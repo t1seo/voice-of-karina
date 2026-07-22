@@ -23,15 +23,15 @@
 
 **작업 완료** — *다 끝났어요! 결과 한번 확인해주세요~*
 
-https://github.com/user-attachments/assets/da276adb-389b-4b31-b583-720123f40cf7
+https://github.com/user-attachments/assets/25a5c321-327e-4e1a-a7b4-28807d1feddc
 
 **권한 요청** — *잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~*
 
-https://github.com/user-attachments/assets/25a5c321-327e-4e1a-a7b4-28807d1feddc
+https://github.com/user-attachments/assets/2342c4e3-4be2-4067-a94d-8bf38417f739
 
 **인증 성공** — *인증이 완료되었어요! 도와주셔서 정말 고마워요~*
 
-https://github.com/user-attachments/assets/2342c4e3-4be2-4067-a94d-8bf38417f739
+https://github.com/user-attachments/assets/da276adb-389b-4b31-b583-720123f40cf7
 
 > 위 플레이어는 GitHub에서 인라인 재생되도록 파형 비디오로 만들었습니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples`로 재생성할 수 있습니다.
 
