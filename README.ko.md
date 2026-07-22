@@ -19,15 +19,15 @@
 
 ## 🔊 목소리 샘플
 
-같은 문장 — *"다 끝났어요! 결과 한번 확인해주세요~"* — 을 세 명의 인터뷰 목소리로 복제했습니다. 클릭하면 재생됩니다:
+카리나 목소리로 복제한 알림음 세 종류 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)). ▶ 를 클릭하면 재생됩니다:
 
-| 목소리 | 샘플 | 출처 |
-|--------|------|------|
-| 🎤 **카리나** (aespa) | ▶ [듣기](assets/samples/karina.wav) | [인터뷰](https://www.youtube.com/watch?v=r96zEiIHVf4) |
-| 🎤 **이채영** | ▶ [듣기](assets/samples/chaeyoung.wav) | [인터뷰](https://www.youtube.com/watch?v=8amfOc9d02I) |
-| 🎤 **박은빈** | ▶ [듣기](assets/samples/eunbin.wav) | [인터뷰](https://www.youtube.com/watch?v=1UcsKU7gY2k) |
+| 알림 | 문장 | 샘플 |
+|------|------|------|
+| **작업 완료** | 다 끝났어요! 결과 한번 확인해주세요~ | ▶ [듣기](assets/samples/karina_done_ko.wav) |
+| **권한 요청** | 잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~ | ▶ [듣기](assets/samples/karina_permission_ko.wav) |
+| **인증 성공** | 인증이 완료되었어요! 도와주셔서 정말 고마워요~ | ▶ [듣기](assets/samples/karina_auth_ko.wav) |
 
-> `pixi run samples`로 직접 생성할 수 있습니다. 세 목소리 모두 `notification_lines.json`의 공통 문장으로 만들어집니다.
+> `pixi run samples`로 직접 생성할 수 있습니다. 클릭하면 브라우저 오디오 플레이어에서 `.wav`가 재생됩니다.
 
 ## 빠른 시작
 

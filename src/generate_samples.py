@@ -6,7 +6,8 @@ Non-interactive counterpart to pipeline.py: clones several celebrities' voices
 from interview URLs and makes each speak a set of sample lines in both Korean
 and English, so the README can showcase the tool with real, comparable audio.
 
-Matrix: CELEBRITIES x CASES x LANGUAGES  (3 x 3 x 2 = 18 clips)
+Matrix: CELEBRITIES x CASES x LANGUAGES  (defaults to Karina x 3 lines x Korean).
+Add entries to CELEBRITIES / LANGUAGES to expand the matrix automatically.
 
 For every celebrity it runs ONCE:
     YouTube -> download -> BGM removal (Demucs) -> auto segment pick
@@ -60,11 +61,10 @@ ASSETS_SAMPLES_DIR = PROJECT_ROOT / "assets" / "samples"
 # Reference-audio window length (seconds) for voice cloning.
 SEGMENT_SECONDS = 12
 
-# The three showcase voices. Order = README display order.
+# Showcase voice(s). Order = README display order.
+# (Add more entries to clone additional voices — the matrix below expands automatically.)
 CELEBRITIES = [
     {"id": "karina", "name": "카리나 (aespa)", "url": "https://www.youtube.com/watch?v=r96zEiIHVf4"},
-    {"id": "chaeyoung", "name": "이채영", "url": "https://www.youtube.com/watch?v=8amfOc9d02I"},
-    {"id": "eunbin", "name": "박은빈", "url": "https://www.youtube.com/watch?v=1UcsKU7gY2k"},
 ]
 
 # Three sample lines, each generated in every voice and every language.
@@ -88,9 +88,9 @@ CASES = [
 ]
 
 # Qwen3-TTS language code + text key in CASES + filename suffix.
+# (Add {"code": "english", "key": "en", "suffix": "en"} to also generate English clips.)
 LANGUAGES = [
     {"code": "korean", "key": "ko", "suffix": "ko"},
-    {"code": "english", "key": "en", "suffix": "en"},
 ]
 
 
