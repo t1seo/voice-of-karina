@@ -17,6 +17,18 @@
 
 > YouTube 영상에서 **원하는 목소리**로 Claude Code 알림음을 생성합니다.
 
+## 🔊 목소리 샘플
+
+같은 문장 — *"다 끝났어요! 결과 한번 확인해주세요~"* — 을 세 명의 인터뷰 목소리로 복제했습니다. 클릭하면 재생됩니다:
+
+| 목소리 | 샘플 | 출처 |
+|--------|------|------|
+| 🎤 **카리나** (aespa) | ▶ [듣기](assets/samples/karina.wav) | [인터뷰](https://www.youtube.com/watch?v=r96zEiIHVf4) |
+| 🎤 **이채영** | ▶ [듣기](assets/samples/chaeyoung.wav) | [인터뷰](https://www.youtube.com/watch?v=8amfOc9d02I) |
+| 🎤 **박은빈** | ▶ [듣기](assets/samples/eunbin.wav) | [인터뷰](https://www.youtube.com/watch?v=1UcsKU7gY2k) |
+
+> `pixi run samples`로 직접 생성할 수 있습니다. 세 목소리 모두 `notification_lines.json`의 공통 문장으로 만들어집니다.
+
 ## 빠른 시작
 
 ### 1. 설치

@@ -17,6 +17,36 @@
 
 > Generate Claude Code notification sounds with **any voice** from YouTube videos.
 
+## 🔊 Voice Samples
+
+Three interview voices — **Karina** ([source](https://www.youtube.com/watch?v=r96zEiIHVf4)), **Lee Chae-young** ([source](https://www.youtube.com/watch?v=8amfOc9d02I)), **Park Eun-bin** ([source](https://www.youtube.com/watch?v=1UcsKU7gY2k)) — each cloned across 3 notification lines in both Korean and English (18 clips). Click ▶ to listen:
+
+**Case 1 — Task complete** · *"다 끝났어요! 결과 한번 확인해주세요~"* / *"All done! Please take a look at the results."*
+
+| Voice | 🇰🇷 Korean | 🇺🇸 English |
+|-------|-----------|-----------|
+| 🎤 **Karina** | ▶ [Listen](assets/samples/karina_done_ko.wav) | ▶ [Listen](assets/samples/karina_done_en.wav) |
+| 🎤 **Lee Chae-young** | ▶ [Listen](assets/samples/chaeyoung_done_ko.wav) | ▶ [Listen](assets/samples/chaeyoung_done_en.wav) |
+| 🎤 **Park Eun-bin** | ▶ [Listen](assets/samples/eunbin_done_ko.wav) | ▶ [Listen](assets/samples/eunbin_done_en.wav) |
+
+**Case 2 — Permission request** · *"잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~"* / *"Wait a second! Is it okay to run this? Please allow it."*
+
+| Voice | 🇰🇷 Korean | 🇺🇸 English |
+|-------|-----------|-----------|
+| 🎤 **Karina** | ▶ [Listen](assets/samples/karina_permission_ko.wav) | ▶ [Listen](assets/samples/karina_permission_en.wav) |
+| 🎤 **Lee Chae-young** | ▶ [Listen](assets/samples/chaeyoung_permission_ko.wav) | ▶ [Listen](assets/samples/chaeyoung_permission_en.wav) |
+| 🎤 **Park Eun-bin** | ▶ [Listen](assets/samples/eunbin_permission_ko.wav) | ▶ [Listen](assets/samples/eunbin_permission_en.wav) |
+
+**Case 3 — Auth success** · *"인증이 완료되었어요! 도와주셔서 정말 고마워요~"* / *"Authentication complete! Thank you so much for your help."*
+
+| Voice | 🇰🇷 Korean | 🇺🇸 English |
+|-------|-----------|-----------|
+| 🎤 **Karina** | ▶ [Listen](assets/samples/karina_auth_ko.wav) | ▶ [Listen](assets/samples/karina_auth_en.wav) |
+| 🎤 **Lee Chae-young** | ▶ [Listen](assets/samples/chaeyoung_auth_ko.wav) | ▶ [Listen](assets/samples/chaeyoung_auth_en.wav) |
+| 🎤 **Park Eun-bin** | ▶ [Listen](assets/samples/eunbin_auth_ko.wav) | ▶ [Listen](assets/samples/eunbin_auth_en.wav) |
+
+> Generate these yourself with `pixi run samples`. Clicking a link opens the `.wav` in your browser's audio player.
+
 ## Quick Start
 
 ### 1. Install

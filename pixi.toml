@@ -28,6 +28,7 @@ mac = { features = ["mac"], solve-group = "mac" }
 
 [tasks]
 pipeline = "python src/pipeline.py"
+samples = "python src/generate_samples.py"
 install-deps = "pip install numpy pydub torch torchaudio soundfile huggingface-hub scipy loguru rich qwen-tts readchar transformers tqdm noisereduce pedalboard pyloudnorm demucs torchcodec"
 install-deps-mac = "pip install numpy pydub torch torchaudio soundfile huggingface-hub scipy loguru rich qwen-tts readchar mlx mlx-whisper transformers tqdm noisereduce pedalboard pyloudnorm demucs torchcodec"
 install-deps-linux = "pip install numpy pydub torch torchaudio soundfile huggingface-hub scipy loguru rich qwen-tts readchar faster-whisper transformers tqdm noisereduce pedalboard pyloudnorm demucs torchcodec"
