@@ -33,13 +33,13 @@ if str(_src_dir) not in sys.path:
     sys.path.insert(0, str(_src_dir))
 
 import soundfile as sf
-import torch
 import transformers
 from loguru import logger
 
-from device_utils import DeviceType, detect_device, print_device_info
+from device_utils import detect_device, print_device_info
 from generate_samples import auto_select_segment, download_audio, separate_vocals
-from pipeline import add_silence, setup_tts_model, transcribe_audio
+from pipeline import add_silence, transcribe_audio
+from tts_backends import DEFAULT_BACKEND, available_backends, get_backend
 
 transformers.logging.set_verbosity_error()
 warnings.filterwarnings("ignore", message=".*pad_token_id.*")
@@ -70,33 +70,21 @@ def build_lines(lines_file: Path | None, overrides: list[str]) -> dict:
     return base
 
 
-def prepare_reference(url: str, device_info, use_bgm_removal: bool) -> tuple[Path, str]:
-    """Download → (BGM removal) → auto-select segment → transcribe."""
+def prepare_reference(url: str, device_info, use_bgm_removal: bool,
+                      need_ref_text: bool) -> tuple[Path, str]:
+    """Download → (BGM removal) → auto-select segment (→ transcribe if needed)."""
     logger.info(f"Preparing reference from: {url}")
     raw = download_audio(url, "quickstart")
     ref = separate_vocals(raw, "quickstart", device_info) if use_bgm_removal else raw
     clip = auto_select_segment(ref, "quickstart")
-    text = transcribe_audio(clip, device_info, language="ko")
+    text = transcribe_audio(clip, device_info, language="ko") if need_ref_text else ""
     return clip, text
 
 
-def generate(lines: dict, ref_audio: Path, ref_text: str, model_path: Path, device_info,
-             tts_language: str) -> list[Path]:
+def generate(lines: dict, ref_audio: Path, ref_text: str, backend, language: str) -> list[Path]:
     """Clone every line into output/notifications/<type>/<filename>."""
-    from qwen_tts import Qwen3TTSModel
-
-    logger.info(f"Loading Qwen3-TTS on {device_info.device_type.value.upper()}...")
-    model = Qwen3TTSModel.from_pretrained(
-        str(model_path),
-        dtype=device_info.dtype,
-        attn_implementation=device_info.attn_implementation,
-        device_map=device_info.torch_device,
-    )
-    if device_info.device_type == DeviceType.MPS:
-        torch.mps.synchronize()
-
     total = sum(len(v) for v in lines.values())
-    logger.info(f"Generating {total} notification clips...")
+    logger.info(f"Generating {total} notification clips with '{backend.name}'...")
 
     outputs = []
     for ntype, items in lines.items():
@@ -104,16 +92,8 @@ def generate(lines: dict, ref_audio: Path, ref_text: str, model_path: Path, devi
         type_dir.mkdir(parents=True, exist_ok=True)
         for item in items:
             logger.info(f"[{ntype}] {item['text']}")
-            wavs, sr = model.generate_voice_clone(
-                text=item["text"],
-                ref_audio=str(ref_audio),
-                ref_text=ref_text,
-                language=tts_language,
-                non_streaming_mode=True,
-            )
-            if device_info.device_type == DeviceType.MPS:
-                torch.mps.synchronize()
-            audio, sr = add_silence(wavs[0], sr, silence_ms=300)
+            audio, sr = backend.clone(item["text"], ref_audio, ref_text, language)
+            audio, sr = add_silence(audio, sr, silence_ms=300)
             out = type_dir / item["filename"]
             sf.write(str(out), audio, sr)
             outputs.append(out)
@@ -127,20 +107,25 @@ def main() -> None:
                         help="Override a notification line (repeatable)")
     parser.add_argument("--lines", type=Path, default=None,
                         help="Custom notification_lines.json (default: repo's file)")
-    parser.add_argument("--language", default="korean", help="TTS language (default: korean)")
+    parser.add_argument("--language", default="ko", help="TTS language ISO code (default: ko)")
+    parser.add_argument("--backend", default=DEFAULT_BACKEND,
+                        help=f"TTS backend: {', '.join(available_backends())} (default: {DEFAULT_BACKEND})")
     parser.add_argument("--no-bgm-removal", action="store_true",
                         help="Skip Demucs BGM removal (use for already-clean audio)")
     args = parser.parse_args()
 
     lines = build_lines(args.lines, args.line)
-    logger.info(f"Notification types: {list(lines)}")
+    logger.info(f"Backend: {args.backend} | Notification types: {list(lines)}")
 
     device_info = detect_device()
     print_device_info(device_info)
 
-    ref_audio, ref_text = prepare_reference(args.url, device_info, not args.no_bgm_removal)
-    model_path = setup_tts_model()
-    outputs = generate(lines, ref_audio, ref_text, model_path, device_info, args.language)
+    backend = get_backend(args.backend)
+    ref_audio, ref_text = prepare_reference(
+        args.url, device_info, not args.no_bgm_removal, backend.needs_ref_text
+    )
+    backend.load(device_info)
+    outputs = generate(lines, ref_audio, ref_text, backend, args.language)
 
     logger.success(f"Done — {len(outputs)} clips in {NOTIFICATIONS_DIR.relative_to(PROJECT_ROOT)}/")
     logger.info("Next: install into Claude Code / Codex with scripts/install_notifications.py")

@@ -26,11 +26,13 @@ esac; }
 only="${1:-}"   # optional stem filter, e.g. karina_done_ko
 
 for wav in "$SRC"/*.wav; do
-  stem="$(basename "$wav" .wav)"          # e.g. karina_done_ko
+  stem="$(basename "$wav" .wav)"          # e.g. karina_done_ko  or  karina_done_ko_raw
   [ -n "$only" ] && [ "$stem" != "$only" ] && continue
-  IFS='_' read -r who what lang <<< "$stem"
-  lang_upper="$(printf '%s' "$lang" | tr '[:lower:]' '[:upper:]')"
-  label="$(name_of "$who")  |  $(case_of "$what")  |  ${lang_upper}"
+  # A trailing _raw marks the "background music NOT removed" variant.
+  base="$stem"; variant="BGM removed"
+  case "$stem" in *_raw) base="${stem%_raw}"; variant="with BGM";; esac
+  IFS='_' read -r who what lang <<< "$base"
+  label="$(name_of "$who")  |  $(case_of "$what")  |  ${variant}"
   out="$OUT/$stem.mp4"
 
   ffmpeg -y -loglevel error -i "$wav" -filter_complex \

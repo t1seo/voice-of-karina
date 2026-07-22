@@ -65,7 +65,27 @@ flowchart LR
 | BGM Removal | Demucs (Meta AI) | Optional — strips background music for a cleaner reference |
 | Split & Select | pydub | Cut into segments; pick 5–15s of clean speech |
 | Transcription | Whisper large-v3 | mlx-whisper (Mac) / faster-whisper (Linux) |
-| Voice Cloning | Qwen3-TTS 1.7B | Cross-lingual — a Korean reference can speak English too |
+| Voice Cloning | **Chatterbox** (default) / Qwen3-TTS / IndexTTS-2 / CosyVoice | Swappable engine — see below |
+
+### 🧩 Voice engines (backends)
+
+The cloning step is pluggable — pick the model with `--backend`:
+
+| Backend | License | Notes |
+|---------|---------|-------|
+| **`chatterbox`** (default) | MIT | Most natural in 2026 blind tests; zero-shot, no transcript needed |
+| `qwen3` | — | The original Qwen3-TTS 1.7B |
+| `indextts2` | open | SOTA zero-shot, strong Korean; MLX build for Apple Silicon *(optional install)* |
+| `cosyvoice` | Apache-2.0 | Excellent cross-lingual cloning *(optional install)* |
+
+```bash
+pixi run install-chatterbox                      # install the default engine
+pixi run quickstart "<URL>" --backend chatterbox # or --backend qwen3, ...
+```
+
+> Backends have conflicting dependencies (e.g. Chatterbox pins torch 2.6, Qwen3
+> needs an older transformers), so install only the one you use — or keep them in
+> separate environments.
 
 Works with both **Claude Code** and **Codex** — same skills, same sounds.
 

@@ -38,7 +38,22 @@ Ask the user:
 > "Which YouTube video should I clone the voice from? Paste the link.
 > A clean interview or solo-talking clip works best."
 
-Store it as `<URL>`. If it's a music video, note that BGM removal is on by default.
+Store it as `<URL>`.
+
+## Step 3.5 — Ask about background-music removal (conversation)
+
+The pipeline can strip background music/noise from the source with Demucs before
+cloning. Ask the user which they want:
+
+> "Should I remove the background music first? By default I do — it usually gives
+> a cleaner, more natural clone. Keep it **on** for music videos or noisy clips.
+> Turn it **off** only if the source is already clean solo speech (it's faster,
+> and occasionally preserves more of the original tone)."
+
+- **Remove BGM (default)** → no extra flag.
+- **Keep BGM / skip removal** → add `--no-bgm-removal` in Step 5.
+
+If unsure, recommend removal (on).
 
 ## Step 4 — Ask what the notifications should say (conversation)
 
@@ -68,7 +83,8 @@ pixi run python src/quickstart.py "<URL>" \
     --language korean
 ```
 - Add `--language english` if they chose English.
-- Add `--no-bgm-removal` only if the source is already clean speech.
+- Add `--no-bgm-removal` if they chose to keep the background music in Step 3.5.
+- Pick the engine with `--backend` (default `chatterbox`; also `qwen3`, `indextts2`, `cosyvoice`).
 - Omit `--line` entirely to use all defaults.
 
 This downloads the audio, removes BGM, auto-picks a clean segment, transcribes

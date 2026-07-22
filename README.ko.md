@@ -62,7 +62,26 @@ flowchart LR
 | BGM 제거 | Demucs (Meta AI) | 선택 사항 — 배경음악을 제거해 더 깨끗한 레퍼런스 확보 |
 | 분할 & 선택 | pydub | 구간으로 자르고 5~15초 깨끗한 발화 선택 |
 | 전사 | Whisper large-v3 | mlx-whisper (Mac) / faster-whisper (Linux) |
-| 음성 복제 | Qwen3-TTS 1.7B | 교차언어 지원 — 한국어 레퍼런스로 영어도 발화 가능 |
+| 음성 복제 | **Chatterbox**(기본) / Qwen3-TTS / IndexTTS-2 / CosyVoice | 교체 가능한 엔진 — 아래 참고 |
+
+### 🧩 음성 엔진 (백엔드)
+
+복제 단계는 교체 가능합니다 — `--backend`로 모델을 고르세요:
+
+| 백엔드 | 라이선스 | 설명 |
+|--------|----------|------|
+| **`chatterbox`**(기본) | MIT | 2026 블라인드 테스트 최고 자연스러움; 제로샷(참조 대본 불필요) |
+| `qwen3` | — | 기존 Qwen3-TTS 1.7B |
+| `indextts2` | 오픈 | 제로샷 SOTA, 한국어 강함; Apple Silicon용 MLX 빌드 *(선택 설치)* |
+| `cosyvoice` | Apache-2.0 | 교차언어 클로닝 최상급 *(선택 설치)* |
+
+```bash
+pixi run install-chatterbox                       # 기본 엔진 설치
+pixi run quickstart "<URL>" --backend chatterbox  # 또는 --backend qwen3, ...
+```
+
+> 백엔드마다 의존성이 충돌합니다(예: Chatterbox는 torch 2.6, Qwen3는 옛 transformers).
+> 사용할 하나만 설치하거나, 환경을 분리해서 쓰세요.
 
 **Claude Code와 Codex 양쪽 지원** — 같은 스킬, 같은 사운드.
 
