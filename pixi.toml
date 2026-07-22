@@ -34,11 +34,6 @@ install-notifications = "python scripts/install_notifications.py"
 install-deps = "pip install numpy pydub torch torchaudio soundfile huggingface-hub scipy loguru rich qwen-tts readchar transformers tqdm noisereduce pedalboard pyloudnorm demucs torchcodec"
 install-deps-mac = "pip install numpy pydub torch torchaudio soundfile huggingface-hub scipy loguru rich qwen-tts readchar mlx mlx-whisper transformers tqdm noisereduce pedalboard pyloudnorm demucs torchcodec"
 install-deps-linux = "pip install numpy pydub torch torchaudio soundfile huggingface-hub scipy loguru rich qwen-tts readchar faster-whisper transformers tqdm noisereduce pedalboard pyloudnorm demucs torchcodec"
-# Chatterbox is the default backend. Installing it pulls transformers 5.x and
-# torch 2.6; we pin transformers back to 4.57.3 (qwen-tts's requirement) so both
-# engines coexist. The qwen3 backend uses eager attention, so it runs fine on
-# Chatterbox's torch 2.6.
-install-chatterbox = "pip install chatterbox-tts && pip install transformers==4.57.3"
 post-process = "python src/post_process.py"
 separate-vocals = "python -m demucs --two-stems vocals"
 lint = "ruff check src/"

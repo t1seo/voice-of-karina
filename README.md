@@ -65,28 +65,7 @@ flowchart LR
 | BGM Removal | Demucs (Meta AI) | Optional — strips background music for a cleaner reference |
 | Split & Select | pydub | Cut into segments; pick 5–15s of clean speech |
 | Transcription | Whisper large-v3 | mlx-whisper (Mac) / faster-whisper (Linux) |
-| Voice Cloning | **Chatterbox** (default) / Qwen3-TTS / IndexTTS-2 / CosyVoice | Swappable engine — see below |
-
-### 🧩 Voice engines (backends)
-
-The cloning step is pluggable — pick the model with `--backend`:
-
-| Backend | License | Notes |
-|---------|---------|-------|
-| **`chatterbox`** (default) | MIT | Most natural in 2026 blind tests; zero-shot, no transcript needed |
-| `qwen3` | — | The original Qwen3-TTS 1.7B |
-| `indextts2` | open | SOTA zero-shot, strong Korean; MLX build for Apple Silicon *(optional install)* |
-| `cosyvoice` | Apache-2.0 | Excellent cross-lingual cloning *(optional install)* |
-
-```bash
-pixi run install-chatterbox                      # install the default engine
-pixi run quickstart "<URL>" --backend chatterbox # or --backend qwen3, ...
-```
-
-> `chatterbox` and `qwen3` coexist in one env: `install-chatterbox` pins
-> `transformers` to 4.57.3 (Qwen3's requirement), and the Qwen3 backend uses
-> eager attention so it runs on Chatterbox's torch 2.6. `indextts2` / `cosyvoice`
-> are optional installs from their own repos.
+| Voice Cloning | Qwen3-TTS 1.7B | Cross-lingual — a Korean reference can speak English too |
 
 Works with both **Claude Code** and **Codex** — same skills, same sounds.
 
@@ -160,39 +139,21 @@ Edit `notification_lines.json` to change the phrases:
 
 ## 🔊 Voice Samples
 
-The same three Korean notification lines, cloned in Karina's voice ([interview source](https://www.youtube.com/watch?v=r96zEiIHVf4)) by **each engine** — compare how they sound. Press ▶ to play:
+Three Korean notification lines, cloned in Karina's voice ([interview source](https://www.youtube.com/watch?v=r96zEiIHVf4)) with Qwen3-TTS. Press ▶ to play:
 
-### 1. "작업을 완료했습니다." — *Task complete*
-
-**Chatterbox** (default)
-
-https://github.com/user-attachments/assets/e51b2a3a-3ee0-4a54-a643-14449e7c359b
-
-**Qwen3-TTS**
+**Task complete** — *작업을 완료했습니다.*
 
 https://github.com/user-attachments/assets/4414a9c8-8430-459f-88c7-e88460971a8e
 
-### 2. "실행 허가가 필요합니다." — *Permission required*
-
-**Chatterbox** (default)
-
-https://github.com/user-attachments/assets/81f2c41d-0be4-4e26-80cc-71a06796d663
-
-**Qwen3-TTS**
+**Permission required** — *실행 허가가 필요합니다.*
 
 https://github.com/user-attachments/assets/5d1de7c1-bf1d-45ed-8b78-0525ecb2ebc1
 
-### 3. "인증에 성공했습니다." — *Authentication succeeded*
-
-**Chatterbox** (default)
-
-https://github.com/user-attachments/assets/f6e9a81f-5ba1-4373-a72a-2f2fb9870acf
-
-**Qwen3-TTS**
+**Authentication succeeded** — *인증에 성공했습니다.*
 
 https://github.com/user-attachments/assets/2440c136-482a-4281-919c-b06f43ae44a1
 
-> Players are waveform videos (labelled with the model) so they play inline on GitHub. Source `.wav` files are in [`assets/samples/`](assets/samples); regenerate any engine with `pixi run samples --backend <model>`.
+> Players are waveform videos so they play inline on GitHub. Source `.wav` files are in [`assets/samples/`](assets/samples); regenerate with `pixi run samples`.
 
 ## License
 

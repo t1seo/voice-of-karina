@@ -62,28 +62,7 @@ flowchart LR
 | BGM 제거 | Demucs (Meta AI) | 선택 사항 — 배경음악을 제거해 더 깨끗한 레퍼런스 확보 |
 | 분할 & 선택 | pydub | 구간으로 자르고 5~15초 깨끗한 발화 선택 |
 | 전사 | Whisper large-v3 | mlx-whisper (Mac) / faster-whisper (Linux) |
-| 음성 복제 | **Chatterbox**(기본) / Qwen3-TTS / IndexTTS-2 / CosyVoice | 교체 가능한 엔진 — 아래 참고 |
-
-### 🧩 음성 엔진 (백엔드)
-
-복제 단계는 교체 가능합니다 — `--backend`로 모델을 고르세요:
-
-| 백엔드 | 라이선스 | 설명 |
-|--------|----------|------|
-| **`chatterbox`**(기본) | MIT | 2026 블라인드 테스트 최고 자연스러움; 제로샷(참조 대본 불필요) |
-| `qwen3` | — | 기존 Qwen3-TTS 1.7B |
-| `indextts2` | 오픈 | 제로샷 SOTA, 한국어 강함; Apple Silicon용 MLX 빌드 *(선택 설치)* |
-| `cosyvoice` | Apache-2.0 | 교차언어 클로닝 최상급 *(선택 설치)* |
-
-```bash
-pixi run install-chatterbox                       # 기본 엔진 설치
-pixi run quickstart "<URL>" --backend chatterbox  # 또는 --backend qwen3, ...
-```
-
-> `chatterbox`와 `qwen3`는 한 환경에서 공존합니다: `install-chatterbox`가
-> `transformers`를 4.57.3(Qwen3 요구)으로 고정하고, Qwen3 백엔드는 eager 어텐션을
-> 써서 Chatterbox의 torch 2.6에서도 동작합니다. `indextts2`/`cosyvoice`는 각자
-> 저장소에서 선택 설치.
+| 음성 복제 | Qwen3-TTS 1.7B | 교차언어 지원 — 한국어 레퍼런스로 영어도 발화 가능 |
 
 **Claude Code와 Codex 양쪽 지원** — 같은 스킬, 같은 사운드.
 
@@ -156,39 +135,21 @@ python scripts/install_notifications.py --dry-run      # 변경 미리보기
 
 ## 🔊 목소리 샘플
 
-같은 한국어 알림 문구 세 개를 카리나 목소리로 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)) **각 엔진**이 복제한 결과입니다 — 어떻게 다른지 비교해 보세요. ▶ 를 누르면 재생됩니다:
+카리나 목소리로 Qwen3-TTS가 복제한 한국어 알림 문구 세 개 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)). ▶ 를 누르면 재생됩니다:
 
-### 1. "작업을 완료했습니다." — *작업 완료*
-
-**Chatterbox** (기본)
-
-https://github.com/user-attachments/assets/e51b2a3a-3ee0-4a54-a643-14449e7c359b
-
-**Qwen3-TTS**
+**작업 완료** — *작업을 완료했습니다.*
 
 https://github.com/user-attachments/assets/4414a9c8-8430-459f-88c7-e88460971a8e
 
-### 2. "실행 허가가 필요합니다." — *권한 요청*
-
-**Chatterbox** (기본)
-
-https://github.com/user-attachments/assets/81f2c41d-0be4-4e26-80cc-71a06796d663
-
-**Qwen3-TTS**
+**권한 요청** — *실행 허가가 필요합니다.*
 
 https://github.com/user-attachments/assets/5d1de7c1-bf1d-45ed-8b78-0525ecb2ebc1
 
-### 3. "인증에 성공했습니다." — *인증 성공*
-
-**Chatterbox** (기본)
-
-https://github.com/user-attachments/assets/f6e9a81f-5ba1-4373-a72a-2f2fb9870acf
-
-**Qwen3-TTS**
+**인증 성공** — *인증에 성공했습니다.*
 
 https://github.com/user-attachments/assets/2440c136-482a-4281-919c-b06f43ae44a1
 
-> 플레이어는 모델명이 표시된 파형 비디오라 GitHub에서 인라인 재생됩니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples --backend <모델>`로 재생성합니다.
+> 플레이어는 파형 비디오라 GitHub에서 인라인 재생됩니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples`로 재생성합니다.
 
 ## 라이선스
 

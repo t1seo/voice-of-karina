@@ -520,10 +520,7 @@ def show_tts_language_menu() -> str:
 
 # Human-friendly descriptions for the backend menu.
 _BACKEND_DESC = {
-    "chatterbox": "Most natural (2026 blind tests) · MIT · zero-shot",
-    "qwen3": "Qwen3-TTS 1.7B · the original engine",
-    "indextts2": "SOTA zero-shot, strong Korean · optional install",
-    "cosyvoice": "Cross-lingual, Apache-2.0 · optional install",
+    "qwen3": "Qwen3-TTS 1.7B",
 }
 
 
