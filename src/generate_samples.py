@@ -35,13 +35,13 @@ if str(_src_dir) not in sys.path:
     sys.path.insert(0, str(_src_dir))
 
 import soundfile as sf
-import torch
 import transformers
 from loguru import logger
 from pydub import AudioSegment
 
 from device_utils import DeviceType, detect_device, print_device_info
-from pipeline import add_silence, normalize_audio_file, setup_tts_model, transcribe_audio
+from pipeline import add_silence, normalize_audio_file, transcribe_audio
+from tts_backends import DEFAULT_BACKEND, available_backends, get_backend
 
 transformers.logging.set_verbosity_error()
 warnings.filterwarnings("ignore", message=".*pad_token_id.*")
@@ -67,23 +67,23 @@ CELEBRITIES = [
     {"id": "karina", "name": "카리나 (aespa)", "url": "https://www.youtube.com/watch?v=r96zEiIHVf4"},
 ]
 
-# Three sample lines, each generated in every voice and every language.
-# Korean text mirrors notification_lines.json; English is a natural equivalent.
+# Three sample lines (Korean), mirroring notification_lines.json, used to
+# compare how each TTS backend renders the same text.
 CASES = [
     {
         "id": "done",
-        "ko": "다 끝났어요! 결과 한번 확인해주세요~",
-        "en": "All done! Please take a look at the results.",
+        "ko": "작업을 완료했습니다.",
+        "en": "The task is complete.",
     },
     {
         "id": "permission",
-        "ko": "잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~",
-        "en": "Wait a second! Is it okay to run this? Please allow it.",
+        "ko": "실행 허가가 필요합니다.",
+        "en": "Permission to run is required.",
     },
     {
         "id": "auth",
-        "ko": "인증이 완료되었어요! 도와주셔서 정말 고마워요~",
-        "en": "Authentication complete! Thank you so much for your help.",
+        "ko": "인증에 성공했습니다.",
+        "en": "Authentication succeeded.",
     },
 ]
 
@@ -181,40 +181,39 @@ def auto_select_segment(input_file: Path, output_name: str) -> Path:
     return output_path
 
 
-def prepare_reference(celeb: dict, device_info) -> dict | None:
-    """Run download -> separate -> segment -> transcribe for one celebrity."""
+def prepare_reference(celeb: dict, device_info, need_ref_text: bool,
+                      use_bgm_removal: bool = True) -> dict | None:
+    """Run download -> (separate) -> segment (-> transcribe) for one celebrity.
+
+    With `use_bgm_removal=False` the raw audio is used as the reference and a
+    `_raw` filename suffix is applied, so BGM-removed and raw variants can be
+    generated side by side for comparison.
+    Transcription only runs for backends that need the transcript (`need_ref_text`).
+    """
     cid = celeb["id"]
-    logger.info(f"=== Preparing reference for {celeb['name']} ({cid}) ===")
+    variant = "" if use_bgm_removal else "_raw"
+    logger.info(f"=== Preparing reference for {celeb['name']} ({cid}{variant}) ===")
     try:
         raw = download_audio(celeb["url"], cid)
-        vocals = separate_vocals(raw, cid, device_info)
-        clip = auto_select_segment(vocals, cid)
-        ref_text = transcribe_audio(clip, device_info, language="ko")
-        return {**celeb, "ref_audio": clip, "ref_text": ref_text}
+        ref = separate_vocals(raw, cid, device_info) if use_bgm_removal else raw
+        clip = auto_select_segment(ref, f"{cid}{variant}")
+        ref_text = transcribe_audio(clip, device_info, language="ko") if need_ref_text else ""
+        return {**celeb, "ref_audio": clip, "ref_text": ref_text, "suffix": variant}
     except Exception as e:
         logger.error(f"[{cid}] reference preparation failed: {e}")
         return None
 
 
-def generate_samples(refs: list[dict], model_path: Path, device_info) -> list[Path]:
-    """Load Qwen3-TTS once and clone every case/language in each prepared voice."""
-    from qwen_tts import Qwen3TTSModel
-
+def generate_samples(refs: list[dict], backend, device_info) -> list[Path]:
+    """Clone every case/language in each prepared voice with the chosen backend."""
     SAMPLES_OUT_DIR.mkdir(parents=True, exist_ok=True)
     ASSETS_SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
 
-    logger.info(f"Loading Qwen3-TTS on {device_info.device_type.value.upper()}...")
-    model = Qwen3TTSModel.from_pretrained(
-        str(model_path),
-        dtype=device_info.dtype,
-        attn_implementation=device_info.attn_implementation,
-        device_map=device_info.torch_device,
-    )
-    if device_info.device_type == DeviceType.MPS:
-        torch.mps.synchronize()
-
     total = len(refs) * len(CASES) * len(LANGUAGES)
-    logger.info(f"Generating {total} clips ({len(refs)} voices x {len(CASES)} cases x {len(LANGUAGES)} langs)...")
+    logger.info(
+        f"Generating {total} clips with '{backend.name}' "
+        f"({len(refs)} voices x {len(CASES)} cases x {len(LANGUAGES)} langs)..."
+    )
 
     outputs = []
     for ref in refs:
@@ -222,19 +221,12 @@ def generate_samples(refs: list[dict], model_path: Path, device_info) -> list[Pa
         for case in CASES:
             for lang in LANGUAGES:
                 text = case[lang["key"]]
-                stem = f"{cid}_{case['id']}_{lang['suffix']}"
-                logger.info(f"[{stem}] cloning ({lang['code']}): {text}")
-                wavs, sr = model.generate_voice_clone(
-                    text=text,
-                    ref_audio=str(ref["ref_audio"]),
-                    ref_text=ref["ref_text"],
-                    language=lang["code"],
-                    non_streaming_mode=True,
-                )
-                if device_info.device_type == DeviceType.MPS:
-                    torch.mps.synchronize()
+                # Filename embeds the model so per-backend outputs can be compared.
+                stem = f"{cid}_{case['id']}_{lang['suffix']}_{backend.name}"
+                logger.info(f"[{stem}] cloning ({lang['suffix']}): {text}")
+                audio, sr = backend.clone(text, ref["ref_audio"], ref["ref_text"], lang["suffix"])
 
-                audio, sr = add_silence(wavs[0], sr, silence_ms=300)
+                audio, sr = add_silence(audio, sr, silence_ms=300)
                 out_path = SAMPLES_OUT_DIR / f"{stem}.wav"
                 sf.write(str(out_path), audio, sr)
 
@@ -247,24 +239,39 @@ def generate_samples(refs: list[dict], model_path: Path, device_info) -> list[Pa
 
 
 def main():
-    wanted = set(sys.argv[1:])
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Generate README voice samples")
+    parser.add_argument("celebrities", nargs="*", help="Subset of celebrity ids (default: all)")
+    parser.add_argument("--backend", default=DEFAULT_BACKEND,
+                        help=f"TTS backend: {', '.join(available_backends())} (default: {DEFAULT_BACKEND})")
+    parser.add_argument("--no-bgm-removal", action="store_true",
+                        help="Skip Demucs BGM removal; use raw audio (adds a _raw suffix)")
+    args = parser.parse_args()
+
+    wanted = set(args.celebrities)
     celebs = [c for c in CELEBRITIES if not wanted or c["id"] in wanted]
     if not celebs:
         logger.error(f"No matching celebrities for {wanted}. Known: {[c['id'] for c in CELEBRITIES]}")
         sys.exit(1)
 
-    logger.info(f"Cases: {[c['id'] for c in CASES]} | Languages: {[x['suffix'] for x in LANGUAGES]}")
+    logger.info(f"Backend: {args.backend} | Cases: {[c['id'] for c in CASES]} "
+                f"| Languages: {[x['suffix'] for x in LANGUAGES]}")
 
     device_info = detect_device()
     print_device_info(device_info)
 
-    refs = [r for c in celebs if (r := prepare_reference(c, device_info))]
+    backend = get_backend(args.backend)
+    refs = [
+        r for c in celebs
+        if (r := prepare_reference(c, device_info, backend.needs_ref_text, not args.no_bgm_removal))
+    ]
     if not refs:
         logger.error("No references prepared; aborting.")
         sys.exit(1)
 
-    model_path = setup_tts_model()
-    outputs = generate_samples(refs, model_path, device_info)
+    backend.load(device_info)
+    outputs = generate_samples(refs, backend, device_info)
 
     logger.success(f"Done. {len(outputs)} samples in {ASSETS_SAMPLES_DIR.relative_to(PROJECT_ROOT)}/")
     for p in outputs:

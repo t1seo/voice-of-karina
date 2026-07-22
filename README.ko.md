@@ -135,21 +135,21 @@ python scripts/install_notifications.py --dry-run      # 변경 미리보기
 
 ## 🔊 목소리 샘플
 
-카리나 목소리로 복제한 알림음 세 종류 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)). ▶ 를 누르면 바로 재생됩니다:
+카리나 목소리로 Qwen3-TTS가 복제한 한국어 알림 문구 세 개 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)). ▶ 를 누르면 재생됩니다:
 
-**작업 완료** — *다 끝났어요! 결과 한번 확인해주세요~*
+**작업 완료** — *작업을 완료했습니다.*
 
-https://github.com/user-attachments/assets/25a5c321-327e-4e1a-a7b4-28807d1feddc
+https://github.com/user-attachments/assets/4414a9c8-8430-459f-88c7-e88460971a8e
 
-**권한 요청** — *잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~*
+**권한 요청** — *실행 허가가 필요합니다.*
 
-https://github.com/user-attachments/assets/2342c4e3-4be2-4067-a94d-8bf38417f739
+https://github.com/user-attachments/assets/5d1de7c1-bf1d-45ed-8b78-0525ecb2ebc1
 
-**인증 성공** — *인증이 완료되었어요! 도와주셔서 정말 고마워요~*
+**인증 성공** — *인증에 성공했습니다.*
 
-https://github.com/user-attachments/assets/da276adb-389b-4b31-b583-720123f40cf7
+https://github.com/user-attachments/assets/2440c136-482a-4281-919c-b06f43ae44a1
 
-> 위 플레이어는 GitHub에서 인라인 재생되도록 파형 비디오로 만들었습니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples`로 재생성할 수 있습니다.
+> 플레이어는 파형 비디오라 GitHub에서 인라인 재생됩니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples`로 재생성합니다.
 
 ## 라이선스
 

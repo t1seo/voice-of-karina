@@ -139,21 +139,21 @@ Edit `notification_lines.json` to change the phrases:
 
 ## 🔊 Voice Samples
 
-Karina's cloned voice ([interview source](https://www.youtube.com/watch?v=r96zEiIHVf4)) speaking three of the notification lines. Press ▶ to play:
+Three Korean notification lines, cloned in Karina's voice ([interview source](https://www.youtube.com/watch?v=r96zEiIHVf4)) with Qwen3-TTS. Press ▶ to play:
 
-**Task complete** — *다 끝났어요! 결과 한번 확인해주세요~*
+**Task complete** — *작업을 완료했습니다.*
 
-https://github.com/user-attachments/assets/25a5c321-327e-4e1a-a7b4-28807d1feddc
+https://github.com/user-attachments/assets/4414a9c8-8430-459f-88c7-e88460971a8e
 
-**Permission request** — *잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~*
+**Permission required** — *실행 허가가 필요합니다.*
 
-https://github.com/user-attachments/assets/2342c4e3-4be2-4067-a94d-8bf38417f739
+https://github.com/user-attachments/assets/5d1de7c1-bf1d-45ed-8b78-0525ecb2ebc1
 
-**Auth success** — *인증이 완료되었어요! 도와주셔서 정말 고마워요~*
+**Authentication succeeded** — *인증에 성공했습니다.*
 
-https://github.com/user-attachments/assets/da276adb-389b-4b31-b583-720123f40cf7
+https://github.com/user-attachments/assets/2440c136-482a-4281-919c-b06f43ae44a1
 
-> The players above are waveform videos so they play inline on GitHub. Source `.wav` files live in [`assets/samples/`](assets/samples); regenerate with `pixi run samples`.
+> Players are waveform videos so they play inline on GitHub. Source `.wav` files are in [`assets/samples/`](assets/samples); regenerate with `pixi run samples`.
 
 ## License
 
