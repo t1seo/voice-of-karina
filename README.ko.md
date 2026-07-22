@@ -19,15 +19,21 @@
 
 ## 🔊 목소리 샘플
 
-카리나 목소리로 복제한 알림음 세 종류 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)). ▶ 를 클릭하면 재생됩니다:
+카리나 목소리로 복제한 알림음 세 종류 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)). ▶ 를 누르면 바로 재생됩니다:
 
-| 알림 | 문장 | 샘플 |
-|------|------|------|
-| **작업 완료** | 다 끝났어요! 결과 한번 확인해주세요~ | ▶ [듣기](assets/samples/karina_done_ko.wav) |
-| **권한 요청** | 잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~ | ▶ [듣기](assets/samples/karina_permission_ko.wav) |
-| **인증 성공** | 인증이 완료되었어요! 도와주셔서 정말 고마워요~ | ▶ [듣기](assets/samples/karina_auth_ko.wav) |
+**작업 완료** — *다 끝났어요! 결과 한번 확인해주세요~*
 
-> `pixi run samples`로 직접 생성할 수 있습니다. 클릭하면 브라우저 오디오 플레이어에서 `.wav`가 재생됩니다.
+https://github.com/user-attachments/assets/da276adb-389b-4b31-b583-720123f40cf7
+
+**권한 요청** — *잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~*
+
+https://github.com/user-attachments/assets/25a5c321-327e-4e1a-a7b4-28807d1feddc
+
+**인증 성공** — *인증이 완료되었어요! 도와주셔서 정말 고마워요~*
+
+https://github.com/user-attachments/assets/2342c4e3-4be2-4067-a94d-8bf38417f739
+
+> 위 플레이어는 GitHub에서 인라인 재생되도록 파형 비디오로 만들었습니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples`로 재생성할 수 있습니다.
 
 ## 빠른 시작
 
