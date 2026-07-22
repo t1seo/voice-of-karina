@@ -67,23 +67,23 @@ CELEBRITIES = [
     {"id": "karina", "name": "카리나 (aespa)", "url": "https://www.youtube.com/watch?v=r96zEiIHVf4"},
 ]
 
-# Three sample lines, each generated in every voice and every language.
-# Korean text mirrors notification_lines.json; English is a natural equivalent.
+# Three sample lines (Korean), mirroring notification_lines.json, used to
+# compare how each TTS backend renders the same text.
 CASES = [
     {
         "id": "done",
-        "ko": "다 끝났어요! 결과 한번 확인해주세요~",
-        "en": "All done! Please take a look at the results.",
+        "ko": "작업을 완료했습니다.",
+        "en": "The task is complete.",
     },
     {
         "id": "permission",
-        "ko": "잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~",
-        "en": "Wait a second! Is it okay to run this? Please allow it.",
+        "ko": "실행 허가가 필요합니다.",
+        "en": "Permission to run is required.",
     },
     {
         "id": "auth",
-        "ko": "인증이 완료되었어요! 도와주셔서 정말 고마워요~",
-        "en": "Authentication complete! Thank you so much for your help.",
+        "ko": "인증에 성공했습니다.",
+        "en": "Authentication succeeded.",
     },
 ]
 
@@ -221,7 +221,8 @@ def generate_samples(refs: list[dict], backend, device_info) -> list[Path]:
         for case in CASES:
             for lang in LANGUAGES:
                 text = case[lang["key"]]
-                stem = f"{cid}_{case['id']}_{lang['suffix']}{ref.get('suffix', '')}"
+                # Filename embeds the model so per-backend outputs can be compared.
+                stem = f"{cid}_{case['id']}_{lang['suffix']}_{backend.name}"
                 logger.info(f"[{stem}] cloning ({lang['suffix']}): {text}")
                 audio, sr = backend.clone(text, ref["ref_audio"], ref["ref_text"], lang["suffix"])
 

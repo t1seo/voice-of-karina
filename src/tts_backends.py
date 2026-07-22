@@ -99,13 +99,19 @@ class Qwen3Backend(VoiceBackend):
         from pipeline import setup_tts_model
         from qwen_tts import Qwen3TTSModel
 
+        from device_utils import DeviceType
+
         self._device_info = device_info
         model_path = setup_tts_model()
-        logger.info(f"Loading Qwen3-TTS on {device_info.device_type.value.upper()}...")
+        # On MPS, "sdpa" grouped-query attention breaks on torch 2.6 (mps_matmul
+        # shape error); "eager" does the repeat_kv explicitly and works across
+        # torch versions.
+        attn = "eager" if device_info.device_type == DeviceType.MPS else device_info.attn_implementation
+        logger.info(f"Loading Qwen3-TTS on {device_info.device_type.value.upper()} (attn={attn})...")
         self.model = Qwen3TTSModel.from_pretrained(
             str(model_path),
             dtype=device_info.dtype,
-            attn_implementation=device_info.attn_implementation,
+            attn_implementation=attn,
             device_map=device_info.torch_device,
         )
 

@@ -83,9 +83,10 @@ pixi run install-chatterbox                      # install the default engine
 pixi run quickstart "<URL>" --backend chatterbox # or --backend qwen3, ...
 ```
 
-> Backends have conflicting dependencies (e.g. Chatterbox pins torch 2.6, Qwen3
-> needs an older transformers), so install only the one you use — or keep them in
-> separate environments.
+> `chatterbox` and `qwen3` coexist in one env: `install-chatterbox` pins
+> `transformers` to 4.57.3 (Qwen3's requirement), and the Qwen3 backend uses
+> eager attention so it runs on Chatterbox's torch 2.6. `indextts2` / `cosyvoice`
+> are optional installs from their own repos.
 
 Works with both **Claude Code** and **Codex** — same skills, same sounds.
 

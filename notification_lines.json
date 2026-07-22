@@ -1,33 +1,33 @@
 {
   "permission_prompt": [
     {
-      "text": "잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~",
+      "text": "실행 허가가 필요합니다.",
       "filename": "permission_prompt_1.wav"
     },
     {
-      "text": "잠시만요, 이 작업을 하려면 허락이 필요해요~",
+      "text": "이 작업을 진행하려면 승인이 필요합니다.",
       "filename": "permission_prompt_2.wav"
     }
   ],
   "idle_prompt": [
     {
-      "text": "다 끝났어요! 결과 한번 확인해주세요~",
+      "text": "작업을 완료했습니다.",
       "filename": "idle_prompt_1.wav"
     },
     {
-      "text": "작업이 완료되었어요, 한번 봐주시겠어요?",
+      "text": "작업이 끝났습니다. 결과를 확인해 주세요.",
       "filename": "idle_prompt_2.wav"
     }
   ],
   "auth_success": [
     {
-      "text": "인증이 완료되었어요! 도와주셔서 정말 고마워요~",
+      "text": "인증에 성공했습니다.",
       "filename": "auth_success_1.wav"
     }
   ],
   "elicitation_dialog": [
     {
-      "text": "여기에 입력이 필요해요! 작성해주시겠어요?",
+      "text": "입력이 필요합니다. 내용을 작성해 주세요.",
       "filename": "elicitation_dialog_1.wav"
     }
   ]

@@ -38,6 +38,7 @@ from rich.table import Table
 from rich.text import Text
 
 from device_utils import DeviceInfo, DeviceType, detect_device, print_device_info
+from tts_backends import DEFAULT_BACKEND, available_backends, get_backend
 
 transformers.logging.set_verbosity_error()
 warnings.filterwarnings("ignore", message=".*pad_token_id.*")
@@ -517,6 +518,31 @@ def show_tts_language_menu() -> str:
     return SUPPORTED_LANGUAGES[result]["tts_code"]
 
 
+# Human-friendly descriptions for the backend menu.
+_BACKEND_DESC = {
+    "chatterbox": "Most natural (2026 blind tests) · MIT · zero-shot",
+    "qwen3": "Qwen3-TTS 1.7B · the original engine",
+    "indextts2": "SOTA zero-shot, strong Korean · optional install",
+    "cosyvoice": "Cross-lingual, Apache-2.0 · optional install",
+}
+
+
+def show_backend_menu() -> str:
+    """Show TTS backend (model) selection menu. Returns the backend name."""
+    names = available_backends()
+    options = [{"label": f"🧩 {n}", "desc": _BACKEND_DESC.get(n, "")} for n in names]
+
+    menu = InteractiveMenu(
+        title="TTS Model / 음성 모델",
+        subtitle=f"Select the voice-cloning engine (default: {DEFAULT_BACKEND})",
+        options=options,
+    )
+    result = menu.run()
+    if result is None:
+        return DEFAULT_BACKEND
+    return names[result]
+
+
 def show_source_separation_menu() -> bool:
     """Show source separation (BGM removal) menu. Returns True if enabled."""
     options = [
@@ -939,48 +965,33 @@ def enhance_audio(audio: np.ndarray, sr: int) -> np.ndarray:
 def generate_notifications(
     ref_audio_path: Path,
     ref_text: str,
-    model_path: Path,
+    backend,
     device_info: DeviceInfo,
     enable_postprocess: bool = True,
     tts_language: str = "korean",
 ):
-    """Generate all notification voice lines using voice cloning."""
+    """Generate all notification voice lines with the chosen (already-loaded) backend."""
     console.print(
         Panel(
-            f"[bold]Step 6: Generate Notification Voice Lines ({device_info.device_type.value.upper()})[/bold]",
+            f"[bold]Step 6: Generate Notification Voice Lines "
+            f"({backend.name} / {device_info.device_type.value.upper()})[/bold]",
             style="blue",
         )
     )
 
-    from qwen_tts import Qwen3TTSModel
-
     NOTIFICATIONS_DIR.mkdir(parents=True, exist_ok=True)
-
-    # Load notification lines from JSON file
     notification_lines = load_notification_lines()
 
-    with Progress(
-        SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console
-    ) as progress:
-        progress.add_task(
-            f"Loading Qwen3-TTS 1.7B model on {device_info.device_type.value.upper()}...",
-            total=None,
-        )
-        model = Qwen3TTSModel.from_pretrained(
-            str(model_path),
-            dtype=device_info.dtype,
-            attn_implementation=device_info.attn_implementation,
-            device_map=device_info.torch_device,
-        )
-
-    if device_info.device_type == DeviceType.MPS:
-        torch.mps.synchronize()
+    # Backends speak ISO codes; the TTS menu returns full names ("korean").
+    iso_lang = next(
+        (lang["whisper_code"] for lang in SUPPORTED_LANGUAGES if lang["tts_code"] == tts_language),
+        "ko",
+    )
 
     total = sum(len(lines) for lines in notification_lines.values())
-    logger.info(f"Generating {total} notification voice lines...")
+    logger.info(f"Generating {total} notification voice lines with '{backend.name}'...")
     logger.info(f"Reference audio: {ref_audio_path}")
-    logger.info(f"Reference text: {ref_text[:50]}...")
-    logger.info(f"TTS language: {tts_language}")
+    logger.info(f"TTS language: {tts_language} ({iso_lang})")
     logger.info(f"Post-processing: {'enabled' if enable_postprocess else 'disabled'}")
 
     with Progress(
@@ -998,19 +1009,10 @@ def generate_notifications(
 
             for line in lines:
                 output_path = type_dir / line["filename"]
-                wavs, sr = model.generate_voice_clone(
-                    text=line["text"],
-                    ref_audio=str(ref_audio_path),
-                    ref_text=ref_text,
-                    language=tts_language,
-                    non_streaming_mode=True,
-                )
-
-                if device_info.device_type == DeviceType.MPS:
-                    torch.mps.synchronize()
+                audio, sr = backend.clone(line["text"], ref_audio_path, ref_text, iso_lang)
 
                 # Add silence at the beginning
-                audio_with_silence, sr = add_silence(wavs[0], sr, silence_ms=300)
+                audio_with_silence, sr = add_silence(audio, sr, silence_ms=300)
                 # Apply audio enhancement if enabled
                 if enable_postprocess:
                     final_audio = enhance_audio(audio_with_silence, sr)
@@ -1076,13 +1078,16 @@ def run_full_pipeline(url: str, device_info: DeviceInfo):
     # Ask about transcribe language
     transcribe_lang = show_transcribe_language_menu()
     transcript = transcribe_audio(selected_segment, device_info, transcribe_lang)
-    model_path = setup_tts_model()
+    # Ask which TTS model (backend)
+    backend_name = show_backend_menu()
     # Ask about TTS language
     tts_language = show_tts_language_menu()
     # Ask about post-processing
     enable_postprocess = show_postprocess_menu()
+    backend = get_backend(backend_name)
+    backend.load(device_info)
     generate_notifications(
-        selected_segment, transcript, model_path, device_info, enable_postprocess, tts_language
+        selected_segment, transcript, backend, device_info, enable_postprocess, tts_language
     )
     show_completion()
 
@@ -1129,13 +1134,16 @@ def run_from_transcribe(device_info: DeviceInfo):
     # Ask about transcribe language
     transcribe_lang = show_transcribe_language_menu()
     transcript = transcribe_audio(clean_audio, device_info, transcribe_lang)
-    model_path = setup_tts_model()
+    # Ask which TTS model (backend)
+    backend_name = show_backend_menu()
     # Ask about TTS language
     tts_language = show_tts_language_menu()
     # Ask about post-processing
     enable_postprocess = show_postprocess_menu()
+    backend = get_backend(backend_name)
+    backend.load(device_info)
     generate_notifications(
-        clean_audio, transcript, model_path, device_info, enable_postprocess, tts_language
+        clean_audio, transcript, backend, device_info, enable_postprocess, tts_language
     )
     show_completion()
 
@@ -1166,13 +1174,16 @@ def run_generate_only(device_info: DeviceInfo):
     transcript = transcript_data["text"]
 
     logger.info(f"Using transcript: {transcript[:50]}...")
-    model_path = setup_tts_model()
+    # Ask which TTS model (backend)
+    backend_name = show_backend_menu()
     # Ask about TTS language
     tts_language = show_tts_language_menu()
     # Ask about post-processing
     enable_postprocess = show_postprocess_menu()
+    backend = get_backend(backend_name)
+    backend.load(device_info)
     generate_notifications(
-        clean_audio, transcript, model_path, device_info, enable_postprocess, tts_language
+        clean_audio, transcript, backend, device_info, enable_postprocess, tts_language
     )
     show_completion()
 

@@ -80,8 +80,10 @@ pixi run install-chatterbox                       # 기본 엔진 설치
 pixi run quickstart "<URL>" --backend chatterbox  # 또는 --backend qwen3, ...
 ```
 
-> 백엔드마다 의존성이 충돌합니다(예: Chatterbox는 torch 2.6, Qwen3는 옛 transformers).
-> 사용할 하나만 설치하거나, 환경을 분리해서 쓰세요.
+> `chatterbox`와 `qwen3`는 한 환경에서 공존합니다: `install-chatterbox`가
+> `transformers`를 4.57.3(Qwen3 요구)으로 고정하고, Qwen3 백엔드는 eager 어텐션을
+> 써서 Chatterbox의 torch 2.6에서도 동작합니다. `indextts2`/`cosyvoice`는 각자
+> 저장소에서 선택 설치.
 
 **Claude Code와 Codex 양쪽 지원** — 같은 스킬, 같은 사운드.
 

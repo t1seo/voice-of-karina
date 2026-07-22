@@ -22,17 +22,20 @@ esac; }
 case_of() { case "$1" in
   done) echo "Task complete";; permission) echo "Permission";; auth) echo "Auth success";; *) echo "$1";;
 esac; }
+model_of() { case "$1" in
+  chatterbox) echo "Chatterbox";; qwen3) echo "Qwen3-TTS";; indextts2) echo "IndexTTS-2";;
+  cosyvoice) echo "CosyVoice";; "") echo "";; *) echo "$1";;
+esac; }
 
-only="${1:-}"   # optional stem filter, e.g. karina_done_ko
+only="${1:-}"   # optional stem filter, e.g. karina_done_ko_chatterbox
 
 for wav in "$SRC"/*.wav; do
-  stem="$(basename "$wav" .wav)"          # e.g. karina_done_ko  or  karina_done_ko_raw
+  stem="$(basename "$wav" .wav)"          # e.g. karina_done_ko_chatterbox
   [ -n "$only" ] && [ "$stem" != "$only" ] && continue
-  # A trailing _raw marks the "background music NOT removed" variant.
-  base="$stem"; variant="BGM removed"
-  case "$stem" in *_raw) base="${stem%_raw}"; variant="with BGM";; esac
-  IFS='_' read -r who what lang <<< "$base"
-  label="$(name_of "$who")  |  $(case_of "$what")  |  ${variant}"
+  # Stem layout: <who>_<case>_<lang>_<model>
+  IFS='_' read -r who what lang model <<< "$stem"
+  m="$(model_of "$model")"
+  label="$(name_of "$who")  |  $(case_of "$what")${m:+  |  $m}"
   out="$OUT/$stem.mp4"
 
   ffmpeg -y -loglevel error -i "$wav" -filter_complex \
