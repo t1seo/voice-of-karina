@@ -166,23 +166,13 @@ The same three Korean notification lines, cloned in Karina's voice ([interview s
 
 **Chatterbox** (default)
 
-https://github.com/user-attachments/assets/f6e9a81f-5ba1-4373-a72a-2f2fb9870acf
-
-**Qwen3-TTS**
-
-https://github.com/user-attachments/assets/2440c136-482a-4281-919c-b06f43ae44a1
-
-### 2. "실행 허가가 필요합니다." — *Permission required*
-
-**Chatterbox** (default)
-
 https://github.com/user-attachments/assets/e51b2a3a-3ee0-4a54-a643-14449e7c359b
 
 **Qwen3-TTS**
 
 https://github.com/user-attachments/assets/4414a9c8-8430-459f-88c7-e88460971a8e
 
-### 3. "인증에 성공했습니다." — *Authentication succeeded*
+### 2. "실행 허가가 필요합니다." — *Permission required*
 
 **Chatterbox** (default)
 
@@ -191,6 +181,16 @@ https://github.com/user-attachments/assets/81f2c41d-0be4-4e26-80cc-71a06796d663
 **Qwen3-TTS**
 
 https://github.com/user-attachments/assets/5d1de7c1-bf1d-45ed-8b78-0525ecb2ebc1
+
+### 3. "인증에 성공했습니다." — *Authentication succeeded*
+
+**Chatterbox** (default)
+
+https://github.com/user-attachments/assets/f6e9a81f-5ba1-4373-a72a-2f2fb9870acf
+
+**Qwen3-TTS**
+
+https://github.com/user-attachments/assets/2440c136-482a-4281-919c-b06f43ae44a1
 
 > Players are waveform videos (labelled with the model) so they play inline on GitHub. Source `.wav` files are in [`assets/samples/`](assets/samples); regenerate any engine with `pixi run samples --backend <model>`.
 

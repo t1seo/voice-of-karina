@@ -156,21 +156,39 @@ python scripts/install_notifications.py --dry-run      # 변경 미리보기
 
 ## 🔊 목소리 샘플
 
-카리나 목소리로 복제한 알림음 세 종류 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)). ▶ 를 누르면 바로 재생됩니다:
+같은 한국어 알림 문구 세 개를 카리나 목소리로 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)) **각 엔진**이 복제한 결과입니다 — 어떻게 다른지 비교해 보세요. ▶ 를 누르면 재생됩니다:
 
-**작업 완료** — *다 끝났어요! 결과 한번 확인해주세요~*
+### 1. "작업을 완료했습니다." — *작업 완료*
 
-https://github.com/user-attachments/assets/25a5c321-327e-4e1a-a7b4-28807d1feddc
+**Chatterbox** (기본)
 
-**권한 요청** — *잠깐만요! 이거 실행해도 괜찮을까요? 허락해주세요~*
+https://github.com/user-attachments/assets/e51b2a3a-3ee0-4a54-a643-14449e7c359b
 
-https://github.com/user-attachments/assets/2342c4e3-4be2-4067-a94d-8bf38417f739
+**Qwen3-TTS**
 
-**인증 성공** — *인증이 완료되었어요! 도와주셔서 정말 고마워요~*
+https://github.com/user-attachments/assets/4414a9c8-8430-459f-88c7-e88460971a8e
 
-https://github.com/user-attachments/assets/da276adb-389b-4b31-b583-720123f40cf7
+### 2. "실행 허가가 필요합니다." — *권한 요청*
 
-> 위 플레이어는 GitHub에서 인라인 재생되도록 파형 비디오로 만들었습니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples`로 재생성할 수 있습니다.
+**Chatterbox** (기본)
+
+https://github.com/user-attachments/assets/81f2c41d-0be4-4e26-80cc-71a06796d663
+
+**Qwen3-TTS**
+
+https://github.com/user-attachments/assets/5d1de7c1-bf1d-45ed-8b78-0525ecb2ebc1
+
+### 3. "인증에 성공했습니다." — *인증 성공*
+
+**Chatterbox** (기본)
+
+https://github.com/user-attachments/assets/f6e9a81f-5ba1-4373-a72a-2f2fb9870acf
+
+**Qwen3-TTS**
+
+https://github.com/user-attachments/assets/2440c136-482a-4281-919c-b06f43ae44a1
+
+> 플레이어는 모델명이 표시된 파형 비디오라 GitHub에서 인라인 재생됩니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples --backend <모델>`로 재생성합니다.
 
 ## 라이선스
 
