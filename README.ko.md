@@ -64,29 +64,47 @@ flowchart LR
 | 전사 | Whisper large-v3 | mlx-whisper (Mac) / faster-whisper (Linux) |
 | 음성 복제 | Qwen3-TTS 1.7B | 교차언어 지원 — 한국어 레퍼런스로 영어도 발화 가능 |
 
-## 🚀 사용법
+**Claude Code와 Codex 양쪽 지원** — 같은 스킬, 같은 사운드.
 
-### 1. 파이프라인 실행
+### 1. 알림음 생성
 
-```bash
-pixi run pipeline
+**대화형 (권장)** — Claude Code나 Codex에서 스킬을 실행하면 대화로 안내합니다:
+YouTube 링크 붙여넣기 → 각 알림 문구 정하기 → 완료.
+
+```
+/generate-voice
 ```
 
-인터랙티브 메뉴를 따라:
+**또는 CLI로:**
 
-1. 깨끗한 음성이 있는 YouTube URL 입력
-2. 깨끗한 음성 구간 선택 (5~15초)
-3. 알림음 생성 → `output/notifications/`
+```bash
+pixi run pipeline          # 메뉴 방식: URL → 세그먼트 선택 → 생성
+# 또는 비대화형 원샷:
+pixi run quickstart "https://youtu.be/VIDEO_ID" --line "idle_prompt:다 됐어요!"
+```
 
-### 2. Claude Code에 연결
+어느 방식이든 알림 세트는 `output/notifications/`에 생성됩니다.
 
-Claude Code에서 실행:
+### 2. Claude Code / Codex에 설치
+
+두 도구 중 어디서든 설정 스킬을 실행:
 
 ```
 /setup-notifications
 ```
 
-이 스킬이 음성 파일을 `~/.claude/sounds/`에 복사하고 Hook을 자동 설정합니다.
+또는 설치기를 직접 실행:
+
+```bash
+pixi run install-notifications          # 양쪽 자동 감지
+python scripts/install_notifications.py --tool codex   # Codex만
+python scripts/install_notifications.py --dry-run      # 변경 미리보기
+```
+
+사운드를 복사하고 이벤트를 연결합니다 — **Claude Code**: `~/.claude/settings.json`에
+`Stop` + `Notification` 훅, **Codex**: `~/.codex/config.toml`에 `notify` 프로그램
+(턴 완료 시 발동) + `~/.codex/skills/`에 스킬 복사. 편집 파일은 모두 백업되며,
+재실행해도 안전합니다. 설치 후 도구를 재시작하면 훅이 로드됩니다.
 
 ### 💡 좋은 결과를 위한 팁
 

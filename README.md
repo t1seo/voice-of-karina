@@ -67,29 +67,48 @@ flowchart LR
 | Transcription | Whisper large-v3 | mlx-whisper (Mac) / faster-whisper (Linux) |
 | Voice Cloning | Qwen3-TTS 1.7B | Cross-lingual — a Korean reference can speak English too |
 
-## 🚀 How to Use
+Works with both **Claude Code** and **Codex** — same skills, same sounds.
 
-### 1. Run the pipeline
+### 1. Generate the sounds
 
-```bash
-pixi run pipeline
+**Conversationally (recommended)** — in Claude Code or Codex, run the skill and it
+walks you through it: paste a YouTube link, choose what each alert should say, done.
+
+```
+/generate-voice
 ```
 
-Follow the interactive menu to:
+**Or via the interactive CLI:**
 
-1. Paste a YouTube URL with a clear voice
-2. Select a clean voice segment (5–15 seconds)
-3. Generate the notification sounds → `output/notifications/`
+```bash
+pixi run pipeline          # menu-driven: URL → segment → generate
+# or one-shot, non-interactive:
+pixi run quickstart "https://youtu.be/VIDEO_ID" --line "idle_prompt:다 됐어요!"
+```
 
-### 2. Wire it into Claude Code
+Either way the notification set lands in `output/notifications/`.
 
-In Claude Code, run:
+### 2. Install into Claude Code / Codex
+
+Run the setup skill in either tool:
 
 ```
 /setup-notifications
 ```
 
-This skill copies the sounds to `~/.claude/sounds/` and configures the hooks for you.
+Or run the installer directly:
+
+```bash
+pixi run install-notifications          # both tools (auto-detects)
+python scripts/install_notifications.py --tool codex   # just Codex
+python scripts/install_notifications.py --dry-run      # preview changes
+```
+
+It copies the sounds and wires up the events — **Claude Code**: `Stop` +
+`Notification` hooks in `~/.claude/settings.json`; **Codex**: a `notify` program
+in `~/.codex/config.toml` (fires on turn completion) plus the skills into
+`~/.codex/skills/`. Every edited file is backed up, and it's safe to re-run.
+Restart the tool afterward to load the hooks.
 
 ### 💡 Tips for best results
 

@@ -1,90 +1,76 @@
 ---
 name: setup-notifications
-description: Set up Karina voice notification sounds for Claude Code. Use when user asks to "install notifications", "setup sounds", "configure voice alerts", or mentions "Karina voice notifications".
-disable-model-invocation: true
+description: Install voice notification sounds into Claude Code and/or Codex — copies the generated sounds and wires up the event hooks. Use when the user asks to "install notifications", "setup sounds", "configure voice alerts", or "make the notification sounds play in Claude Code / Codex".
 ---
 
-# Setup Karina Voice Notifications
+# Setup Voice Notifications (Claude Code + Codex)
 
-This skill helps you install custom voice notification sounds for Claude Code events.
+Install the generated sounds so they actually play when Claude Code or Codex
+needs attention. One installer handles both tools.
 
-## What Gets Installed
+## Prerequisite
 
-| Event | Sound | When It Plays |
-|-------|-------|---------------|
-| `permission_prompt` | Permission request voice | Before executing risky commands |
-| `idle_prompt` | Task complete voice | After task completion |
-| `auth_success` | Authentication success voice | After successful auth |
-| `elicitation_dialog` | Input needed voice | When user input is required |
+Sounds must exist in `output/notifications/` first. If it's empty, run the
+**generate-voice** skill (or `pixi run pipeline`) to create them.
 
-## Installation Steps
+## Recommended: use the installer
 
-### 1. Copy Audio Files
+From the repo root:
 
 ```bash
-mkdir -p ~/.claude/sounds
-cp output/notifications/*/*.wav ~/.claude/sounds/
+python scripts/install_notifications.py            # both tools (auto-detects)
+python scripts/install_notifications.py --tool claude
+python scripts/install_notifications.py --tool codex
+python scripts/install_notifications.py --dry-run  # preview changes
 ```
 
-### 2. Copy Hook Script
+The installer:
+- copies a cross-platform player to `~/.local/share/voice-notification/`
+- copies the sounds to `~/.claude/sounds/` and/or `~/.codex/sounds/`
+- **Claude Code:** adds `Stop` + `Notification` hooks to `~/.claude/settings.json`
+- **Codex:** sets a `notify` program in `~/.codex/config.toml` (fires on
+  `agent-turn-complete`) and copies the skills to `~/.codex/skills/`
+- backs up every file it edits (`*.bak-voicenotif-<timestamp>`) and is safe to
+  re-run (idempotent)
 
-```bash
-mkdir -p ~/.claude/hooks
-cp .claude/skills/setup-notifications/scripts/claude_notification_hook.py ~/.claude/hooks/
-chmod +x ~/.claude/hooks/claude_notification_hook.py
-```
+After it finishes, **restart Claude Code / Codex** (or start a new session) so
+the hooks load.
 
-### 3. Configure Claude Code Settings
+## What gets wired up
 
-Add to `~/.claude/settings.json`:
+| Tool | Event | Sound |
+|------|-------|-------|
+| Claude Code | `Stop` | `idle_prompt_*` (task complete) |
+| Claude Code | `Notification` | matching type (`permission_prompt_*`, ...) |
+| Codex | `agent-turn-complete` | `idle_prompt_*` (turn finished) |
 
+## Verify
+
+- Claude Code: finish any task — you should hear the completion sound.
+- Codex: run a short `codex exec "say hi"` — the sound should play when it finishes.
+- Player debug log: `~/.cache/voice-notification/hook_debug.log`
+- Sounds present: `ls ~/.claude/sounds/` and/or `ls ~/.codex/sounds/`
+
+## Platform notes
+
+The player auto-detects the audio command: `afplay` (macOS), or `paplay` /
+`aplay` / `ffplay` (Linux). No manual edits needed.
+
+## Manual setup (reference)
+
+If you prefer to wire it by hand instead of the installer:
+
+**Claude Code** — add to `~/.claude/settings.json`:
 ```json
 {
   "hooks": {
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/hooks/claude_notification_hook.py",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/hooks/claude_notification_hook.py",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
+    "Stop": [{"hooks": [{"type": "command", "command": "python3 ~/.local/share/voice-notification/notification_player.py", "timeout": 10}]}],
+    "Notification": [{"hooks": [{"type": "command", "command": "python3 ~/.local/share/voice-notification/notification_player.py", "timeout": 10}]}]
   }
 }
 ```
 
-## Verification
-
-After installation, test by:
-1. Running any Claude Code task
-2. When the task completes, you should hear the idle_prompt sound
-3. When permission is required, you should hear the permission_prompt sound
-
-## Troubleshooting
-
-If sounds don't play:
-- Check files exist: `ls ~/.claude/sounds/`
-- Check hook permissions: `ls -la ~/.claude/hooks/`
-- Check debug log: `cat ~/.claude/hooks/hook_debug.log`
-
-## Platform-Specific Notes
-
-| Platform | Audio Command |
-|----------|---------------|
-| macOS | `afplay` (default) |
-| Linux (ALSA) | Change to `aplay` in hook script |
-| Linux (PulseAudio) | Change to `paplay` in hook script |
+**Codex** — add to `~/.codex/config.toml`:
+```toml
+notify = ["python3", "/Users/you/.local/share/voice-notification/notification_player.py"]
+```
