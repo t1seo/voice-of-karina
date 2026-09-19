@@ -1,156 +1,130 @@
-# Karina Voice Notification Generator
+# Voice of Karina
 
-**AI 음성 복제 도구** — YouTube 영상의 목소리로 Claude Code 맞춤 알림음을 생성합니다. Qwen3-TTS, Whisper, Demucs 기반.
+**Codex나 Claude에 듣고 싶은 목소리와 문장을 말씀해 주세요.** YouTube 영상의 목소리를 참고하거나, 설명으로 새로운 목소리를 만들거나, 저장한 목소리를 다시 사용합니다. WAV 파일을 만들고, 원하시면 작업 완료 알림에도 연결합니다.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/python-3.12-blue?logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/platform-Linux%20|%20macOS-lightgrey" alt="Platform">
-  <img src="https://img.shields.io/badge/GPU-CUDA%2012.0%2B%20|%20Apple%20Silicon-green" alt="GPU">
-  <img src="https://img.shields.io/badge/TTS-Qwen3--TTS%201.7B-orange" alt="TTS Model">
-  <img src="https://img.shields.io/badge/license-MIT-brightgreen" alt="License">
-  <a href="README.md"><img src="https://img.shields.io/badge/README-English-blue" alt="English"></a>
-</p>
+[English](README.md) · [모델 비교](docs/model-comparison.md)
 
 <p align="center">
   <img src="assets/karina.jpg" alt="Karina" width="800">
 </p>
 
-## 📖 이게 뭔가요?
+## 이렇게 요청해 주세요
 
-Claude Code는 당신의 주의가 필요할 때 알림음을 재생합니다 — 권한 요청, 작업 완료 등.
-이 도구는 그 **알림음을 원하는 사람의 목소리로 바꿔줍니다.** YouTube 클립 하나로 목소리를 복제하죠.
+**영상 속 목소리로 만들기**
 
-YouTube URL(인터뷰, 방송, 팟캐스트)을 넣고 깨끗한 몇 초의 발화를 고르면, 그 사람 목소리로
-한국어·영어 알림 문장 세트를 생성합니다 — 명령어 하나로 Claude Code에 바로 연결할 수 있어요.
-모든 처리는 **로컬**(Apple Silicon 또는 NVIDIA GPU)에서 이뤄지며, 음성은 컴퓨터 밖으로 나가지 않습니다.
+> 이 영상의 카리나 목소리로 “작업이 끝났어요. 확인해 주세요.”를 만들어 주세요.
+> https://www.youtube.com/watch?v=r96zEiIHVf4
 
-먼저 들어보고 싶으신가요? 맨 아래 [🔊 목소리 샘플](#-목소리-샘플)로 가세요.
+**영상 없이 새 목소리 만들기**
 
-## 📦 요구 사항 & 설치
+> 따뜻하고 차분한 한국어 여성 목소리로 “잠시 쉬어 가셔도 괜찮아요.”를 만들어 주세요. 목소리는 “차분한 안내”라는 이름으로 저장해 주세요.
 
-| 플랫폼 | 요구 사항 |
-|--------|----------|
-| **macOS** | Apple Silicon (M1+), 32GB+ RAM, [pixi](https://pixi.sh) |
-| **Linux** | NVIDIA GPU, CUDA 12.0+, [pixi](https://pixi.sh) |
+**저장한 목소리 재사용하기**
+
+> “차분한 안내” 목소리로 “다음 작업도 준비됐어요.”도 만들어 주세요.
+
+“음성을 만들고 싶어요”로 시작하셔도 됩니다. 스킬이 기존 사람의 목소리를 참고할지, 새로 만들지 대화로 정하고 빠진 정보만 여쭙습니다. 복제는 YouTube 링크를 하나 이상, 새 목소리는 원하는 음색 설명을 전달해 주세요. 여러 사람이 등장하면 짧은 발화 후보를 듣고 한 번 선택합니다. 이미 주신 링크·문장·선택은 다시 묻지 않습니다.
+
+## 한 번만 설치해 주세요
+
+현재 로컬 음성 생성은 **macOS 14 이상인 Apple Silicon Mac**에서 지원하며 Python 3.12, [uv](https://docs.astral.sh/uv/getting-started/installation/), FFmpeg를 사용합니다. 모델은 처음 사용할 때 다운로드합니다. YouTube와 모델 다운로드에는 인터넷이 필요하며 참조 음성 분석과 합성은 로컬에서 실행됩니다.
 
 ```bash
-git clone https://github.com/t1seo/karina-voice-notification.git
-cd karina-voice-notification
-
-pixi install
-pixi run install-deps-mac    # macOS (Apple Silicon)
-pixi run install-deps-linux  # Linux (NVIDIA GPU)
+brew install uv ffmpeg
+git clone https://github.com/t1seo/voice-of-karina.git
+cd voice-of-karina
+uv sync --extra local
 ```
 
-## 🔄 작동 흐름
+이 폴더를 **Codex 또는 Claude Code**에서 열고 위 예시처럼 요청해 주세요. 두 도구가 같은 `voice-of-karina` 스킬을 발견합니다. 직접 선택하려면 Codex에서는 `$voice-of-karina`, Claude Code에서는 `/voice-of-karina`를 사용하시면 됩니다.
 
-원본 YouTube 링크를 깨끗한 알림음으로 바꾸는 6단계 파이프라인입니다:
+다른 프로젝트에서도 사용하시려면 에이전트에 다음처럼 요청해 주세요.
+
+> 이 저장소의 voice-of-karina 스킬을 Codex와 Claude Code 개인 스킬로 설치해 주세요. 기존 설치가 있으면 보존하고 현재 스킬 폴더를 링크해 주세요. 로컬 엔진은 이 저장소를 계속 사용해 주세요.
+
+원본 스킬은 `.agents/skills/voice-of-karina`에 있습니다. 개인 설치 경로는 `~/.agents/skills/voice-of-karina`, `~/.claude/skills/voice-of-karina`입니다. 저장소 폴더는 유지해 주세요. 스킬은 링크의 실제 위치를 찾아 uv로 필요한 환경을 준비하므로 다른 프로젝트에서도 같은 엔진을 사용합니다.
+
+이번 구현에는 Linux/CUDA, Intel Mac, CPU 전용 실행과 API 합성 백엔드가 없습니다. 대체 로컬 모델과 유료 API는 [모델 비교 문서](docs/model-comparison.md)에 정리했으며 자동 대체 경로로 사용하지 않습니다.
+
+## 요청을 처리하는 흐름
 
 ```mermaid
 flowchart LR
-    A([YouTube URL]) --> B[다운로드<br/>yt-dlp]
-    B --> C[BGM 제거<br/>Demucs]
-    C --> D[분할 &amp; 선택<br/>깨끗한 구간]
-    D --> E[전사<br/>Whisper large-v3]
-    E --> F[음성 복제<br/>Qwen3-TTS 1.7B]
-    F --> G([알림음 .wav])
+    A[자연어 요청] --> B{목소리 선택}
+    B -->|영상이나 음원| C[짧은 발화 후보 분석]
+    C --> D[화자가 모호할 때 선택]
+    B -->|목소리 설명| E[새 목소리 생성]
+    B -->|저장한 목소리| F[참조 음성 재사용]
+    D --> G[요청한 문장만 합성]
+    E --> G
+    F --> G
+    G --> H[음성·발화 내용 검사]
+    H -->|통과| I[WAV와 저장한 목소리]
+    H -->|재시도 가능| G
+    H -->|입력 필요| J[이유 안내]
+    I -->|요청한 경우| K[완료 알림 적용]
 ```
 
-| 단계 | 기술 | 설명 |
-|------|------|------|
-| 다운로드 | yt-dlp | 최고 음질 오디오 추출 |
-| BGM 제거 | Demucs (Meta AI) | 선택 사항 — 배경음악을 제거해 더 깨끗한 레퍼런스 확보 |
-| 분할 & 선택 | pydub | 구간으로 자르고 5~15초 깨끗한 발화 선택 |
-| 전사 | Whisper large-v3 | mlx-whisper (Mac) / faster-whisper (Linux) |
-| 음성 복제 | Qwen3-TTS 1.7B | 교차언어 지원 — 한국어 레퍼런스로 영어도 발화 가능 |
+작업 진행 상태와 문장별 결과를 저장합니다. 품질 검사 후 재시도는 기본적으로 **첫 생성을 포함해 문장당 총 2회**, 최대 3회입니다. 한 문장이 실패해도 정상 결과는 보존하며 중단한 작업은 기존 시도 횟수를 유지한 채 이어서 진행합니다.
 
-**Claude Code와 Codex 양쪽 지원** — 같은 스킬, 같은 사운드.
+저장한 목소리에는 참조 음성과 전사문이 들어갑니다. 다음 문장을 만들 때 다운로드와 발화 후보 선택을 반복하지 않습니다. 참조 파일을 재사용하는 방식이며 화자 임베딩을 영구 캐시하는 기능은 없습니다.
 
-### 1. 알림음 생성
+작업과 목소리는 기본적으로 저장소의 `.voice-of-karina/`에 보관합니다. 다른 폴더에서 스킬을 실행해도 같은 저장소를 사용합니다. `VOICE_OF_KARINA_HOME`으로 위치를 바꿀 수 있으며 이어서 실행하거나 목소리를 재사용할 때는 같은 경로를 유지해 주세요.
 
-**대화형 (권장)** — Claude Code나 Codex에서 스킬을 실행하면 대화로 안내합니다:
-YouTube 링크 붙여넣기 → 각 알림 문구 정하기 → 완료.
+## 자연스러운 음성과 잡음 처리
 
-```
-/generate-voice
-```
+기본은 **깨끗한 원본 발화를 고르는 것**입니다. 모든 영상에 음악 분리·잡음 제거·EQ·압축을 일괄 적용하지 않습니다. 이런 처리는 보존하려는 음색까지 바꿀 수 있습니다.
 
-**또는 CLI로:**
+분석에서는 발화 비율, 음량, 클리핑, 주파수 특성을 측정하고 후보 음성과 주의점을 보여 줍니다. 이 값은 추정 지표이며 음악이나 화자를 확실하게 식별하는 기능은 아닙니다. 링크를 여러 개 주시면 후보가 늘어나며 서로 다른 녹음을 자동으로 섞지 않습니다.
+
+한 사람이 짧고 완결된 문장을 또렷하게 말하는 구간이 좋습니다. 음악이 크거나 여러 사람이 겹쳐 말하면 다른 구간 또는 더 깨끗한 영상을 전달해 주세요. 원하는 사람이 말하는 타임스탬프가 있으면 선택에 도움이 됩니다.
+
+결과는 디코딩, 무음, 길이, 클리핑과 ASR 전사를 통한 문장 일치를 확인합니다. 전사가 불가능하거나 불확실하면 미검증 상태로 안내합니다. 자동 검사는 자연스러움이나 특정 인물과의 유사성을 보장하지 않으므로 직접 들어 보시고 선택해 주세요. 현재 어댑터에는 저장한 목소리의 속도·감정을 조절하는 기능이 없습니다.
+
+## 원하시면 완료 알림에 적용하세요
+
+> 방금 만든 문장을 Codex와 Claude Code의 작업 완료 알림으로 적용해 주세요.
+
+요청하신 경우에만 설치합니다. **Claude의 `Stop` 훅**, **Codex의 `agent-turn-complete` 알림**에 연결하며 권한 요청·인증 등 다른 이벤트는 연결하지 않습니다.
+
+설정 변경 전 백업을 만들고 다른 Claude 훅을 유지하며 다른 Codex 알림 프로그램에도 이벤트를 전달합니다. 이 프로젝트의 옛 재생기를 연결한 정확한 경로는 명시적으로 새 알림을 설치할 때 교체해 중복 재생을 막습니다. 같은 음성을 다시 설치해도 중복으로 추가하지 않습니다. 각 도구의 설정 폴더에 전용 재생기와 WAV를 복사하므로 알림이 울릴 때 모델을 로드하거나 프로젝트 환경을 실행하지 않습니다. 적용 후 해당 에이전트를 재시작해 주세요.
+
+## 카리나 샘플 듣기
+
+새 엔진이 [카리나 인터뷰](https://www.youtube.com/watch?v=r96zEiIHVf4)의 발화를 참고해 생성한 한국어 샘플입니다. 카리나가 이 문장을 직접 말한 녹음이 아닌 합성 음성입니다. 각 영상의 재생 버튼을 눌러 주세요.
+
+**작업 완료** · 작업이 끝났어요. 확인해 주세요.
+
+https://github.com/user-attachments/assets/b69fb9ec-683e-4f33-9a53-e14ad8b7790e
+
+**확인 요청** · 확인이 필요해요. 잠깐 봐 주세요.
+
+https://github.com/user-attachments/assets/ac07fcfc-744a-429b-8d40-c054749f7b7e
+
+**다음 작업 준비** · 다음 작업도 준비됐어요.
+
+https://github.com/user-attachments/assets/687e46a4-c6bb-42d8-8eaa-b18e88a75a6d
+
+**잠깐 쉬어 가기** · 오늘도 수고 많으셨어요. 잠깐 쉬었다가 다시 시작해 볼까요?
+
+https://github.com/user-attachments/assets/b3a27ab3-ae5d-4e54-abe1-6c567a4192cb
+
+WAV 다운로드: [작업 완료](assets/samples/karina-done.wav), [확인 요청](assets/samples/karina-attention.wav), [다음 작업 준비](assets/samples/karina-ready.wav), [잠깐 쉬어 가기](assets/samples/karina-break.wav). 영상 없이 만든 [새 목소리](assets/samples/original-rest.wav)는 “잠시 쉬어 가셔도 괜찮아요.”라고 말합니다. [듣기 페이지](docs/samples.html)를 로컬에서 열면 다섯 음성을 모두 재생할 수 있습니다. 입력·모델·품질 검사 기록은 [샘플 출처](assets/samples/provenance.json)에 있습니다.
+
+## 개발
+
+사용자 인터페이스는 대화 스킬입니다. 내부 JSON 실행 계약과 예시는 [엔진 참조 문서](.agents/skills/voice-of-karina/references/engine.md)에 있습니다.
 
 ```bash
-pixi run pipeline          # 메뉴 방식: URL → 세그먼트 선택 → 생성
-# 또는 비대화형 원샷:
-pixi run quickstart "https://youtu.be/VIDEO_ID" --line "idle_prompt:다 됐어요!"
+uv run pytest
+uv run ruff check .
+uv run basedpyright
 ```
 
-어느 방식이든 알림 세트는 `output/notifications/`에 생성됩니다.
+## 후원
 
-### 2. Claude Code / Codex에 설치
-
-두 도구 중 어디서든 설정 스킬을 실행:
-
-```
-/setup-notifications
-```
-
-또는 설치기를 직접 실행:
-
-```bash
-pixi run install-notifications          # 양쪽 자동 감지
-python scripts/install_notifications.py --tool codex   # Codex만
-python scripts/install_notifications.py --dry-run      # 변경 미리보기
-```
-
-사운드를 복사하고 이벤트를 연결합니다 — **Claude Code**: `~/.claude/settings.json`에
-`Stop` + `Notification` 훅, **Codex**: `~/.codex/config.toml`에 `notify` 프로그램
-(턴 완료 시 발동) + `~/.codex/skills/`에 스킬 복사. 편집 파일은 모두 백업되며,
-재실행해도 안전합니다. 설치 후 도구를 재시작하면 훅이 로드됩니다.
-
-### 💡 좋은 결과를 위한 팁
-
-**좋은 음성 소스**
-- 인터뷰, 단독 발화, 팟캐스트
-- 뮤직비디오는 **BGM 제거** 활성화
-
-**피해야 할 것**
-- 시끄러운 환경, 여러 명이 말하는 영상
-- 5초 미만의 짧은 클립
-
-### 🎨 커스터마이징
-
-`notification_lines.json`을 수정하여 알림 문구를 변경합니다:
-
-```json
-{"text": "원하는 문구를 여기에", "filename": "permission_prompt_1.wav"}
-```
-
-### 🛠️ 문제 해결
-
-| 문제 | 해결 방법 |
-|------|----------|
-| 음성 품질 저하 | 더 깨끗한 소스 사용, BGM 제거 활성화 |
-| Hook 소리 안남 | `~/.claude/sounds/` 확인, 권한 확인 |
-| 의존성 오류 | `pixi run install-deps-mac` 또는 `install-deps-linux` 실행 |
-| YouTube 다운로드 실패 (HTTP 403) | yt-dlp 업데이트: `pixi run pip install -U yt-dlp` |
-
-## 🔊 목소리 샘플
-
-카리나 목소리로 Qwen3-TTS가 복제한 한국어 알림 문구 세 개 ([인터뷰 출처](https://www.youtube.com/watch?v=r96zEiIHVf4)). ▶ 를 누르면 재생됩니다:
-
-**작업 완료** — *작업을 완료했습니다.*
-
-https://github.com/user-attachments/assets/4414a9c8-8430-459f-88c7-e88460971a8e
-
-**권한 요청** — *실행 허가가 필요합니다.*
-
-https://github.com/user-attachments/assets/5d1de7c1-bf1d-45ed-8b78-0525ecb2ebc1
-
-**인증 성공** — *인증에 성공했습니다.*
-
-https://github.com/user-attachments/assets/2440c136-482a-4281-919c-b06f43ae44a1
-
-> 플레이어는 파형 비디오라 GitHub에서 인라인 재생됩니다. 원본 `.wav`는 [`assets/samples/`](assets/samples)에 있고 `pixi run samples`로 재생성합니다.
+[![Buy me a coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=taewonseo&button_colour=e3e7ef&font_colour=262626&font_family=Inter&outline_colour=262626&coffee_colour=a0522d)](https://www.buymeacoffee.com/taewonseo)
 
 ## 라이선스
 
-MIT License
+MIT. 생성 결과는 합성 음성이며 참조 인물의 실제 녹음이나 프로젝트에 대한 보증을 의미하지 않습니다.

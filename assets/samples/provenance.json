@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T16:17:30.780122+00:00",
+  "disclosure": "These are newly generated synthetic voices. The Karina examples use a selected interview recording as a reference; they are not original speech or an endorsement.",
+  "runtime": {
+    "engine": "voice-of-karina",
+    "mlx_audio_version": "0.5.4",
+    "machine": "Apple M1 with 16 GiB unified memory",
+    "model_downloads_included_in_timings": false
+  },
+  "models": {
+    "speech": {
+      "id": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-4bit",
+      "revision": "0d6bb6fe33f92d47a507e23b9148940e8366ab5b"
+    },
+    "voice_design": {
+      "id": "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-4bit",
+      "revision": "5c390979e4b93af5f2932f90742ca99c7dd04687"
+    },
+    "transcription": {
+      "id": "mlx-community/whisper-large-v3-turbo-asr-fp16",
+      "revision": "624c19c9af5603fa73b83bce14d4aeea96156d18"
+    }
+  },
+  "photo": {
+    "path": "assets/karina.jpg",
+    "sha256": "3ac3f18648ba35dd1a94302ede324f59bfd9578da7782b7bb9bbb51a8e68de55",
+    "unchanged_from_original_repository": true
+  },
+  "references": {
+    "karina": {
+      "kind": "mimic",
+      "source_url": "https://www.youtube.com/watch?v=r96zEiIHVf4",
+      "requested_start_seconds": 16.37,
+      "requested_end_seconds": 27.723,
+      "actual_start_seconds": 16.37,
+      "actual_end_seconds": 27.716,
+      "duration_seconds": 11.346,
+      "sample_rate": 48000,
+      "sha256": "22f4699da0e970aa766758844964507062f045a1064dff8a1faf021d31b6f87f",
+      "transcript": "저에 대한 자팍 사전을 한번 기입을 해볼 예정인데요. 저에 대한 TMI 속속들이 알려드리겠습니다. 오늘 재밌는 시간 함께 보내봅시다.",
+      "transcript_note": "This is the actual automatic reference transcript, including the recognized wording; it is not a claim of error-free transcription or speaker identification.",
+      "preparation": [
+        "original",
+        "mono",
+        "native_sample_rate"
+      ],
+      "analysis": {
+        "speech_ratio": 0.9523809523809523,
+        "rms_dbfs": -25.72599369066467,
+        "clipping_ratio": 0.0,
+        "estimated_noise_floor_dbfs": -40.342491777487666,
+        "wall_seconds": 15.88
+      }
+    },
+    "original_calm": {
+      "kind": "design",
+      "description": "따뜻하고 차분한 한국어 여성 목소리. 또렷하고 편안한 말투.",
+      "sha256": "09bba0a7eb4b893a45e1b55ccff440ffade4ddf9529e4cb0c01833326edbb7fc",
+      "transcript": "안녕하세요, 편안하게 들으실 수 있도록 또렷하고 자연스럽게 말씀 드릴게요, 오늘도 하시는 일이 잘 풀리길 바라요, 잠깐 쉬어 가셔도 괜찮아요.",
+      "preparation": [
+        "original",
+        "asr_transcribed"
+      ],
+      "model": "voice_design"
+    }
+  },
+  "pipeline_wall_seconds": {
+    "three_karina_messages_from_selected_reference": 71.2,
+    "original_voice_reference_and_one_message": 40.12,
+    "reuse_karina_one_message": 14.42,
+    "reuse_original_one_message": 14.56
+  },
+  "samples": [
+    {
+      "id": "done",
+      "reference": "karina",
+      "text": "작업이 끝났어요. 확인해 주세요.",
+      "wav": "assets/samples/karina-done.wav",
+      "wav_sha256": "4ec5ec0bee2ba054c682048cce5d8684b8962191e8630cd51a1da5f61ea0d0c9",
+      "mp4": "assets/samples/karina-done.mp4",
+      "readme_attachment": "https://github.com/user-attachments/assets/b69fb9ec-683e-4f33-9a53-e14ad8b7790e",
+      "mp4_sha256": "660413a7e6255a2e61da8d7bee2b14b7dab8b09e6e653a78258ce733226917f5",
+      "sample_rate": 24000,
+      "duration_seconds": 2.0,
+      "attempts": 1,
+      "model": "speech",
+      "inference_seconds": 10.86898862523958,
+      "quality": {
+        "decision": "pass",
+        "transcript": " 작업이 끝났어요. 확인해주세요.",
+        "normalized_character_error_rate": 0.0,
+        "rms_dbfs": -25.109501573756006,
+        "clipping_ratio": 0.0
+      }
+    },
+    {
+      "id": "attention",
+      "reference": "karina",
+      "text": "확인이 필요해요. 잠깐 봐 주세요.",
+      "wav": "assets/samples/karina-attention.wav",
+      "wav_sha256": "183ad86372e0708cd62cbf6ba82adcd4ba7187cf41fa464a178274ef9cc9c337",
+      "mp4": "assets/samples/karina-attention.mp4",
+      "readme_attachment": "https://github.com/user-attachments/assets/ac07fcfc-744a-429b-8d40-c054749f7b7e",
+      "mp4_sha256": "9aa9207b45a33c7fa4136b503f1d03d22826ea8f21a16be06fb2edd344451ceb",
+      "sample_rate": 24000,
+      "duration_seconds": 2.56,
+      "attempts": 1,
+      "model": "speech",
+      "inference_seconds": 5.631382249761373,
+      "quality": {
+        "decision": "pass",
+        "transcript": " 확인이 필요해요. 잠깐 봐주세요.",
+        "normalized_character_error_rate": 0.0,
+        "rms_dbfs": -27.982380333888276,
+        "clipping_ratio": 0.0
+      }
+    },
+    {
+      "id": "ready",
+      "reference": "karina",
+      "text": "다음 작업도 준비됐어요.",
+      "wav": "assets/samples/karina-ready.wav",
+      "wav_sha256": "100c959f553f73d31928804124c1439e96893c0c8f54a508010aaf84e0af10ae",
+      "mp4": "assets/samples/karina-ready.mp4",
+      "readme_attachment": "https://github.com/user-attachments/assets/687e46a4-c6bb-42d8-8eaa-b18e88a75a6d",
+      "mp4_sha256": "abac158e459c6793caa4cf84d7eb634d5f4a888db5d95b11fbf9be4e6b667155",
+      "sample_rate": 24000,
+      "duration_seconds": 2.88,
+      "attempts": 1,
+      "model": "speech",
+      "inference_seconds": 5.579833833035082,
+      "quality": {
+        "decision": "pass",
+        "transcript": " 다음 작업도 준비됐어요.",
+        "normalized_character_error_rate": 0.0,
+        "rms_dbfs": -27.71453248252974,
+        "clipping_ratio": 0.0
+      }
+    },
+    {
+      "id": "break",
+      "reference": "karina",
+      "mode": "reuse",
+      "generated_at": "2026-09-19T16:51:43.498775+00:00",
+      "text": "오늘도 수고 많으셨어요. 잠깐 쉬었다가 다시 시작해 볼까요?",
+      "wav": "assets/samples/karina-break.wav",
+      "wav_sha256": "6be1c0ff749140e88b31be991f5684012050a87ca24a16e59058ae2645236e11",
+      "mp4": "assets/samples/karina-break.mp4",
+      "mp4_sha256": "d390b91daf777c0dbe71a53beccf6947422440e5d75bd7d20fb12b7022a9724e",
+      "readme_attachment": "https://github.com/user-attachments/assets/b3a27ab3-ae5d-4e54-abe1-6c567a4192cb",
+      "sample_rate": 24000,
+      "duration_seconds": 4.56,
+      "attempts": 1,
+      "model": "speech",
+      "inference_seconds": 8.602397750131786,
+      "quality": {
+        "decision": "pass",
+        "transcript": " 오늘도 수고 많으셨어요. 잠깐 쉬었다가 다시 시작해볼까요?",
+        "normalized_character_error_rate": 0.0,
+        "rms_dbfs": -25.595734925343592,
+        "clipping_ratio": 0.0
+      }
+    },
+    {
+      "id": "rest",
+      "reference": "original_calm",
+      "text": "잠시 쉬어 가셔도 괜찮아요.",
+      "wav": "assets/samples/original-rest.wav",
+      "wav_sha256": "6fef3a47c773177a2f50ffb5d808ba6f84c056ed10ea91c4f347f2d6d4bde909",
+      "sample_rate": 24000,
+      "duration_seconds": 1.68,
+      "attempts": 1,
+      "model": "speech",
+      "inference_seconds": 5.777907208073884,
+      "quality": {
+        "decision": "pass",
+        "transcript": " 잠시 쉬어가셔도 괜찮아요.",
+        "normalized_character_error_rate": 0.0,
+        "rms_dbfs": -18.517719662118083,
+        "clipping_ratio": 0.0
+      }
+    },
+    {
+      "id": "start",
+      "reference": "karina",
+      "mode": "reuse",
+      "text": "새로운 작업을 시작할게요.",
+      "wav": "assets/samples/karina-reuse-start.wav",
+      "wav_sha256": "edf46842270d3e3350774feb9222d8ce8d72e5512f71991fb087c931d966f4bc",
+      "sample_rate": 24000,
+      "duration_seconds": 2.08,
+      "attempts": 1,
+      "model": "speech",
+      "inference_seconds": 5.734122124966234,
+      "quality": {
+        "decision": "pass",
+        "transcript": " 새로운 작업을 시작할게요.",
+        "normalized_character_error_rate": 0.0,
+        "rms_dbfs": -22.483321389758693,
+        "clipping_ratio": 0.0
+      }
+    },
+    {
+      "id": "begin",
+      "reference": "original_calm",
+      "mode": "reuse",
+      "text": "준비되시면 천천히 시작해 주세요.",
+      "wav": "assets/samples/original-reuse-begin.wav",
+      "wav_sha256": "7209ccb1deccac07490216172637912e17490ce7054bbf48068e35a6309e04a4",
+      "sample_rate": 24000,
+      "duration_seconds": 2.48,
+      "attempts": 1,
+      "model": "speech",
+      "inference_seconds": 6.214987833984196,
+      "quality": {
+        "decision": "pass",
+        "transcript": " 준비되시면 천천히 시작해 주세요.",
+        "normalized_character_error_rate": 0.0,
+        "rms_dbfs": -18.865905372129234,
+        "clipping_ratio": 0.0
+      }
+    }
+  ],
+  "quality_limits": "The checks verify decoded non-silent audio and ASR agreement after spacing/punctuation normalization. They do not establish voice similarity, naturalness, speaker identity, or absence of all background noise.",
+  "updated_at": "2026-09-19T16:54:06.384701+00:00"
+}
