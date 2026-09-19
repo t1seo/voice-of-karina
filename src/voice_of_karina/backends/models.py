@@ -57,6 +57,7 @@ def backend_cache_key() -> str:
         QUALITY_POLICY_VERSION,
         "whisper-temperature=0.0",
         "design-asr-reference-v1",
+        "reference-pause-bounded-v1:vad3-10ms",
         "language-mapping-v1",
         str(MAX_GENERATION_TOKENS),
         str(MIN_GENERATION_TOKENS),

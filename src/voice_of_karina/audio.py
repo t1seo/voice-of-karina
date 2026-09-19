@@ -79,7 +79,7 @@ def analyze_sources(request: AnalyzeRequest | GenerateRequest, job_dir: Path) ->
     if transcription_warning is not None:
         warnings.append(transcription_warning)
     usable = tuple(candidate for candidate in transcribed if candidate.transcript)
-    needs_input = transcription_warning
+    needs_input = transcription_warning if not usable else None
     if usable and any(candidate.needs_confirmation for candidate in usable):
         needs_input = (
             "Listen to the candidate clips and select the intended speaker, "
@@ -135,5 +135,6 @@ def prepare_reference(candidate: Candidate, job_dir: Path) -> Reference:
             start_seconds=candidate.start_seconds,
             end_seconds=candidate.end_seconds,
         ),
-        preparation=("original", "mono", "native_sample_rate"),
+        preparation=("original", "mono", "native_sample_rate")
+        + (("pause_bounded",) if candidate.pause_bounded else ()),
     )

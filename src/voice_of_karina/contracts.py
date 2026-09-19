@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints, TypeAdapte
 from pydantic_core import PydanticCustomError
 
 type Identifier = Annotated[str, StringConstraints(pattern=r"^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$")]
+type Sha256 = Annotated[str, StringConstraints(pattern=r"^[a-f0-9]{64}$")]
 type Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=4000)]
 type Mode = Literal["mimic", "design", "reuse"]
 type Status = Literal["running", "needs_input", "needs_selection", "complete", "partial", "failed"]
@@ -142,6 +143,16 @@ class VoicesRequest(FrozenModel):
     action: Literal["voices"] = "voices"
 
 
+class RejectRequest(FrozenModel):
+    """Reject one reviewed artifact by digest without granting more attempts."""
+
+    action: Literal["reject"] = "reject"
+    job_id: Identifier
+    message_id: Identifier
+    sha256: Sha256
+    reason: Text
+
+
 class InstallRequest(FrozenModel):
     """Apply a completed artifact only when the user requests notifications."""
 
@@ -156,6 +167,7 @@ type Request = Annotated[
     | GenerateRequest
     | StatusRequest
     | ResumeRequest
+    | RejectRequest
     | VoicesRequest
     | InstallRequest,
     Field(discriminator="action"),
@@ -204,6 +216,8 @@ class Candidate(FrozenModel):
     warnings: tuple[str, ...] = ()
     needs_confirmation: bool = True
     source: str | None = None
+    pause_bounded: bool = False
+    utterance_count: int | None = Field(default=None, ge=1)
 
 
 class AnalysisResult(FrozenModel):

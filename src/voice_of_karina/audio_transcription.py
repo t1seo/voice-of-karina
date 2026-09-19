@@ -5,8 +5,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
+from voice_of_karina.audio_candidates import MAX_CANDIDATES
 from voice_of_karina.audio_io import crop_audio
-from voice_of_karina.audio_metrics import ANALYSIS_RATE
+from voice_of_karina.audio_metrics import ANALYSIS_RATE, reference_score
+from voice_of_karina.audio_reference_windows import (
+    normalized_reference_text,
+    pause_bounded_candidates,
+    valid_segment_order,
+)
 from voice_of_karina.backends.languages import asr_language
 from voice_of_karina.backends.stt import Transcript, transcribe_many
 from voice_of_karina.errors import VoiceError
@@ -33,13 +39,12 @@ def uncertain_transcript(transcript: Transcript) -> bool:
     )
 
 
-def transcribe_candidates(
+def _transcribe_native_candidates(
     candidates: tuple[Candidate, ...],
     job_dir: Path,
     *,
-    language: str = "Korean",
-) -> tuple[tuple[Candidate, ...], str | None]:
-    """Batch only ranked clips through one ASR worker, preserving native references."""
+    language: str,
+) -> tuple[Transcript, ...]:
     paths: list[Path] = []
     for candidate in candidates:
         path = job_dir / "analysis" / f"{candidate.id}-16k.wav"
@@ -52,8 +57,18 @@ def transcribe_candidates(
                 sample_rate=ANALYSIS_RATE,
             )
         )
+    return transcribe_many(tuple(paths), language=asr_language(language))
+
+
+def transcribe_candidates(
+    candidates: tuple[Candidate, ...],
+    job_dir: Path,
+    *,
+    language: str = "Korean",
+) -> tuple[tuple[Candidate, ...], str | None]:
+    """Verify a bounded batch of pause crops while retaining original references."""
     try:
-        transcripts = transcribe_many(tuple(paths), language=asr_language(language))
+        transcripts = _transcribe_native_candidates(candidates, job_dir, language=language)
     except VoiceError as error:
         return candidates, f"Reference transcription is unavailable: {error.message}"
     results: list[Candidate] = []
@@ -63,5 +78,44 @@ def transcribe_candidates(
         warnings = candidate.warnings
         if uncertain:
             warnings += ("Reference transcription is uncertain; choose a clearer recording.",)
-        results.append(candidate.model_copy(update={"transcript": text, "warnings": warnings}))
-    return tuple(results), None
+        results.append(
+            candidate.model_copy(
+                update={
+                    "transcript": text,
+                    "warnings": warnings,
+                    "utterance_count": len(transcript.segments) if text else None,
+                }
+            )
+        )
+    proposals: list[Candidate] = []
+    try:
+        for candidate, transcript in zip(results, transcripts, strict=True):
+            if candidate.transcript:
+                proposals.extend(
+                    pause_bounded_candidates(
+                        candidate,
+                        transcript.segments,
+                        job_dir,
+                        limit=MAX_CANDIDATES - len(proposals),
+                    )
+                )
+        if not proposals:
+            return tuple(results), None
+        confirmations = _transcribe_native_candidates(tuple(proposals), job_dir, language=language)
+    except VoiceError as error:
+        return tuple(results), f"Shorter reference verification is unavailable: {error.message}"
+    verified = [
+        candidate.model_copy(update={"transcript": transcript.text.strip()})
+        for candidate, transcript in zip(proposals, confirmations, strict=True)
+        if not uncertain_transcript(transcript)
+        and valid_segment_order(transcript.segments, candidate.metrics.duration_seconds)
+        and normalized_reference_text(transcript.text)
+        == normalized_reference_text(candidate.transcript or "")
+    ]
+    ranked = sorted(
+        verified, key=lambda candidate: reference_score(candidate.metrics), reverse=True
+    )
+    originals = sorted(
+        results, key=lambda candidate: reference_score(candidate.metrics), reverse=True
+    )
+    return tuple((ranked[: MAX_CANDIDATES - 1] + originals)[:MAX_CANDIDATES]), None

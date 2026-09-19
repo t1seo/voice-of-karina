@@ -19,7 +19,9 @@ from voice_of_karina.contracts import (
     QualityOptions,
     QualityResult,
     Reference,
+    Sha256,
     Status,
+    Text,
 )
 
 if TYPE_CHECKING:
@@ -42,6 +44,15 @@ class Event(FrozenModel):
     detail: str
 
 
+class ReviewRejection(FrozenModel):
+    """Retain the artifact and automatic verdict that a later review rejected."""
+
+    sha256: Sha256
+    reason: Text
+    audio: GeneratedAudio
+    quality: QualityResult | None
+
+
 class MessageResult(FrozenModel):
     """Attempts and verified output for exactly one requested utterance."""
 
@@ -51,6 +62,7 @@ class MessageResult(FrozenModel):
     audio: GeneratedAudio | None = None
     quality: QualityResult | None = None
     accepted_sha256: str | None = None
+    rejections: tuple[ReviewRejection, ...] = Field(default=(), max_length=3)
     errors: tuple[ErrorDetail, ...] = ()
 
 

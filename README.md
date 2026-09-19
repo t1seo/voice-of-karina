@@ -67,6 +67,8 @@ flowchart LR
 
 The engine keeps resumable jobs and per-message results. Its quality loop allows **two total attempts per message** by default, with a maximum of three. Accepted messages are preserved when another needs a retry. Resume continues the saved job without resetting its attempt budget.
 
+You can give feedback after an automatic pass, such as “There is noise at the beginning; try again.” The skill records why that artifact was rejected and uses the same job's remaining attempts. Recovery cannot select the rejected file again, and other accepted messages stay intact.
+
 Saved voices keep their reference recording and transcript. Follow-up messages skip source acquisition and candidate selection. Reference files are reused; reusable neural speaker embeddings are not cached.
 
 Jobs and voices live in `.voice-of-karina/` inside the checkout by default, even when the skill is invoked from another folder. `VOICE_OF_KARINA_HOME` selects a different persistent store. Keep the same store when resuming or reusing voices.
@@ -79,7 +81,11 @@ Analysis measures speech coverage, level, clipping, and spectral characteristics
 
 Good references contain one person speaking a short, complete phrase clearly. For heavy music, overlapping speakers, or reverberation, provide another interval or a cleaner video. A timestamp helps select the intended person.
 
+When reliable transcription contains several utterances, analysis can propose shorter clips bounded by measured pauses. Each new crop is transcribed again before recommendation. The list shows up to four candidates, including at least one original fallback. Reference PCM keeps its native sample rate. Existing saved voices keep their original references; select a new candidate to save an improved reference separately.
+
 Mimicry and saved voices now use **Qwen3-TTS 1.7B Base (4-bit)**, prioritizing quality with slower generation than the previous 0.6B model; see the [measured tradeoff](docs/model-comparison.md). Output checks combine audible signal quality, stricter text matching, the requested ending, and an acoustic check for abrupt Korean vowel endings. Suspect results are regenerated within the attempt budget. Generation that reaches its token limit is rejected. Missing or uncertain transcription remains unverified. These checks do not guarantee pronunciation, naturalness, or speaker similarity; listen before choosing a result. Saved-voice speed and emotion controls are not exposed.
+
+The [quality improvement notes (Korean)](docs/quality-improvement-notes.ko.md) explain the ending fix, reference selection changes, paired experiments, and the limits of automatic checks.
 
 ## Optional completion notifications
 
@@ -99,7 +105,9 @@ https://github.com/user-attachments/assets/93c3f76f-097a-4e78-9cf8-0260fc86378f
 
 **Attention needed** · 확인이 필요해요. 잠깐 봐 주세요.
 
-https://github.com/user-attachments/assets/322ea733-b125-4295-bfe1-91638193456b
+Selected from a controlled local experiment and revalidated; [reference and quality notes](docs/quality-improvement-notes.ko.md#7-공개-샘플의-선택과-한계).
+
+https://github.com/user-attachments/assets/1c1be57f-a4df-4fc5-8141-d00014bcc526
 
 **Ready for the next task** · 다음 작업도 준비됐어요.
 
