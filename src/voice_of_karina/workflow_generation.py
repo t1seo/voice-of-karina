@@ -12,6 +12,18 @@ from voice_of_karina.workflow_models import Adapters, ErrorDetail, JobResult, Me
 from voice_of_karina.workflow_state import accepted, stale_quality, transition
 
 
+def _attempt_directories(directory: Path) -> list[Path]:
+    return sorted(
+        (
+            path
+            for path in directory.glob("attempt-*")
+            if path.is_dir() and path.name.removeprefix("attempt-").isdecimal()
+        ),
+        key=lambda path: int(path.name.removeprefix("attempt-")),
+        reverse=True,
+    )
+
+
 def checked_output(
     result: MessageResult,
     audio: GeneratedAudio,
@@ -23,6 +35,20 @@ def checked_output(
     path = Path(audio.path)
     if audio.message_id != result.message_id or not path.resolve().is_relative_to(directory):
         raise VoiceError("invalid_output", "The model returned an unrelated output artifact.")
+    rejected_digests = {item.sha256 for item in result.rejections}
+    if rejected_digests and path.is_file() and file_digest(path) in rejected_digests:
+        return result.model_copy(
+            update={
+                "audio": audio,
+                "accepted_sha256": None,
+                "quality": QualityResult(
+                    valid=False,
+                    decision="retry",
+                    policy_version=QUALITY_POLICY_VERSION,
+                    warnings=("This artifact was rejected after quality review.",),
+                ),
+            }
+        )
     quality = adapters.validate(audio, result.text, request.quality)
     if quality.decision == "pass" and quality.policy_version != QUALITY_POLICY_VERSION:
         quality = quality.model_copy(
@@ -63,6 +89,7 @@ def recover_outputs(
 ) -> JobResult:
     """A child may finish WAVs before an interrupted parent receives its response."""
     directory = store.job_dir(state.job_id)
+    batches = _attempt_directories(directory)
     recovered = list(state.messages)
     for index, previous in enumerate(recovered):
         result = previous
@@ -75,9 +102,7 @@ def recover_outputs(
             state = store.save(state.model_copy(update={"messages": tuple(recovered)}))
         if accepted(result) or result.attempts == 0:
             continue
-        manifests = sorted(
-            directory.glob(f"attempt-*/{result.message_id}.audio.json"), reverse=True
-        )
+        manifests = (batch / f"{result.message_id}.audio.json" for batch in batches)
         for manifest in manifests:
             try:
                 audio = GeneratedAudio.model_validate_json(manifest.read_bytes())
@@ -159,9 +184,10 @@ def run_generation(
                 "Persisted attempts before model invocation.",
             )
         )
-        attempt = max(result.attempts for result in state.messages)
+        batches = _attempt_directories(store.job_dir(state.job_id))
+        attempt = int(batches[0].name.removeprefix("attempt-")) + 1 if batches else 1
         directory = store.job_dir(state.job_id) / f"attempt-{attempt}"
-        directory.mkdir(parents=True, exist_ok=True)
+        directory.mkdir()
         subset = request.model_copy(
             update={
                 "messages": tuple(
@@ -210,10 +236,10 @@ def run_generation(
             "done",
             "The bounded generation loop has finished.",
             status=status,
-            input_request="Review quality warnings before making a new request."
+            input_request="Review quality warnings and revise the reference or request."
             if needs_input
             else (
-                "Generation attempts are exhausted. Review rejected audio and make a new request."
+                "Attempts exhausted. Revise the reference or request; do not reset the budget."
                 if successes < len(state.messages)
                 else None
             ),

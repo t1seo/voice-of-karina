@@ -211,7 +211,8 @@ def test_stale_failure_when_budget_exhausted_records_rejection_without_regenerat
     assert result.messages[0].quality.policy_version == QUALITY_POLICY_VERSION
     assert result.messages[0].accepted_sha256 is None
     assert result.input_request is not None
-    assert "new request" in result.input_request.lower()
+    assert "revise the reference or request" in result.input_request.lower()
+    assert "do not reset" in result.input_request.lower()
 
 
 def test_stale_failure_when_budget_remains_regenerates_only_rejected_sibling(
