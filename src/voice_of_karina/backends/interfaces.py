@@ -25,6 +25,9 @@ class GenerationChunk(Protocol):
     @property
     def sample_rate(self) -> int: ...
 
+    @property
+    def token_count(self) -> int: ...
+
 
 class CloneModel(Protocol):
     """Qwen3 Base's reference-conditioned generation call."""

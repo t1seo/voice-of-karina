@@ -1,17 +1,18 @@
 {
-  "schema_version": 1,
-  "generated_at": "2026-09-19T16:17:30.780122+00:00",
+  "schema_version": 2,
+  "generated_at": "2026-09-19T17:25:27.005731+00:00",
   "disclosure": "These are newly generated synthetic voices. The Karina examples use a selected interview recording as a reference; they are not original speech or an endorsement.",
   "runtime": {
     "engine": "voice-of-karina",
     "mlx_audio_version": "0.5.4",
     "machine": "Apple M1 with 16 GiB unified memory",
-    "model_downloads_included_in_timings": false
+    "model_downloads_included_in_timings": false,
+    "quality_policy": "speech-completeness-v2"
   },
   "models": {
     "speech": {
-      "id": "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-4bit",
-      "revision": "0d6bb6fe33f92d47a507e23b9148940e8366ab5b"
+      "id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+      "revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
     },
     "voice_design": {
       "id": "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-4bit",
@@ -66,10 +67,9 @@
     }
   },
   "pipeline_wall_seconds": {
-    "three_karina_messages_from_selected_reference": 71.2,
-    "original_voice_reference_and_one_message": 40.12,
-    "reuse_karina_one_message": 14.42,
-    "reuse_original_one_message": 14.56
+    "karina_five_messages_reusing_reference": 111.93,
+    "original_two_messages_reusing_reference": 53.83,
+    "final_audio_revalidation": 36.10128950001672
   },
   "samples": [
     {
@@ -77,109 +77,147 @@
       "reference": "karina",
       "text": "작업이 끝났어요. 확인해 주세요.",
       "wav": "assets/samples/karina-done.wav",
-      "wav_sha256": "4ec5ec0bee2ba054c682048cce5d8684b8962191e8630cd51a1da5f61ea0d0c9",
+      "wav_sha256": "45e1995c697fa5ca453ccbce1b788305d5a618b27acf943c7941fef26adff4db",
       "mp4": "assets/samples/karina-done.mp4",
-      "readme_attachment": "https://github.com/user-attachments/assets/b69fb9ec-683e-4f33-9a53-e14ad8b7790e",
-      "mp4_sha256": "660413a7e6255a2e61da8d7bee2b14b7dab8b09e6e653a78258ce733226917f5",
+      "readme_attachment": "https://github.com/user-attachments/assets/93c3f76f-097a-4e78-9cf8-0260fc86378f",
+      "mp4_sha256": "dfbb76febe01a4fc069b93d3b264c2c058e1c8763ab5624cd979f36c8a3f699c",
       "sample_rate": 24000,
-      "duration_seconds": 2.0,
-      "attempts": 1,
+      "duration_seconds": 2.08,
+      "attempts": 2,
       "model": "speech",
-      "inference_seconds": 10.86898862523958,
+      "inference_seconds": 10.884178250096738,
       "quality": {
         "decision": "pass",
+        "policy_version": "speech-completeness-v2",
         "transcript": " 작업이 끝났어요. 확인해주세요.",
         "normalized_character_error_rate": 0.0,
-        "rms_dbfs": -25.109501573756006,
-        "clipping_ratio": 0.0
-      }
+        "rms_dbfs": -24.945438973276598,
+        "clipping_ratio": 0.0,
+        "ending_text_match": true,
+        "terminal_decay_seconds": 0.08,
+        "terminal_drop_db": 44.406328426425155
+      },
+      "mode": "reuse",
+      "generated_at": "2026-09-19T17:23:23.256850+00:00",
+      "job_id": "job-acbae8648df8fcb540828f69",
+      "validated_at": "2026-09-19T17:35:22.742054+00:00"
     },
     {
       "id": "attention",
       "reference": "karina",
       "text": "확인이 필요해요. 잠깐 봐 주세요.",
       "wav": "assets/samples/karina-attention.wav",
-      "wav_sha256": "183ad86372e0708cd62cbf6ba82adcd4ba7187cf41fa464a178274ef9cc9c337",
+      "wav_sha256": "2c7301953beb4d183d4972dae14d1374f7be3e3b7acd9405b098c35df17fa640",
       "mp4": "assets/samples/karina-attention.mp4",
-      "readme_attachment": "https://github.com/user-attachments/assets/ac07fcfc-744a-429b-8d40-c054749f7b7e",
-      "mp4_sha256": "9aa9207b45a33c7fa4136b503f1d03d22826ea8f21a16be06fb2edd344451ceb",
+      "readme_attachment": "https://github.com/user-attachments/assets/322ea733-b125-4295-bfe1-91638193456b",
+      "mp4_sha256": "81b33e7a8b9e55c0e2ef0adf4219d2125107947de22bacdf5eda7ac9414a95b9",
       "sample_rate": 24000,
-      "duration_seconds": 2.56,
+      "duration_seconds": 2.8,
       "attempts": 1,
       "model": "speech",
-      "inference_seconds": 5.631382249761373,
+      "inference_seconds": 10.574963207822293,
       "quality": {
         "decision": "pass",
+        "policy_version": "speech-completeness-v2",
         "transcript": " 확인이 필요해요. 잠깐 봐주세요.",
         "normalized_character_error_rate": 0.0,
-        "rms_dbfs": -27.982380333888276,
-        "clipping_ratio": 0.0
-      }
+        "rms_dbfs": -25.311449248505255,
+        "clipping_ratio": 0.0,
+        "ending_text_match": true,
+        "terminal_decay_seconds": 0.47,
+        "terminal_drop_db": 43.83833675981442
+      },
+      "mode": "reuse",
+      "generated_at": "2026-09-19T17:22:06.561957+00:00",
+      "job_id": "job-acbae8648df8fcb540828f69",
+      "validated_at": "2026-09-19T17:35:22.742054+00:00"
     },
     {
       "id": "ready",
       "reference": "karina",
       "text": "다음 작업도 준비됐어요.",
       "wav": "assets/samples/karina-ready.wav",
-      "wav_sha256": "100c959f553f73d31928804124c1439e96893c0c8f54a508010aaf84e0af10ae",
+      "wav_sha256": "a0427ae8f0930313bc88486a13be3a2809e8a0e7184a66e0a2c6233acbbd3125",
       "mp4": "assets/samples/karina-ready.mp4",
-      "readme_attachment": "https://github.com/user-attachments/assets/687e46a4-c6bb-42d8-8eaa-b18e88a75a6d",
-      "mp4_sha256": "abac158e459c6793caa4cf84d7eb634d5f4a888db5d95b11fbf9be4e6b667155",
+      "readme_attachment": "https://github.com/user-attachments/assets/d228e9b7-9f96-40b7-9f25-9fcb03751b47",
+      "mp4_sha256": "13559394ba184f18620992caa954f91f71ab3ab88d0e0bbf3f8fd92c3fa32b95",
       "sample_rate": 24000,
-      "duration_seconds": 2.88,
+      "duration_seconds": 1.6,
       "attempts": 1,
       "model": "speech",
-      "inference_seconds": 5.579833833035082,
+      "inference_seconds": 8.491241875104606,
       "quality": {
         "decision": "pass",
+        "policy_version": "speech-completeness-v2",
         "transcript": " 다음 작업도 준비됐어요.",
         "normalized_character_error_rate": 0.0,
-        "rms_dbfs": -27.71453248252974,
-        "clipping_ratio": 0.0
-      }
+        "rms_dbfs": -24.03196142046127,
+        "clipping_ratio": 0.0,
+        "ending_text_match": true,
+        "terminal_decay_seconds": 0.32,
+        "terminal_drop_db": 47.37716296020858
+      },
+      "mode": "reuse",
+      "generated_at": "2026-09-19T17:22:15.054379+00:00",
+      "job_id": "job-acbae8648df8fcb540828f69",
+      "validated_at": "2026-09-19T17:35:22.742054+00:00"
     },
     {
       "id": "break",
       "reference": "karina",
       "mode": "reuse",
-      "generated_at": "2026-09-19T16:51:43.498775+00:00",
+      "generated_at": "2026-09-19T17:22:28.261831+00:00",
       "text": "오늘도 수고 많으셨어요. 잠깐 쉬었다가 다시 시작해 볼까요?",
       "wav": "assets/samples/karina-break.wav",
-      "wav_sha256": "6be1c0ff749140e88b31be991f5684012050a87ca24a16e59058ae2645236e11",
+      "wav_sha256": "cb50d533048a87cb4931c73d33d26cb1e6e4208387ecb8cc38babac8b312340c",
       "mp4": "assets/samples/karina-break.mp4",
-      "mp4_sha256": "d390b91daf777c0dbe71a53beccf6947422440e5d75bd7d20fb12b7022a9724e",
-      "readme_attachment": "https://github.com/user-attachments/assets/b3a27ab3-ae5d-4e54-abe1-6c567a4192cb",
+      "mp4_sha256": "ce388d2930b5ce90d78d7fefeac21568decb7d0d01892a92baa210c7d5061022",
+      "readme_attachment": "https://github.com/user-attachments/assets/db7d7fc2-3ee0-4682-a955-bea2725e0767",
       "sample_rate": 24000,
-      "duration_seconds": 4.56,
+      "duration_seconds": 5.28,
       "attempts": 1,
       "model": "speech",
-      "inference_seconds": 8.602397750131786,
+      "inference_seconds": 13.203687708824873,
       "quality": {
         "decision": "pass",
+        "policy_version": "speech-completeness-v2",
         "transcript": " 오늘도 수고 많으셨어요. 잠깐 쉬었다가 다시 시작해볼까요?",
         "normalized_character_error_rate": 0.0,
-        "rms_dbfs": -25.595734925343592,
-        "clipping_ratio": 0.0
-      }
+        "rms_dbfs": -21.613803417874383,
+        "clipping_ratio": 0.0,
+        "ending_text_match": true,
+        "terminal_decay_seconds": 0.04,
+        "terminal_drop_db": 30.201483101488535
+      },
+      "job_id": "job-acbae8648df8fcb540828f69",
+      "validated_at": "2026-09-19T17:35:22.742054+00:00"
     },
     {
       "id": "rest",
       "reference": "original_calm",
       "text": "잠시 쉬어 가셔도 괜찮아요.",
       "wav": "assets/samples/original-rest.wav",
-      "wav_sha256": "6fef3a47c773177a2f50ffb5d808ba6f84c056ed10ea91c4f347f2d6d4bde909",
+      "wav_sha256": "6457593c0a1b85aad19fd8ab6d7e64e3ef5d3c9af78a2cf826debbe67eabca54",
       "sample_rate": 24000,
-      "duration_seconds": 1.68,
+      "duration_seconds": 2.64,
       "attempts": 1,
       "model": "speech",
-      "inference_seconds": 5.777907208073884,
+      "inference_seconds": 14.127851834055036,
       "quality": {
         "decision": "pass",
-        "transcript": " 잠시 쉬어가셔도 괜찮아요.",
+        "policy_version": "speech-completeness-v2",
+        "transcript": " 잠시 쉬어 가셔도 괜찮아요.",
         "normalized_character_error_rate": 0.0,
-        "rms_dbfs": -18.517719662118083,
-        "clipping_ratio": 0.0
-      }
+        "rms_dbfs": -19.813025143358573,
+        "clipping_ratio": 0.0,
+        "ending_text_match": true,
+        "terminal_decay_seconds": 0.08,
+        "terminal_drop_db": 25.324697881800894
+      },
+      "mode": "reuse",
+      "generated_at": "2026-09-19T17:25:11.430894+00:00",
+      "job_id": "job-5a6e79205713473b513f00a5",
+      "validated_at": "2026-09-19T17:35:31.559059+00:00"
     },
     {
       "id": "start",
@@ -187,19 +225,26 @@
       "mode": "reuse",
       "text": "새로운 작업을 시작할게요.",
       "wav": "assets/samples/karina-reuse-start.wav",
-      "wav_sha256": "edf46842270d3e3350774feb9222d8ce8d72e5512f71991fb087c931d966f4bc",
+      "wav_sha256": "ef4caefd540340913eb2ddb62d8537fe7edb6a1eee6ef678246cb06a9d241e20",
       "sample_rate": 24000,
-      "duration_seconds": 2.08,
+      "duration_seconds": 1.68,
       "attempts": 1,
       "model": "speech",
-      "inference_seconds": 5.734122124966234,
+      "inference_seconds": 9.114765583071858,
       "quality": {
         "decision": "pass",
+        "policy_version": "speech-completeness-v2",
         "transcript": " 새로운 작업을 시작할게요.",
         "normalized_character_error_rate": 0.0,
-        "rms_dbfs": -22.483321389758693,
-        "clipping_ratio": 0.0
-      }
+        "rms_dbfs": -23.174698269753733,
+        "clipping_ratio": 0.0,
+        "ending_text_match": true,
+        "terminal_decay_seconds": 0.05,
+        "terminal_drop_db": null
+      },
+      "generated_at": "2026-09-19T17:22:37.378418+00:00",
+      "job_id": "job-acbae8648df8fcb540828f69",
+      "validated_at": "2026-09-19T17:35:22.742054+00:00"
     },
     {
       "id": "begin",
@@ -207,21 +252,43 @@
       "mode": "reuse",
       "text": "준비되시면 천천히 시작해 주세요.",
       "wav": "assets/samples/original-reuse-begin.wav",
-      "wav_sha256": "7209ccb1deccac07490216172637912e17490ce7054bbf48068e35a6309e04a4",
+      "wav_sha256": "d1bbf94359afc984c3320a10940eb00bdce39dd76c46765a86ff0733ef735747",
       "sample_rate": 24000,
-      "duration_seconds": 2.48,
+      "duration_seconds": 3.52,
       "attempts": 1,
       "model": "speech",
-      "inference_seconds": 6.214987833984196,
+      "inference_seconds": 15.562016875017434,
       "quality": {
         "decision": "pass",
+        "policy_version": "speech-completeness-v2",
         "transcript": " 준비되시면 천천히 시작해 주세요.",
         "normalized_character_error_rate": 0.0,
-        "rms_dbfs": -18.865905372129234,
-        "clipping_ratio": 0.0
-      }
+        "rms_dbfs": -16.936219727310245,
+        "clipping_ratio": 0.0,
+        "ending_text_match": true,
+        "terminal_decay_seconds": 0.09,
+        "terminal_drop_db": 21.387830747624964
+      },
+      "generated_at": "2026-09-19T17:25:27.005731+00:00",
+      "job_id": "job-5a6e79205713473b513f00a5",
+      "validated_at": "2026-09-19T17:35:31.559059+00:00"
     }
   ],
-  "quality_limits": "The checks verify decoded non-silent audio and ASR agreement after spacing/punctuation normalization. They do not establish voice similarity, naturalness, speaker identity, or absence of all background noise.",
-  "updated_at": "2026-09-19T16:54:06.384701+00:00"
+  "quality_limits": "Checks measure audible finite PCM, clipping, text agreement, exact normalized ending, and acoustic cut risk for Korean open-vowel endings. They do not prove phonetic completeness, naturalness, speaker identity/similarity, or absence of all background noise. Acoustic checks can reject naturally brief endings. Existing saved voice references were reused.",
+  "updated_at": "2026-09-19T17:37:46.322110+00:00",
+  "postprocessing": {
+    "wav": "Native 24 kHz model samples converted to PCM16 only. No denoising, fades, time stretching, added speech or silence.",
+    "added_silence_samples": 0,
+    "mp4": "Unchanged repository photo and waveform video; AAC audio encoded from the accepted WAV."
+  },
+  "ending_regression": {
+    "old_done_wav_sha256": "4ec5ec0bee2ba054c682048cce5d8684b8962191e8630cd51a1da5f61ea0d0c9",
+    "old_done_duration_seconds": 2.0,
+    "old_done_decay_seconds": 0.01,
+    "old_done_with_one_second_silence_decision": "retry",
+    "new_done_decay_seconds": 0.08,
+    "first_new_done_rejected": true,
+    "first_and_accepted_done_duration_seconds": 2.08,
+    "note": "Duration-preserving regeneration, not a silence-padding repair. Decay is supplementary acoustic evidence, not a phoneme recognizer."
+  }
 }

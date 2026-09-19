@@ -28,6 +28,7 @@ class Samples:
 class Chunk:
     audio: Samples
     sample_rate: int = 24_000
+    token_count: int = 3
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,6 +44,7 @@ class CloneCall:
 @dataclass(frozen=True, slots=True)
 class CloneModel:
     calls: list[CloneCall] = field(default_factory=list)
+    token_count: int = 3
 
     def generate(
         self,
@@ -55,7 +57,7 @@ class CloneModel:
         max_tokens: int,
     ) -> tuple[Chunk, ...]:
         self.calls.append(CloneCall(text, lang_code, ref_audio, ref_text, stream, max_tokens))
-        return (Chunk(Samples((0.0, 0.3, -0.3) * 100)),)
+        return (Chunk(Samples((0.0, 0.3, -0.3) * 100), token_count=self.token_count),)
 
 
 @dataclass(frozen=True, slots=True)
@@ -154,3 +156,20 @@ def test_output_rejects_mixed_sample_rates_when_concatenating(tmp_path: Path) ->
     # When / Then
     with pytest.raises(VoiceError, match="sample rate"):
         _ = write_audio(chunks, tmp_path / "bad.wav")
+
+
+def test_generation_budget_exhaustion_never_publishes_an_incomplete_wav(tmp_path: Path) -> None:
+    task = CloneTask(
+        messages=(Message(id="incomplete", text="확인해 주세요."),),
+        reference=Reference(
+            audio_path=str(tmp_path / "reference.wav"),
+            sha256="a" * 64,
+            transcript="참고하는 문장이에요.",
+            provenance=Provenance(kind="mimic", source="sample.wav"),
+        ),
+        output_dir=tmp_path,
+        language="Korean",
+    )
+    with pytest.raises(VoiceError, match="token budget"):
+        _ = clone_batch(task, CloneModel(token_count=256))
+    assert not (tmp_path / "incomplete.wav").exists()

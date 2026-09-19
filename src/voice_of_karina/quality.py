@@ -6,6 +6,10 @@ import unicodedata
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from voice_of_karina.audio_endings import (
+    endpoint_evidence,
+    requested_text_ends_with_korean_open_vowel,
+)
 from voice_of_karina.audio_io import decode_audio, probe_audio
 from voice_of_karina.audio_metrics import signal_metrics
 from voice_of_karina.audio_transcription import uncertain_transcript
@@ -13,6 +17,7 @@ from voice_of_karina.backends.languages import asr_language
 from voice_of_karina.backends.stt import transcribe_audio
 from voice_of_karina.contracts import GeneratedAudio, Metrics, QualityOptions, QualityResult
 from voice_of_karina.errors import VoiceError
+from voice_of_karina.quality_policy import QUALITY_POLICY_VERSION
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -53,13 +58,27 @@ def validate_output(
         info = probe_audio(path)
         if not policy.min_duration_seconds <= info.duration_seconds <= policy.max_duration_seconds:
             return QualityResult(
+                policy_version=QUALITY_POLICY_VERSION,
                 valid=False,
                 decision="retry",
                 warnings=("Output duration is outside the allowed range.",),
             )
-        metrics = signal_metrics(decode_audio(path, max_seconds=policy.max_duration_seconds + 1))
+        decoded = decode_audio(path, max_seconds=policy.max_duration_seconds + 1)
+        metrics = signal_metrics(decoded)
+        ending = endpoint_evidence(decoded)
+        metrics = metrics.model_copy(
+            update={
+                "terminal_decay_seconds": ending.decay_seconds,
+                "terminal_drop_db": ending.drop_db,
+            }
+        )
     except VoiceError as error:
-        return QualityResult(valid=False, decision="retry", warnings=(error.message,))
+        return QualityResult(
+            policy_version=QUALITY_POLICY_VERSION,
+            valid=False,
+            decision="retry",
+            warnings=(error.message,),
+        )
     warnings: list[str] = []
     if metrics.rms_dbfs is None or metrics.rms_dbfs < policy.min_rms_dbfs:
         warnings.append("Output is silent or too quiet; regenerate this message.")
@@ -67,7 +86,28 @@ def validate_output(
         warnings.append("Output is excessively clipped; regenerate this message.")
     if warnings:
         return QualityResult(
-            valid=False, decision="retry", metrics=metrics, warnings=tuple(warnings)
+            policy_version=QUALITY_POLICY_VERSION,
+            valid=False,
+            decision="retry",
+            metrics=metrics,
+            warnings=tuple(warnings),
+        )
+    vowel_ending = requested_text_ends_with_korean_open_vowel(expected_text)
+    if vowel_ending and ending.decay_seconds is None:
+        return QualityResult(
+            policy_version=QUALITY_POLICY_VERSION,
+            valid=True,
+            decision="needs_input",
+            metrics=metrics,
+            warnings=("The vowel ending could not be measured; listen before proceeding.",),
+        )
+    if vowel_ending and (ending.abrupt or ending.ends_active):
+        return QualityResult(
+            policy_version=QUALITY_POLICY_VERSION,
+            valid=True,
+            decision="retry",
+            metrics=metrics,
+            warnings=("The vowel ending may be cut short; regenerate the complete utterance.",),
         )
     return _verify_text(audio, expected_text, policy, metrics, transcriber)
 
@@ -90,6 +130,7 @@ def _verify_text(
             uncertain = False
     except VoiceError as error:
         return QualityResult(
+            policy_version=QUALITY_POLICY_VERSION,
             valid=True,
             decision="needs_input",
             metrics=metrics,
@@ -102,6 +143,7 @@ def _verify_text(
             else "No reliable transcript was recognized; listen before proceeding."
         )
         return QualityResult(
+            policy_version=QUALITY_POLICY_VERSION,
             valid=True,
             decision="needs_input",
             metrics=metrics,
@@ -109,9 +151,23 @@ def _verify_text(
             warnings=(warning,),
         )
     error_rate = text_error_rate(expected_text, transcript)
-    metrics = metrics.model_copy(update={"text_error_rate": error_rate})
+    suffix = normalize_text(expected_text)[-4:]
+    ending_matches = bool(suffix) and normalize_text(transcript).endswith(suffix)
+    metrics = metrics.model_copy(
+        update={"text_error_rate": error_rate, "ending_text_match": ending_matches}
+    )
+    if not ending_matches:
+        return QualityResult(
+            policy_version=QUALITY_POLICY_VERSION,
+            valid=True,
+            decision="retry",
+            metrics=metrics,
+            transcript=transcript,
+            warnings=("The recognized ending differs from the requested ending.",),
+        )
     if error_rate > policy.max_text_error_rate:
         return QualityResult(
+            policy_version=QUALITY_POLICY_VERSION,
             valid=True,
             decision="retry",
             metrics=metrics,
@@ -120,4 +176,10 @@ def _verify_text(
                 f"Recognized speech differs from the requested text (CER {error_rate:.2f}).",
             ),
         )
-    return QualityResult(valid=True, decision="pass", metrics=metrics, transcript=transcript)
+    return QualityResult(
+        policy_version=QUALITY_POLICY_VERSION,
+        valid=True,
+        decision="pass",
+        metrics=metrics,
+        transcript=transcript,
+    )

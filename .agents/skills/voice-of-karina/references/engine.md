@@ -94,9 +94,37 @@ events, and errors. `complete` requires every requested message to be accepted;
 failed, and explain which line still needs attention.
 
 Default attempts: **2 total generations per message**, maximum **3**. Resume
-does not grant more attempts. The check covers valid audible output, clipping,
-duration, and ASR text comparison when available; it does not measure celebrity
+does not grant more attempts. Preserve accepted siblings while retrying a failed
+message. Reaching the model's generation token limit produces
+`incomplete_generation`; a partial WAV is not published as a successful result.
+
+The current quality policy is `speech-completeness-v2`, recorded in
+`quality.policy_version`. It checks decodability, audible level, duration, and
+clipping, then combines two forms of ending evidence:
+
+- For a requested Korean ending without a final consonant, 10 ms energy frames
+  expose abrupt decay or an ending that is still active at the file boundary.
+  A measured drop of at least 18 dB with decay shorter than 40 ms is a retry
+  signal. This is a limited cut-risk heuristic, not phoneme recognition; a natural
+  brief ending can also trigger it. The abrupt-decay measurement examines the
+  speech endpoint even when silence follows it, using thresholds relative to
+  the signal level so quieter audio does not bypass it. An unmeasurable vowel
+  ending remains unverified. The engine regenerates the utterance rather than
+  adding padding or a fade.
+- ASR must match the last four normalized letters or digits of the requested
+  text, or the entire normalized text if shorter. Normalization ignores spacing
+  and punctuation. The whole-text character error rate must also satisfy
+  `quality.max_text_error_rate`, which defaults to `0.15`.
+
+These checks do not prove complete pronunciation, naturalness, or speaker
 similarity. Never relabel missing ASR or uncertain wording as a verified match.
+
+Saved audio with a missing or older policy version is unverified under the current
+policy. `status` requests `quality_revalidation`; call `resume` to check the saved
+audio again without spending a generation attempt. If it fails, regeneration uses
+only the remaining original budget. Notification installation refuses stale
+verification until the artifact passes the current policy. Do not edit the saved
+policy version or reset attempts to bypass these checks.
 
 For unsupported hardware, missing tools, inaccessible sources, a model download
 failure, or exhausted attempts, report the specific actionable error. Do not
