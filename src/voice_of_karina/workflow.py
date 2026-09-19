@@ -7,6 +7,7 @@ from voice_of_karina.contracts import AnalyzeRequest, GenerateRequest, RejectReq
 from voice_of_karina.errors import VoiceError
 from voice_of_karina.storage import Store
 from voice_of_karina.workflow_generation import run_generation
+from voice_of_karina.workflow_invocation import recipe_integrity
 from voice_of_karina.workflow_models import (
     Adapters,
     ErrorDetail,
@@ -54,7 +55,11 @@ class Workflow:
         )
         try:
             analysis = state.analysis
-            if analysis is None or not has_transcripts(analysis):
+            if (
+                analysis is None
+                or not has_transcripts(analysis)
+                or any(candidate.sha256 is None for candidate in analysis.candidates)
+            ):
                 analysis = self.adapters.analyze(request, self.store.job_dir(state.job_id))
         except VoiceError as error:
             return self.failure(state, error)
@@ -125,7 +130,7 @@ class Workflow:
 
     def status(self, job_id: str) -> JobResult:
         """Read status while checking accepted files without changing saved state."""
-        return integrity(self.store.load(job_id), self.store)
+        return recipe_integrity(integrity(self.store.load(job_id), self.store), self.store)
 
     def reject(self, request: RejectRequest) -> JobResult:
         """Serialize review with generation while retaining the original attempt budget."""
@@ -139,7 +144,7 @@ class Workflow:
 
     def continue_generation(self, state: JobResult, request: GenerateRequest) -> JobResult:
         """Keep reference preparation, bounded attempts, and profile persistence durable."""
-        state = self.store.save(integrity(state, self.store))
+        state = self.store.save(recipe_integrity(integrity(state, self.store), self.store))
         try:
             state = prepare_job(state, request, self.store, self.adapters)
             if state.reference is None:
@@ -147,7 +152,9 @@ class Workflow:
             reference = state.reference
             state = run_generation(state, request, self.store, self.adapters)
             if request.profile_name is not None and state.voice_id is None:
-                profile = self.store.save_voice(request.profile_name, reference)
+                profile = self.store.save_voice(
+                    request.profile_name, reference, recipe=state.recipe
+                )
                 state = self.store.save(state.model_copy(update={"voice_id": profile.id}))
         except VoiceError as error:
             return self.failure(state, error)

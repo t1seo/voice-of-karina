@@ -29,6 +29,15 @@ class GenerationChunk(Protocol):
     def token_count(self) -> int: ...
 
 
+class SamplingParameters(TypedDict, total=False):
+    """Optional Qwen sampling arguments; omission retains legacy defaults."""
+
+    temperature: float
+    top_p: float
+    top_k: int
+    repetition_penalty: float
+
+
 class CloneModel(Protocol):
     """Qwen3 Base's reference-conditioned generation call."""
 
@@ -41,6 +50,10 @@ class CloneModel(Protocol):
         ref_text: str,
         stream: bool,
         max_tokens: int,
+        temperature: float = 0.9,
+        top_p: float = 1.0,
+        top_k: int = 50,
+        repetition_penalty: float = 1.05,
     ) -> Iterable[GenerationChunk]: ...
 
 

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "id": "karina-reviewed-v1",
+  "name": "카리나 검토 참조",
+  "reference": {
+    "audio_path": "reference.wav",
+    "sha256": "22133aea2c959269cd804edfdd9bcb1b29945d80b9002782aecfcb15f25d898f",
+    "transcript": "오늘 재밌는 시간 함께 보내봅시다",
+    "provenance": {
+      "kind": "mimic",
+      "source": "https://www.youtube.com/watch?v=r96zEiIHVf4",
+      "start_seconds": 24.419104166666667,
+      "end_seconds": 27.471062500000002,
+      "description": "Exact measured native boundary selection used for the reviewed attention sample; source and PCM provenance are recorded in this preset's README."
+    },
+    "preparation": ["original", "mono", "native_sample_rate", "measured_boundary_selection"]
+  },
+  "recipe": {
+    "version": 1,
+    "language": "Korean",
+    "settings": {
+      "seed": 20260920,
+      "temperature": 0.9,
+      "top_p": 1.0,
+      "top_k": 50,
+      "repetition_penalty": 1.5
+    },
+    "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+    "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+  }
+}

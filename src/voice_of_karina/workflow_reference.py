@@ -7,6 +7,7 @@ from voice_of_karina.contracts import GenerateRequest, Reference
 from voice_of_karina.errors import VoiceError
 from voice_of_karina.storage import Store, file_digest
 from voice_of_karina.workflow_models import Adapters, JobResult
+from voice_of_karina.workflow_recipe import compatible_recipe, resolve_recipe
 from voice_of_karina.workflow_state import has_transcripts, transition
 
 
@@ -14,6 +15,13 @@ def prepare_job(
     state: JobResult, request: GenerateRequest, store: Store, adapters: Adapters
 ) -> JobResult:
     """Resolve a designed, selected, or saved voice without changing established references."""
+    if state.recipe is not None:
+        compatible_recipe(state.recipe, request.language)
+        if request.settings is not None and state.recipe.settings != request.settings:
+            raise VoiceError(
+                "incompatible_recipe",
+                "The saved recipe differs from the original request settings.",
+            )
     if state.reference is not None:
         validate_reference(state.reference)
         return state
@@ -35,7 +43,9 @@ def prepare_job(
                 )
             profile = store.voice(request.voice_id)
             reference = profile.reference
-            state = state.model_copy(update={"voice_id": profile.id})
+            state = state.model_copy(
+                update={"voice_id": profile.id, "recipe": resolve_recipe(request, profile.recipe)}
+            )
         case "design":
             if not request.voice_description:
                 return store.save(
@@ -47,8 +57,14 @@ def prepare_job(
                         input_request="Describe the voice you want.",
                     )
                 )
+            state = store.save(
+                state.model_copy(update={"recipe": state.recipe or resolve_recipe(request)})
+            )
             reference = adapters.design(request, directory)
         case "mimic":
+            state = store.save(
+                state.model_copy(update={"recipe": state.recipe or resolve_recipe(request)})
+            )
             return prepare_mimic(state, request, store, adapters)
         case unreachable:
             assert_never(unreachable)

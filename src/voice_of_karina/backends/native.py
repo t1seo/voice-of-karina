@@ -1,6 +1,8 @@
 """Real model loads and dispatch, confined to a short-lived child process."""
 
+import platform
 import sys
+from importlib.metadata import version
 from pathlib import Path
 from time import perf_counter
 from typing import assert_never
@@ -55,13 +57,18 @@ def execute(task: WorkerTask) -> AudioResponse | TranscriptResponse:
     """Load exactly one model for this child process and requested batch."""
     match task:
         case CloneTask():
+            import mlx.core as mx
             from mlx_audio.tts.utils import load_model
 
             model_path = resolve_model(CLONE_MODEL)
             started = perf_counter()
             model = load_model(model_path)
             _ = sys.stderr.write(f"Base model loaded in {perf_counter() - started:.2f}s\n")
-            return clone_batch(task, model)
+            runtime = (
+                f"mlx-audio=={version('mlx-audio')}; mlx=={version('mlx')}; "
+                f"python={platform.python_version()}; {platform.platform()}; {platform.machine()}"
+            )
+            return clone_batch(task, model, seed_rng=mx.random.seed, runtime=runtime)
         case DesignTask():
             from mlx_audio.tts.utils import load_model
 

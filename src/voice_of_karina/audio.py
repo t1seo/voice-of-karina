@@ -106,6 +106,14 @@ def prepare_reference(candidate: Candidate, job_dir: Path) -> Reference:
             msg, "A reliable reference transcript is required; choose a clearer utterance."
         )
     source = Path(candidate.audio_path)
+    try:
+        digest = file_sha256(source)
+    except OSError as error:
+        raise VoiceError(
+            "changed_candidate", "The candidate audio is no longer readable."
+        ) from error
+    if candidate.sha256 is not None and digest != candidate.sha256:
+        raise VoiceError("changed_candidate", "The candidate audio changed after transcription.")
     metrics = signal_metrics(decode_audio(source))
     if (
         metrics.rms_dbfs is None
@@ -114,13 +122,14 @@ def prepare_reference(candidate: Candidate, job_dir: Path) -> Reference:
     ):
         msg = "invalid_reference"
         raise VoiceError(msg, "The selected clip is silent or clipped; select another candidate.")
-    digest = file_sha256(source)
     destination = job_dir / "references" / f"{digest}.wav"
     destination.parent.mkdir(parents=True, exist_ok=True)
     with NamedTemporaryFile(dir=destination.parent, suffix=".wav", delete=False) as temporary:
         temporary_path = Path(temporary.name)
     try:
         _ = shutil.copyfile(source, temporary_path)
+        if file_sha256(temporary_path) != digest:
+            raise VoiceError("changed_candidate", "The candidate audio changed while copying.")
         _ = temporary_path.replace(destination)
     finally:
         temporary_path.unlink(missing_ok=True)

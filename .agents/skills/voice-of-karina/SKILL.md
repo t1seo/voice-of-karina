@@ -5,9 +5,10 @@ description: Create spoken messages locally from one or more YouTube voice refer
 
 # Voice of Karina
 
-Create the requested speech through conversation. The engine handles acquisition,
-reference analysis, synthesis, saved voices, and a bounded quality loop. Use the
-user's language and a polite tone. In Korean, use 존댓말.
+Create the requested speech through conversation. Prepare and compare voice
+references once, save the selected reference and generation recipe, then reuse
+them for new messages. Use the user's language and a polite tone. In Korean, use
+존댓말.
 
 Read [engine.md](references/engine.md) before executing an action. Run the private
 JSON engine through `scripts/run-engine.sh` next to this skill; it resolves this
@@ -24,6 +25,8 @@ do not repeat a supplied mode, URL, voice description, message, or previous choi
 2. For **mimic**, ask for **one or more YouTube links** only if none were supplied.
    Local audio is also supported when the user already has a recording. A timestamp
    is useful when several people speak, but do not require it before analysis.
+   When the user wants the reviewed Karina voice used for the README's attention
+   sample, use the packaged `karina-reviewed-v1` preset instead of requesting a link.
 3. For **design**, ask for a short voice description only if missing, such as
    “따뜻하고 차분한 한국어 여성 목소리.” No reference video is needed.
 4. For **reuse**, use the known `voice_id`; otherwise list saved voices. If the
@@ -33,15 +36,18 @@ do not repeat a supplied mode, URL, voice description, message, or previous choi
 6. Briefly describe the next step, then execute. Keep useful progress visible while
    a model downloads or generates. Downloading model weights can take time on first use.
 
-For a new mimic or design request, include `profile_name` so the voice is reusable.
-Use the requested name, or infer a short descriptive name from the source or voice
-description; do not add a question just to name it. If the user declines saving a
-profile, omit this field and report that choice accurately.
+Use the requested profile name or infer a short descriptive name; do not ask just
+to name it. For a new design or a direct one-candidate generation, include
+`profile_name` unless the user declines saving, and include `settings: {}` to
+record the current default recipe. Comparison selection saves the chosen voice
+through `select_voice` instead. Never add settings to replace a resumed job.
 
 ## Mimic: choose a voice reference
 
-Run `analyze` on supplied sources. Present up to three candidate clips with their
-source link, timestamps, transcript when available, and plain-language warnings.
+Read [curation.md](references/curation.md) when preparing a new voice, reusing the
+reviewed preset, or preserving an exact local reference. Run `analyze` on supplied
+sources. Show useful candidate clips with source, timestamps, transcript, and
+plain-language warnings.
 The metrics estimate speech coverage, clipping, level, and spectral characteristics.
 They **do not identify a celebrity, prove there is no music, or separate speakers**.
 Do not claim “the model confirmed this is Karina” from loudness or ASR.
@@ -53,7 +59,18 @@ a cleaner link or a different segment before promising audio repair.
 When the target person is uncertain or `needs_confirmation` is true, ask one short
 selection question using playable clips or a timestamp. Never concatenate different
 people's recordings as one voice. Respect a timestamp supplied by the user.
-Generate with the selected `candidate_id` and `analysis_job_id`.
+
+For a reusable new voice, register two suitable references of the confirmed person
+and run a bounded paired audition using the user's requested text. Keep an original
+fallback where useful; do not automatically choose the shortest crop. Show playable
+eligible previews and ask which sounds best. Save an explicit review choice, never
+a naturalness claim inferred from ASR or signal scores. If you cannot listen, keep
+the choice pending for the user. Return already-created requested previews instead
+of generating the same lines again.
+
+If the user wants a quick result, only one usable reference exists, or they decline
+saving, generate directly with the selected `candidate_id` and `analysis_job_id`.
+State that the voice has not undergone the paired comparison.
 
 ## Generate, inspect, and reuse
 
@@ -68,8 +85,14 @@ sounds natural or matches a person; listening remains the final judgment.
   for the missing information. Unavailable ASR is **unverified text**, not a pass.
 - For interruptions, retain the `job_id`; call `status`, then `resume`. Do not edit
   persisted JSON or replace the original request to force a successful state.
+- Audition jobs have a finite comparison matrix, separate from ordinary per-message
+  retries. Resume only that matrix; do not change settings, text, or budgets to
+  bypass exhausted trials. Saving a voice does not approve every future output.
 - Reuse saved profiles for follow-up phrases. For a changed phrase, create a new
-  reuse request containing only that phrase. Do not regenerate accepted siblings.
+  reuse request containing only that phrase and omit sampling overrides so the
+  saved recipe is restored. Match its language; report an incompatible recipe
+  instead of silently changing it. Do not regenerate accepted siblings or expose a
+  parameter menu when the user only wants speech.
 - If listening feedback or a separate quality review rejects an output, call
   `reject` with its job, message, exact SHA256, and the observed reason; then
   `resume` using the remaining original attempts. Keep automatic text checks
@@ -89,9 +112,11 @@ Do not install notifications unless the user explicitly asks.
 When requested, apply a completed message with the `install` action. Ask which
 tool only if it is not clear: Codex, Claude Code, or both. This version installs
 **completion** sounds (Claude `Stop`, Codex `agent-turn-complete`). Other event
-types are not implemented. Report changed config paths, backups, and the need to
-restart the selected agent. Notification installation failure does not invalidate
-successfully generated speech.
+types are not implemented. Audition previews are playable but cannot be installed
+directly; generate a regular verified message from the selected profile when
+notification installation is requested. Report changed config paths, backups,
+and the need to restart the selected agent. Notification installation failure
+does not invalidate successfully generated speech.
 
 ## Execution boundaries
 

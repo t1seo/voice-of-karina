@@ -15,13 +15,15 @@ from typing import TYPE_CHECKING
 
 from pydantic import ValidationError
 
+from voice_of_karina.contracts import GenerateRequest
 from voice_of_karina.errors import VoiceError
-from voice_of_karina.workflow_models import JobResult, VoiceProfile
+from voice_of_karina.workflow_models import JobResult, VoiceProfile, VoiceSelection
 
 if TYPE_CHECKING:
     from collections.abc import Generator
 
-    from voice_of_karina.contracts import AnalyzeRequest, FrozenModel, GenerateRequest, Reference
+    from voice_of_karina.contracts import AnalyzeRequest, FrozenModel, Reference
+    from voice_of_karina.generation_settings import VoiceRecipe
 
 
 def file_digest(path: Path) -> str:
@@ -35,6 +37,20 @@ def safe_id(value: str) -> str:
     if re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}", value) is None:
         raise VoiceError("invalid_id", "Use the job or voice identifier returned by the engine.")
     return value
+
+
+def profile_identity(
+    reference: Reference, recipe: VoiceRecipe | None, selection: VoiceSelection | None
+) -> str:
+    """Keep legacy IDs stable while binding new recipes and review evidence."""
+    digest = hashlib.sha256(
+        reference.model_copy(update={"audio_path": ""}).model_dump_json().encode()
+    )
+    if recipe is not None:
+        digest.update(b"\nvoice-recipe-v1\n" + recipe.model_dump_json().encode())
+    if selection is not None:
+        digest.update(b"\nvoice-selection-v1\n" + selection.model_dump_json().encode())
+    return "voice-" + digest.hexdigest()[:24]
 
 
 class Store:
@@ -64,7 +80,14 @@ class Store:
             for source in request.sources
         )
         canonical = request.model_copy(update={"sources": sources})
-        digest = hashlib.sha256(self.cache_key.encode() + canonical.model_dump_json().encode())
+        excluded: set[str] = (
+            {"settings"}
+            if isinstance(canonical, GenerateRequest) and canonical.settings is None
+            else set()
+        )
+        digest = hashlib.sha256(
+            self.cache_key.encode() + canonical.model_dump_json(exclude=excluded).encode()
+        )
         for source in sources:
             path = Path(source)
             if "://" not in source and path.is_file():
@@ -134,16 +157,34 @@ class Store:
         finally:
             temporary.unlink(missing_ok=True)
 
-    def save_voice(self, name: str, reference: Reference) -> VoiceProfile:
+    def save_voice(
+        self,
+        name: str,
+        reference: Reference,
+        *,
+        recipe: VoiceRecipe | None = None,
+        selection: VoiceSelection | None = None,
+    ) -> VoiceProfile:
         """Copy the reference so a reusable voice is independent of job outputs."""
-        identity = hashlib.sha256(
-            reference.model_copy(update={"audio_path": ""}).model_dump_json().encode()
-        ).hexdigest()[:24]
-        voice_id = "voice-" + identity
+        voice_id = profile_identity(reference, recipe, selection)
+        with self.lock(voice_id):
+            return self._save_voice(name, reference, recipe=recipe, selection=selection)
+
+    def _save_voice(
+        self,
+        name: str,
+        reference: Reference,
+        *,
+        recipe: VoiceRecipe | None,
+        selection: VoiceSelection | None,
+    ) -> VoiceProfile:
+        voice_id = profile_identity(reference, recipe, selection)
         directory = self.root / "voices" / voice_id
         if not directory.resolve().is_relative_to(self.root):
             raise VoiceError("invalid_path", "The profile directory escapes the voice store.")
         directory.mkdir(parents=True, exist_ok=True)
+        if (directory / "profile.json").is_file():
+            return self.voice(voice_id)
         original = Path(reference.audio_path)
         if not original.is_file() or file_digest(original) != reference.sha256:
             raise VoiceError("invalid_reference", "The reference audio is missing or changed.")
@@ -154,6 +195,8 @@ class Store:
             temporary = Path(temporary_file.name)
         try:
             _ = shutil.copy2(original, temporary)
+            if file_digest(temporary) != reference.sha256:
+                raise VoiceError("invalid_reference", "The reference changed during copying.")
             _ = temporary.replace(target)
         finally:
             temporary.unlink(missing_ok=True)
@@ -162,6 +205,8 @@ class Store:
             name=name,
             reference=reference.model_copy(update={"audio_path": str(target)}),
             created_at=datetime.now(UTC).isoformat(),
+            recipe=recipe,
+            selection=selection,
         )
         self.atomic_write(directory / "profile.json", profile)
         return profile
@@ -180,6 +225,8 @@ class Store:
         audio = Path(profile.reference.audio_path)
         if profile.id != voice_id or not audio.resolve().is_relative_to(path.parent.resolve()):
             raise VoiceError("invalid_profile", "Saved voice paths do not match their profile.")
+        if profile_identity(profile.reference, profile.recipe, profile.selection) != voice_id:
+            raise VoiceError("invalid_profile", "Saved voice identity does not match its recipe.")
         if not audio.is_file() or file_digest(audio) != profile.reference.sha256:
             raise VoiceError(
                 "invalid_reference", "The saved voice reference is missing or changed."

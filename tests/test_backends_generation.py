@@ -39,6 +39,10 @@ class CloneCall:
     ref_text: str
     stream: bool
     max_tokens: int
+    temperature: float = 0.9
+    top_p: float = 1.0
+    top_k: int = 50
+    repetition_penalty: float = 1.05
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,8 +59,25 @@ class CloneModel:
         ref_text: str,
         stream: bool,
         max_tokens: int,
+        temperature: float = 0.9,
+        top_p: float = 1.0,
+        top_k: int = 50,
+        repetition_penalty: float = 1.05,
     ) -> tuple[Chunk, ...]:
-        self.calls.append(CloneCall(text, lang_code, ref_audio, ref_text, stream, max_tokens))
+        self.calls.append(
+            CloneCall(
+                text,
+                lang_code,
+                ref_audio,
+                ref_text,
+                stream,
+                max_tokens,
+                temperature,
+                top_p,
+                top_k,
+                repetition_penalty,
+            )
+        )
         return (Chunk(Samples((0.0, 0.3, -0.3) * 100), token_count=self.token_count),)
 
 

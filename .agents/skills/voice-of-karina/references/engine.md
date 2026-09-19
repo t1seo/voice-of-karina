@@ -21,6 +21,10 @@ digit. Keep them unique within a request. One request accepts up to 8 sources an
 32 nonempty messages. Default language is Korean. Use the exact field names below;
 unknown fields are rejected rather than silently ignored.
 
+For packaged presets, exact reference registration, paired previews, and saving a
+reviewed voice recipe, read [curation.md](curation.md). Those actions use this same
+transport; users do not need to operate a separate CLI.
+
 ## Request recipes
 
 ### Analyze one or more references
@@ -50,8 +54,11 @@ job preserves its reference and attempt budget.
 
 ### Generate from a selected candidate
 
+This is the quick one-candidate path. For a reusable new voice with multiple
+suitable references, prefer the bounded comparison in [curation.md](curation.md).
+
 ```json
-{"action":"generate","mode":"mimic","analysis_job_id":"RETURNED_ANALYSIS_JOB_ID","candidate_id":"RETURNED_CANDIDATE_ID","messages":[{"id":"done","text":"작업이 끝났어요. 확인해 주세요."}],"profile_name":"카리나 참고 목소리","language":"Korean","max_attempts":2}
+{"action":"generate","mode":"mimic","analysis_job_id":"RETURNED_ANALYSIS_JOB_ID","candidate_id":"RETURNED_CANDIDATE_ID","messages":[{"id":"done","text":"작업이 끝났어요. 확인해 주세요."}],"profile_name":"카리나 참고 목소리","language":"Korean","max_attempts":2,"settings":{}}
 ```
 
 For a user-selected interval, a mimic generation can instead include `sources`
@@ -60,8 +67,12 @@ and `source_time`. Never provide both a timestamp and a candidate ID.
 ### Design an original voice
 
 ```json
-{"action":"generate","mode":"design","voice_description":"따뜻하고 차분한 한국어 여성 목소리. 또렷하고 편안한 말투.","messages":[{"id":"rest","text":"잠시 쉬어 가셔도 괜찮아요."}],"profile_name":"차분한 안내 목소리","language":"Korean","max_attempts":2}
+{"action":"generate","mode":"design","voice_description":"따뜻하고 차분한 한국어 여성 목소리. 또렷하고 편안한 말투.","messages":[{"id":"rest","text":"잠시 쉬어 가셔도 괜찮아요."}],"profile_name":"차분한 안내 목소리","language":"Korean","max_attempts":2,"settings":{}}
 ```
+
+For first-time design or direct mimic generation, `settings: {}` records the
+current defaults as a reusable recipe. It is not a user-facing tuning step.
+Do not replace a resumed request with a newly configured one.
 
 ### Reuse or list saved voices
 
@@ -72,6 +83,15 @@ and `source_time`. Never provide both a timestamp and a candidate ID.
 ```json
 {"action":"generate","mode":"reuse","voice_id":"RETURNED_VOICE_ID","messages":[{"id":"next","text":"다음 작업도 준비됐어요."}],"language":"Korean"}
 ```
+
+Omit `settings` to restore the saved voice's effective sampling settings. Use its
+recipe language; incompatible model revisions or languages are refused rather
+than silently changed. Explicit `settings` are supported for a requested
+controlled change, not a routine user parameter menu. Old profiles without a
+recipe remain compatible but have no recorded comparison selection. Generated
+audio includes synthesis evidence tying the applied settings and requested text
+to the WAV digest and runtime. Retries use deterministic, distinct seeds without
+resetting the original attempt budget.
 
 ### Check or resume an interrupted job
 
@@ -86,6 +106,9 @@ and `source_time`. Never provide both a timestamp and a candidate ID.
 When a saved generation is waiting for a candidate choice, include the returned
 `candidate_id` in `resume`. A changed message or voice is a new request. Resume
 preserves the original message list and total attempt budget.
+The same actions accept an `audition-...` job ID; its finite trial matrix and
+selection state are described in [curation.md](curation.md). Do not add a
+`candidate_id` when resuming an audition.
 
 ### Reject a result after quality review
 
@@ -116,7 +139,9 @@ mutations return `job_busy` and can be retried after the active operation finish
 ```
 
 `target` is `claude`, `codex`, or `both`. Installation accepts an accepted artifact
-from a saved job; arbitrary filenames are not transport inputs. It copies a
+from a regular generation job; audition trial files and arbitrary filenames are
+not installation inputs. Generate a regular verified message from the selected
+profile before installing a completion sound. It copies a
 stdlib-only player and WAV into the selected tool home, preserves existing
 settings, chains an unrelated existing Codex notifier, and returns backup paths.
 Only this project's known legacy player command is retired during explicit
@@ -124,7 +149,7 @@ installation, so the old and new sounds do not play together.
 
 ## Quality and failure handling
 
-Read the result's `status`, current step, input request, message results, attempts,
+For ordinary jobs, read `status`, current step, input request, message results, attempts,
 events, and errors. `complete` requires every requested message to be accepted;
 `partial` is not full success. Link existing successful WAVs even if another line
 failed, and explain which line still needs attention.

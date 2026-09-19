@@ -1,7 +1,8 @@
 import pytest
 from pydantic import ValidationError
 
-from voice_of_karina.contracts import REQUEST_ADAPTER, GenerateRequest
+from voice_of_karina.contracts import GenerateRequest
+from voice_of_karina.requests import REQUEST_ADAPTER
 
 
 @pytest.mark.parametrize(

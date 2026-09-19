@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from typing import Annotated, ClassVar, Literal, Self, assert_never
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints, TypeAdapter, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 from pydantic_core import PydanticCustomError
+
+from voice_of_karina.generation_settings import GenerationSettings, SynthesisEvidence
 
 type Identifier = Annotated[str, StringConstraints(pattern=r"^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$")]
 type Sha256 = Annotated[str, StringConstraints(pattern=r"^[a-f0-9]{64}$")]
@@ -92,6 +94,7 @@ class GenerateRequest(FrozenModel):
     language: Text = "Korean"
     max_attempts: int = Field(default=2, ge=1, le=3)
     quality: QualityOptions = Field(default_factory=QualityOptions)
+    settings: GenerationSettings | None = None
 
     @model_validator(mode="after")
     def unique_messages(self) -> Self:
@@ -162,19 +165,6 @@ class InstallRequest(FrozenModel):
     target: Literal["claude", "codex", "both"] = "both"
 
 
-type Request = Annotated[
-    AnalyzeRequest
-    | GenerateRequest
-    | StatusRequest
-    | ResumeRequest
-    | RejectRequest
-    | VoicesRequest
-    | InstallRequest,
-    Field(discriminator="action"),
-]
-REQUEST_ADAPTER: TypeAdapter[Request] = TypeAdapter(Request)
-
-
 class Metrics(FrozenModel):
     """Measured signal properties, not a speaker-identity or music detector."""
 
@@ -218,6 +208,7 @@ class Candidate(FrozenModel):
     source: str | None = None
     pause_bounded: bool = False
     utterance_count: int | None = Field(default=None, ge=1)
+    sha256: Sha256 | None = None
 
 
 class AnalysisResult(FrozenModel):
@@ -265,6 +256,7 @@ class GeneratedAudio(FrozenModel):
     elapsed_seconds: float
     language: Text = "Korean"
     reference: Reference | None = None
+    synthesis: SynthesisEvidence | None = None
 
 
 class QualityResult(FrozenModel):

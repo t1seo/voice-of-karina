@@ -22,6 +22,7 @@ from voice_of_karina.audio_metrics import (
 )
 from voice_of_karina.contracts import Candidate, Source
 from voice_of_karina.errors import VoiceError
+from voice_of_karina.sources import file_sha256
 
 MAX_CANDIDATES: Final = 4
 
@@ -92,4 +93,7 @@ def source_candidates(source: Source, job_dir: Path, *, selected: bool) -> tuple
             candidate.start_seconds - source.offset_seconds,
             candidate.end_seconds - source.offset_seconds,
         )
-    return selected_candidates
+    return tuple(
+        candidate.model_copy(update={"sha256": file_sha256(Path(candidate.audio_path))})
+        for candidate in selected_candidates
+    )
