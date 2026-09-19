@@ -26,6 +26,7 @@ class Samples:
 class Chunk:
     audio: Samples
     sample_rate: int = 24_000
+    token_count: int = 3
 
 
 def test_wav_preserves_chunk_order_and_clamps_pcm_when_model_samples_exceed_range(

@@ -79,7 +79,7 @@ flowchart LR
 
 한 사람이 짧고 완결된 문장을 또렷하게 말하는 구간이 좋습니다. 음악이 크거나 여러 사람이 겹쳐 말하면 다른 구간 또는 더 깨끗한 영상을 전달해 주세요. 원하는 사람이 말하는 타임스탬프가 있으면 선택에 도움이 됩니다.
 
-결과는 디코딩, 무음, 길이, 클리핑과 ASR 전사를 통한 문장 일치를 확인합니다. 전사가 불가능하거나 불확실하면 미검증 상태로 안내합니다. 자동 검사는 자연스러움이나 특정 인물과의 유사성을 보장하지 않으므로 직접 들어 보시고 선택해 주세요. 현재 어댑터에는 저장한 목소리의 속도·감정을 조절하는 기능이 없습니다.
+복제와 저장한 목소리 재사용에는 품질을 우선해 **Qwen3-TTS 1.7B Base (4-bit)**를 사용합니다. 이전 0.6B 모델보다 생성 시간이 늘어나는 점은 [실측 비교](docs/model-comparison.md)에 정리했습니다. 결과는 음성 신호, 강화된 문장 일치 기준, 요청한 끝말, 한국어 모음 끝부분의 급격한 끊김을 함께 검사하고 의심되는 결과는 정해진 횟수 안에서 다시 생성합니다. 토큰 한도에 도달한 생성은 거부하며 전사가 불가능하거나 불확실하면 미검증 상태로 안내합니다. 자동 검사는 발음·자연스러움·인물과의 유사성을 보장하지 않으므로 직접 들어 보시고 선택해 주세요. 저장한 목소리의 속도·감정 조절은 지원하지 않습니다.
 
 ## 원하시면 완료 알림에 적용하세요
 
@@ -95,19 +95,19 @@ flowchart LR
 
 **작업 완료** · 작업이 끝났어요. 확인해 주세요.
 
-https://github.com/user-attachments/assets/b69fb9ec-683e-4f33-9a53-e14ad8b7790e
+https://github.com/user-attachments/assets/93c3f76f-097a-4e78-9cf8-0260fc86378f
 
 **확인 요청** · 확인이 필요해요. 잠깐 봐 주세요.
 
-https://github.com/user-attachments/assets/ac07fcfc-744a-429b-8d40-c054749f7b7e
+https://github.com/user-attachments/assets/322ea733-b125-4295-bfe1-91638193456b
 
 **다음 작업 준비** · 다음 작업도 준비됐어요.
 
-https://github.com/user-attachments/assets/687e46a4-c6bb-42d8-8eaa-b18e88a75a6d
+https://github.com/user-attachments/assets/d228e9b7-9f96-40b7-9f25-9fcb03751b47
 
 **잠깐 쉬어 가기** · 오늘도 수고 많으셨어요. 잠깐 쉬었다가 다시 시작해 볼까요?
 
-https://github.com/user-attachments/assets/b3a27ab3-ae5d-4e54-abe1-6c567a4192cb
+https://github.com/user-attachments/assets/db7d7fc2-3ee0-4682-a955-bea2725e0767
 
 WAV 다운로드: [작업 완료](assets/samples/karina-done.wav), [확인 요청](assets/samples/karina-attention.wav), [다음 작업 준비](assets/samples/karina-ready.wav), [잠깐 쉬어 가기](assets/samples/karina-break.wav). 영상 없이 만든 [새 목소리](assets/samples/original-rest.wav)는 “잠시 쉬어 가셔도 괜찮아요.”라고 말합니다. [듣기 페이지](docs/samples.html)를 로컬에서 열면 다섯 음성을 모두 재생할 수 있습니다. 입력·모델·품질 검사 기록은 [샘플 출처](assets/samples/provenance.json)에 있습니다.
 

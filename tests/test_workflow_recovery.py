@@ -13,14 +13,38 @@ from voice_of_karina.contracts import (
     QualityResult,
     Reference,
     ResumeRequest,
+    Status,
 )
+from voice_of_karina.quality_policy import QUALITY_POLICY_VERSION
 from voice_of_karina.storage import Store, file_digest
 from voice_of_karina.workflow import Workflow
 from voice_of_karina.workflow_models import Adapters, JobResult, MessageResult
 
 
-def test_finished_child_artifact_when_parent_interrupted_is_recovered_without_inference(
+@pytest.mark.parametrize(
+    ("quality", "expected_status"),
+    [
+        (
+            QualityResult(valid=True, decision="pass", policy_version=QUALITY_POLICY_VERSION),
+            "complete",
+        ),
+        (
+            QualityResult(
+                valid=False,
+                decision="retry",
+                policy_version=QUALITY_POLICY_VERSION,
+                warnings=("Ending is incomplete.",),
+            ),
+            "failed",
+        ),
+        (QualityResult(valid=True, decision="pass"), "needs_input"),
+    ],
+    ids=("current-pass", "current-rejection", "unchecked-legacy-pass"),
+)
+def test_finished_child_artifact_when_parent_interrupted_is_checked_without_inference(
     tmp_path: Path,
+    quality: QualityResult,
+    expected_status: Status,
 ) -> None:
     # Given
     store = Store(tmp_path)
@@ -69,17 +93,25 @@ def test_finished_child_artifact_when_parent_interrupted_is_recovered_without_in
         lambda _request, _reference, _directory: pytest.fail(
             "The spent budget cannot run inference"
         ),
-        lambda _audio, _text, _policy: QualityResult(valid=True, decision="pass"),
+        lambda _audio, _text, _policy: quality,
     )
     # When
     result = Workflow(store, adapters).resume(ResumeRequest(job_id=job_id))
     # Then
-    assert result.status == "complete"
+    assert result.status == expected_status
     assert result.messages[0].attempts == 1
-    assert result.messages[0].accepted_sha256 == file_digest(output)
+    assert result.messages[0].audio == audio
+    assert result.messages[0].quality is not None
+    assert result.messages[0].accepted_sha256 == (
+        file_digest(output) if expected_status == "complete" else None
+    )
+    assert store.load(job_id).messages == result.messages
 
 
-def test_status_when_accepted_artifact_deleted_is_truthful_and_read_only(tmp_path: Path) -> None:
+@pytest.mark.parametrize("policy_version", [QUALITY_POLICY_VERSION, None])
+def test_status_when_accepted_artifact_deleted_is_truthful_and_read_only(
+    tmp_path: Path, policy_version: str | None
+) -> None:
     # Given
     store = Store(tmp_path)
     request = GenerateRequest(
@@ -105,7 +137,9 @@ def test_status_when_accepted_artifact_deleted_is_truthful_and_read_only(tmp_pat
                     text="hello",
                     attempts=1,
                     audio=audio,
-                    quality=QualityResult(valid=True, decision="pass"),
+                    quality=QualityResult(
+                        valid=True, decision="pass", policy_version=policy_version
+                    ),
                     accepted_sha256="expected",
                 ),
             ),

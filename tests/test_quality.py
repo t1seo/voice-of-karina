@@ -28,7 +28,11 @@ def artifact(path: Path) -> GeneratedAudio:
 def write_samples(path: Path, value: int) -> Path:
     with wave.open(str(path), "wb") as output:
         output.setparams((1, 2, 16000, 0, "NONE", "not compressed"))
-        output.writeframes(struct.pack("<h", value) * 16000)
+        samples = (
+            round(value * min(1, (16000 - index) / 3200)) if 0 < abs(value) < 32767 else value
+            for index in range(16000)
+        )
+        output.writeframes(b"".join(struct.pack("<h", sample) for sample in samples))
     return path
 
 

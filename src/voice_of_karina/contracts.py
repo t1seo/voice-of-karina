@@ -48,7 +48,7 @@ class QualityOptions(FrozenModel):
     max_duration_seconds: float = Field(default=120, ge=1, le=300, allow_inf_nan=False)
     max_clipping_ratio: float = Field(default=0.02, ge=0, le=0.1, allow_inf_nan=False)
     min_rms_dbfs: float = Field(default=-50, ge=-60, le=-10, allow_inf_nan=False)
-    max_text_error_rate: float = Field(default=0.35, ge=0, le=0.5, allow_inf_nan=False)
+    max_text_error_rate: float = Field(default=0.15, ge=0, le=0.5, allow_inf_nan=False)
 
     @model_validator(mode="after")
     def ordered(self) -> Self:
@@ -174,6 +174,9 @@ class Metrics(FrozenModel):
     spectral_flatness: float | None = None
     noise_floor_dbfs: float | None = None
     text_error_rate: float | None = None
+    terminal_decay_seconds: float | None = None
+    terminal_drop_db: float | None = None
+    ending_text_match: bool | None = None
 
 
 class Source(FrozenModel):
@@ -258,3 +261,4 @@ class QualityResult(FrozenModel):
     metrics: Metrics = Field(default_factory=Metrics)
     warnings: tuple[str, ...] = ()
     transcript: str | None = None
+    policy_version: str | None = None

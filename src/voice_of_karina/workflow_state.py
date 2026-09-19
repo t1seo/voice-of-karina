@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from voice_of_karina.contracts import AnalysisResult, Status
+from voice_of_karina.quality_policy import QUALITY_POLICY_VERSION
 from voice_of_karina.storage import Store, file_digest
 from voice_of_karina.workflow_models import ErrorDetail, Event, JobResult, MessageResult
 
@@ -15,7 +16,15 @@ def accepted(result: MessageResult) -> bool:
         and result.quality is not None
         and result.quality.valid
         and result.quality.decision == "pass"
+        and result.quality.policy_version == QUALITY_POLICY_VERSION
         and result.accepted_sha256 is not None
+    )
+
+
+def stale_quality(result: MessageResult) -> bool:
+    """Identify saved audio that has never completed the current validation policy."""
+    return result.audio is not None and (
+        result.quality is None or result.quality.policy_version != QUALITY_POLICY_VERSION
     )
 
 
@@ -47,7 +56,7 @@ def integrity(state: JobResult, store: Store) -> JobResult:
     changed = False
     for result in state.messages:
         audio = result.audio
-        if not accepted(result) or audio is None:
+        if audio is None or result.accepted_sha256 is None:
             checked.append(result)
             continue
         path = Path(audio.path)
@@ -74,6 +83,18 @@ def integrity(state: JobResult, store: Store) -> JobResult:
                     ),
                 }
             )
+        )
+    if any(stale_quality(result) for result in checked):
+        return state.model_copy(
+            update={
+                "messages": tuple(checked),
+                "status": "needs_input",
+                "step": "quality_revalidation",
+                "input_request": (
+                    "Resume this job to revalidate saved audio under the current quality policy; "
+                    "revalidation does not spend a generation attempt."
+                ),
+            }
         )
     if not changed:
         return state
