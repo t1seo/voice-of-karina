@@ -70,6 +70,12 @@ sounds natural or matches a person; listening remains the final judgment.
   persisted JSON or replace the original request to force a successful state.
 - Reuse saved profiles for follow-up phrases. For a changed phrase, create a new
   reuse request containing only that phrase. Do not regenerate accepted siblings.
+- If listening feedback or a separate quality review rejects an output, call
+  `reject` with its job, message, exact SHA256, and the observed reason; then
+  `resume` using the remaining original attempts. Keep automatic text checks
+  distinct from the review judgment. Do not reset the budget with a new job.
+  The rejected file and its prior checks remain recorded and cannot be recovered
+  as an accepted result. If the budget is exhausted, report the unresolved issue.
 - Style or speed changes are not guaranteed by this backend. Do not invent model
   parameters. A new voice description creates a new design; it is not an assured
   emotion edit of an existing person's voice.

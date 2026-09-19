@@ -34,6 +34,20 @@ An explicit interval can be passed as `"source_time":{"source_index":0,
 the supplied sources. The interval still undergoes speech-quality checks.
 Use real returned candidate IDs; the examples below are placeholders.
 
+Reliable multi-segment transcripts may produce shorter candidates bounded by
+measured pauses inside the original interval. These native-rate crops are
+transcribed independently and prioritized only when the wording matches.
+`pause_bounded: true` records this verification, not speaker identity or absence
+of noise. `utterance_count` describes the analysis segmentation. The displayed
+list is capped at four candidates and retains at least one original fallback.
+Failed refinement keeps the original candidates.
+The extra verification batch is limited to four clips, and speaker-selection
+requirements are preserved.
+
+Previously saved voices are unchanged. To use an improved reference, run a new
+analysis and save the chosen candidate under a new profile. Resuming an existing
+job preserves its reference and attempt budget.
+
 ### Generate from a selected candidate
 
 ```json
@@ -72,6 +86,28 @@ and `source_time`. Never provide both a timestamp and a candidate ID.
 When a saved generation is waiting for a candidate choice, include the returned
 `candidate_id` in `resume`. A changed message or voice is a new request. Resume
 preserves the original message list and total attempt budget.
+
+### Reject a result after quality review
+
+An automatic pass does not override listening feedback. Read `status` and use
+the exact reviewed artifact's SHA256 (normally `accepted_sha256`):
+
+```json
+{"action":"reject","job_id":"RETURNED_JOB_ID","message_id":"attention","sha256":"EXACT_64_CHARACTER_LOWERCASE_SHA256","reason":"The reviewed output has an unwanted sound at the beginning."}
+```
+
+This records the rejection and its original audio/automatic checks; it does not
+generate audio. Call `resume` on the same job to use only the original remaining
+attempts. The text, reference, and successful siblings are retained. Replaying the
+same rejection is harmless even after a later output succeeds. A different stale
+digest is refused. Rejected bytes cannot pass recovery or notification installation,
+even when they are found under another filename. When no attempts remain, report
+the unresolved quality issue. Do not create a new job just to reset the budget.
+
+Each synthesis batch uses a fresh numbered directory, preserving every reviewed
+artifact even when messages have different attempt counts. Installation holds the
+same job lock as review and generation through the settings transaction; concurrent
+mutations return `job_busy` and can be retried after the active operation finishes.
 
 ### Apply a completion sound, only when requested
 

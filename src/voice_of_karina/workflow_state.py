@@ -18,6 +18,7 @@ def accepted(result: MessageResult) -> bool:
         and result.quality.decision == "pass"
         and result.quality.policy_version == QUALITY_POLICY_VERSION
         and result.accepted_sha256 is not None
+        and all(item.sha256 != result.accepted_sha256 for item in result.rejections)
     )
 
 

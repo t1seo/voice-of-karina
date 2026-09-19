@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import assert_never
 
-from voice_of_karina.contracts import AnalyzeRequest, GenerateRequest, ResumeRequest
+from voice_of_karina.contracts import AnalyzeRequest, GenerateRequest, RejectRequest, ResumeRequest
 from voice_of_karina.errors import VoiceError
 from voice_of_karina.storage import Store
 from voice_of_karina.workflow_generation import run_generation
@@ -15,6 +15,7 @@ from voice_of_karina.workflow_models import (
     VoicesResult,
 )
 from voice_of_karina.workflow_reference import prepare_job
+from voice_of_karina.workflow_review import reject_output
 from voice_of_karina.workflow_state import has_transcripts, integrity, transition
 
 
@@ -125,6 +126,12 @@ class Workflow:
     def status(self, job_id: str) -> JobResult:
         """Read status while checking accepted files without changing saved state."""
         return integrity(self.store.load(job_id), self.store)
+
+    def reject(self, request: RejectRequest) -> JobResult:
+        """Serialize review with generation while retaining the original attempt budget."""
+        _ = self.store.load(request.job_id)
+        with self.store.lock(request.job_id):
+            return reject_output(self.store.load(request.job_id), request, self.store)
 
     def voices(self) -> VoicesResult:
         """Expose validated saved voices to the conversation agent."""

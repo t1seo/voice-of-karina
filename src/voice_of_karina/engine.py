@@ -15,6 +15,7 @@ from voice_of_karina.contracts import (
     FrozenModel,
     GenerateRequest,
     InstallRequest,
+    RejectRequest,
     Request,
     ResumeRequest,
     StatusRequest,
@@ -52,7 +53,13 @@ def run(raw: str | bytes, root: Path | None = None) -> Response:
             case AnalyzeRequest() | GenerateRequest():
                 for source in request.sources:
                     validate_source(source)
-            case StatusRequest() | ResumeRequest() | VoicesRequest() | InstallRequest():
+            case (
+                StatusRequest()
+                | ResumeRequest()
+                | RejectRequest()
+                | VoicesRequest()
+                | InstallRequest()
+            ):
                 pass
             case unreachable:
                 assert_never(unreachable)
@@ -74,42 +81,48 @@ def run(raw: str | bytes, root: Path | None = None) -> Response:
 
 
 def _dispatch(request: Request, workflow: Workflow) -> Response:
+    response: Response
     match request:
         case AnalyzeRequest():
-            return workflow.analyze(request)
+            response = workflow.analyze(request)
         case GenerateRequest():
-            return workflow.generate(request)
+            response = workflow.generate(request)
         case StatusRequest():
-            return workflow.status(request.job_id)
+            response = workflow.status(request.job_id)
         case ResumeRequest():
-            return workflow.resume(request)
+            response = workflow.resume(request)
+        case RejectRequest():
+            response = workflow.reject(request)
         case VoicesRequest():
-            return workflow.voices()
+            response = workflow.voices()
         case InstallRequest():
-            return apply_notification(request, workflow)
+            response = apply_notification(request, workflow)
         case unreachable:
             assert_never(unreachable)
+    return response
 
 
 def apply_notification(request: InstallRequest, workflow: Workflow) -> InstallResult:
     """Installation requires an existing validated utterance from this exact job."""
-    state = workflow.status(request.job_id)
-    result = next(
-        (result for result in state.messages if result.message_id == request.message_id), None
-    )
-    if result is None or not accepted(result) or result.audio is None:
-        raise VoiceError(
-            "unverified_output", "Only a successfully verified message can be installed."
+    _ = workflow.store.load(request.job_id)
+    with workflow.store.lock(request.job_id):
+        state = workflow.status(request.job_id)
+        result = next(
+            (result for result in state.messages if result.message_id == request.message_id), None
         )
-    target = request.target
-    tools: tuple[Literal["claude", "codex"], ...]
-    match target:
-        case "claude":
-            tools = ("claude",)
-        case "codex":
-            tools = ("codex",)
-        case "both":
-            tools = ("claude", "codex")
-        case unreachable:
-            assert_never(unreachable)
-    return install_notifications(Path(result.audio.path), tools)
+        if result is None or not accepted(result) or result.audio is None:
+            raise VoiceError(
+                "unverified_output", "Only a successfully verified message can be installed."
+            )
+        target = request.target
+        tools: tuple[Literal["claude", "codex"], ...]
+        match target:
+            case "claude":
+                tools = ("claude",)
+            case "codex":
+                tools = ("codex",)
+            case "both":
+                tools = ("claude", "codex")
+            case unreachable:
+                assert_never(unreachable)
+        return install_notifications(Path(result.audio.path), tools)
