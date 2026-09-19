@@ -25,11 +25,18 @@ class AudioStats:
     duration_seconds: float
 
 
-def write_audio(chunks: Iterable[GenerationChunk], destination: Path) -> AudioStats:
+def write_audio(
+    chunks: Iterable[GenerationChunk], destination: Path, *, max_tokens: int | None = None
+) -> AudioStats:
     """Reject empty/nonfinite output before publishing a playable WAV."""
     samples: list[float] = []
     sample_rate: int | None = None
     for chunk in chunks:
+        if max_tokens is not None and chunk.token_count >= max_tokens:
+            raise VoiceError(
+                "incomplete_generation",
+                "The model exhausted its token budget before confirming completion.",
+            )
         if chunk.sample_rate <= 0 or (sample_rate is not None and sample_rate != chunk.sample_rate):
             raise VoiceError("invalid_audio", "The model returned inconsistent sample rates.")
         sample_rate = chunk.sample_rate
@@ -66,7 +73,7 @@ def clone_batch(task: CloneTask, model: CloneModel) -> AudioResponse:
             stream=False,
             max_tokens=token_limit(message.text),
         )
-        stats = write_audio(chunks, path)
+        stats = write_audio(chunks, path, max_tokens=token_limit(message.text))
         artifact = GeneratedAudio(
             message_id=message.id,
             path=str(path),
@@ -96,7 +103,7 @@ def design_audio(task: DesignTask, model: DesignModel) -> AudioResponse:
         stream=False,
         max_tokens=token_limit(task.text),
     )
-    stats = write_audio(chunks, task.output_path)
+    stats = write_audio(chunks, task.output_path, max_tokens=token_limit(task.text))
     return AudioResponse(
         audio=(
             GeneratedAudio(
