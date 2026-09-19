@@ -15,6 +15,7 @@ from voice_of_karina.contracts import (
     Reference,
     ResumeRequest,
 )
+from voice_of_karina.quality_policy import QUALITY_POLICY_VERSION
 from voice_of_karina.storage import Store, file_digest
 from voice_of_karina.workflow import Workflow
 from voice_of_karina.workflow_models import Adapters
@@ -82,7 +83,11 @@ class ModelBoundary:
         self, audio: GeneratedAudio, _expected: str, _options: QualityOptions
     ) -> QualityResult:
         accepted = Path(audio.path).read_bytes() == b"good"
-        return QualityResult(valid=accepted, decision="pass" if accepted else "retry")
+        return QualityResult(
+            valid=accepted,
+            decision="pass" if accepted else "retry",
+            policy_version=QUALITY_POLICY_VERSION,
+        )
 
     def adapters(self) -> Adapters:
         return Adapters(self.analyze, self.prepare, self.design, self.synthesize, self.validate)

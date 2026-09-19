@@ -4,6 +4,8 @@ import hashlib
 from dataclasses import dataclass
 from typing import Final
 
+from voice_of_karina.quality_policy import QUALITY_POLICY_VERSION
+
 
 @dataclass(frozen=True, slots=True)
 class ModelSpec:
@@ -14,8 +16,8 @@ class ModelSpec:
 
 
 CLONE_MODEL: Final = ModelSpec(
-    "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-4bit",
-    "0d6bb6fe33f92d47a507e23b9148940e8366ab5b",
+    "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+    "37e955a1deb861c088ae5f3a67043185f3d1a60c",
 )
 DESIGN_MODEL: Final = ModelSpec(
     "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-4bit",
@@ -51,6 +53,8 @@ def backend_cache_key() -> str:
     parts = [
         "mlx-audio==0.5.4",
         "pcm-s16le-v1",
+        "generation-budget-completion-v2",
+        QUALITY_POLICY_VERSION,
         "whisper-temperature=0.0",
         "design-asr-reference-v1",
         "language-mapping-v1",
