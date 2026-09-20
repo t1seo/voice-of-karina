@@ -24,7 +24,7 @@
 
 **다른 사람의 목소리 준비하기**
 
-> 첨부한 이채영 영상에서 혼자 또렷하게 말하는 구간들을 비교해서 “확인이 필요해요. 잠깐 봐 주세요.”를 만들어 주세요. 미리 듣기로 골라서 “채영 안내” 목소리로 저장하고 싶어요.
+> 첨부한 영상에서 혼자 또렷하게 말하는 구간들을 비교해서 “확인이 필요해요. 잠깐 봐 주세요.”를 만들어 주세요. 미리 듣기로 골라서 “내 안내” 목소리로 저장하고 싶어요.
 
 원하는 사람의 YouTube 링크를 하나 이상 붙여 주세요. 다른 화자도 같은 준비·비교·저장
 흐름을 사용하며, 실제 음성의 품질은 각각 확인합니다.
@@ -148,66 +148,7 @@ https://github.com/user-attachments/assets/d228e9b7-9f96-40b7-9f25-9fcb03751b47
 
 https://github.com/user-attachments/assets/db7d7fc2-3ee0-4682-a955-bea2725e0767
 
-WAV 다운로드: [작업 완료](assets/samples/karina-done.wav), [확인 요청](assets/samples/karina-attention.wav), [다음 작업 준비](assets/samples/karina-ready.wav), [잠깐 쉬어 가기](assets/samples/karina-break.wav). 영상 없이 만든 [새 목소리](assets/samples/original-rest.wav)는 “잠시 쉬어 가셔도 괜찮아요.”라고 말합니다. [듣기 페이지](docs/samples.html)를 로컬에서 열면 이 다섯 음성과 아래 이채영 샘플 일곱 개를 재생할 수 있습니다. 입력·모델·품질 검사 기록은 [샘플 출처](assets/samples/provenance.json)에 있습니다.
-
-## 이채영 샘플 듣기
-
-**재생 가능한 샘플은 7개입니다.** A·B·C 후보별 두 문장씩 6개와 새 문장 1개입니다. [프로미스나인 이채영 인터뷰](https://www.youtube.com/watch?v=opvsj3J5ccs)를 참고해 생성한 합성 음성이며, 이채영이 직접 이 문장을 말한 녹음이 아닙니다. 모두 자동 검사를 통과했고, 최종 청취 선택은 아직 하지 않았습니다. 각 후보를 펼쳐 두 음성을 비교해 주세요.
-
-<details open>
-<summary>후보 A · 미리 듣기 2개</summary>
-
-**확인 요청** · 확인이 필요해요. 잠깐 봐 주세요.
-
-https://github.com/user-attachments/assets/0293a99b-a977-46bc-8922-cd1db9d1f4ad
-
-**작업 완료** · 작업이 끝났어요. 확인해 주세요.
-
-https://github.com/user-attachments/assets/137ca7ad-386f-4a63-82bd-12a00ec3001e
-
-WAV 다운로드: [확인 요청](assets/evaluation/reusable-voices/chaeyoung/trial-2dccd0e42fe196497aaf2c3e-attention.wav) · [작업 완료](assets/evaluation/reusable-voices/chaeyoung/trial-2fd19d49ef09b44af875ca9a-done.wav)
-
-</details>
-
-<details>
-<summary>후보 B · 미리 듣기 2개</summary>
-
-**확인 요청** · 확인이 필요해요. 잠깐 봐 주세요.
-
-https://github.com/user-attachments/assets/0887285c-be4e-4a09-97bc-faf374f27c17
-
-**작업 완료** · 작업이 끝났어요. 확인해 주세요.
-
-https://github.com/user-attachments/assets/cfe86949-cd0f-408d-bf94-bc3b2f74a8c8
-
-WAV 다운로드: [확인 요청](assets/evaluation/reusable-voices/chaeyoung/trial-4a3d04c3f19ef098a2cee5de-attention.wav) · [작업 완료](assets/evaluation/reusable-voices/chaeyoung/trial-68b0a9e08909140ae280ee17-done.wav)
-
-</details>
-
-<details>
-<summary>후보 C · 미리 듣기 2개</summary>
-
-**확인 요청** · 확인이 필요해요. 잠깐 봐 주세요.
-
-https://github.com/user-attachments/assets/befe8618-aa1d-4bba-94c0-ee03ec601128
-
-**작업 완료** · 작업이 끝났어요. 확인해 주세요.
-
-https://github.com/user-attachments/assets/5b9171be-65c5-48da-a14c-d4d2ff690163
-
-WAV 다운로드: [확인 요청](assets/evaluation/reusable-voices/chaeyoung/trial-26da080d2d2264c20d1ec987-attention.wav) · [작업 완료](assets/evaluation/reusable-voices/chaeyoung/trial-31ab28107e439424523047fb-done.wav)
-
-</details>
-
-**새 문장** · 잠시 쉬었다가 다음 작업을 시작해 볼까요?
-
-긴 참조 구간을 재사용해 두 번째 시도에서 통과한 추가 문장입니다. 위 후보들을 비교·선택하는 데 사용한 문장은 아닙니다.
-
-https://github.com/user-attachments/assets/d0673b28-8bd7-4646-bd40-326d43c90c6e
-
-[WAV 다운로드](assets/evaluation/reusable-voices/heldout/chaeyoung-long.wav) · [샘플 출처와 생성 조건](assets/samples/chaeyoung-provenance.json)
-
-저장소에 보관한 이채영 검증 WAV는 **총 10개**로, 비교용 8개와 새 문장의 최종 결과 2개입니다. 위 플레이어는 후보별 두 문장씩 6개와 통과한 새 문장 1개입니다. 나머지 통과 샘플 1개와 실패 결과 2개도 [전체 검증 듣기 페이지](docs/reusable-voice-evaluation.html)를 로컬에서 열어 확인하실 수 있습니다. 자세한 결과는 [검증 기록](docs/reusable-voice-validation.ko.md)에 있습니다.
+WAV 다운로드: [작업 완료](assets/samples/karina-done.wav), [확인 요청](assets/samples/karina-attention.wav), [다음 작업 준비](assets/samples/karina-ready.wav), [잠깐 쉬어 가기](assets/samples/karina-break.wav). 영상 없이 만든 [새 목소리](assets/samples/original-rest.wav)는 “잠시 쉬어 가셔도 괜찮아요.”라고 말합니다. [듣기 페이지](docs/samples.html)를 로컬에서 열면 WAV 파일을 재생할 수 있습니다. 입력·모델·품질 검사 기록은 [샘플 출처](assets/samples/provenance.json)에 있습니다.
 
 ## 개발
 
