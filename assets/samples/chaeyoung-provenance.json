@@ -1,0 +1,152 @@
+{
+  "person": "fromis_9 Lee Chaeyoung",
+  "synthetic": true,
+  "reference_source": "https://www.youtube.com/watch?v=opvsj3J5ccs",
+  "evaluation": "../evaluation/reusable-voices/results.json",
+  "published_evaluation_wavs": 10,
+  "readme_players": 7,
+  "listening_selection": "pending",
+  "note": "A, B and C are eligible comparison choices, not a listening preference. Each has two preview messages. The separate new-sentence result passed automatic checks using the long reference. The full evaluation also retains one unpaired passing preview and two failed results.",
+  "packaging": "H.264 waveform video with AAC audio for GitHub playback. No audio filters, trimming, padding or regeneration. Original lossless WAV downloads remain available.",
+  "samples": [
+    {
+      "id": "chaeyoung-a-attention",
+      "candidate": "A",
+      "choice_id": "8c16ba7f74c78bc223ec08d481ad5397ecdfbb3b8fda0e2aca2b68472bd7987f",
+      "trial_id": "trial-2dccd0e42fe196497aaf2c3e",
+      "text": "확인이 필요해요. 잠깐 봐 주세요.",
+      "wav": "assets/evaluation/reusable-voices/chaeyoung/trial-2dccd0e42fe196497aaf2c3e-attention.wav",
+      "wav_sha256": "fbafde038ee2a394e6aa1e0b3286581f01f72a55a21375e52615626dd6e852e2",
+      "settings": {
+        "seed": 20260921,
+        "temperature": 0.9,
+        "top_p": 1,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
+      "video": "assets/samples/chaeyoung-a-attention.mp4",
+      "video_sha256": "7dc92093c2839c70436efdf8fa0116821bb0e6247d154efacd6a9e92485abd5a",
+      "player_url": "https://github.com/user-attachments/assets/0293a99b-a977-46bc-8922-cd1db9d1f4ad"
+    },
+    {
+      "id": "chaeyoung-a-done",
+      "candidate": "A",
+      "choice_id": "8c16ba7f74c78bc223ec08d481ad5397ecdfbb3b8fda0e2aca2b68472bd7987f",
+      "trial_id": "trial-2fd19d49ef09b44af875ca9a",
+      "text": "작업이 끝났어요. 확인해 주세요.",
+      "wav": "assets/evaluation/reusable-voices/chaeyoung/trial-2fd19d49ef09b44af875ca9a-done.wav",
+      "wav_sha256": "3823d54a8b6636aa17812e4ed04b02ae0e881fbdbf90f2c9af9137b7d481d22f",
+      "settings": {
+        "seed": 20260921,
+        "temperature": 0.9,
+        "top_p": 1,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
+      "video": "assets/samples/chaeyoung-a-done.mp4",
+      "video_sha256": "0e9bee8ff44cabe171a77b305367b168d32b11dc7129a15614476b0a5bae8c2a",
+      "player_url": "https://github.com/user-attachments/assets/137ca7ad-386f-4a63-82bd-12a00ec3001e"
+    },
+    {
+      "id": "chaeyoung-b-attention",
+      "candidate": "B",
+      "choice_id": "93e1e2bb84035f99edd39476b4b370196730817e6b4c8dbd5350397c1957ad6b",
+      "trial_id": "trial-4a3d04c3f19ef098a2cee5de",
+      "text": "확인이 필요해요. 잠깐 봐 주세요.",
+      "wav": "assets/evaluation/reusable-voices/chaeyoung/trial-4a3d04c3f19ef098a2cee5de-attention.wav",
+      "wav_sha256": "846bfe802149ef9afaaabc796d61a5c186a152701f8ad9bcdb18f24d086e153d",
+      "settings": {
+        "seed": 20260920,
+        "temperature": 0.9,
+        "top_p": 1,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "voice_id": "voice-26967610ed84dba375abdb14",
+      "video": "assets/samples/chaeyoung-b-attention.mp4",
+      "video_sha256": "d91cf54e9677de2e2afc81ec9d5972bb5b14b27092ed742e77c1309904b42d88",
+      "player_url": "https://github.com/user-attachments/assets/0887285c-be4e-4a09-97bc-faf374f27c17"
+    },
+    {
+      "id": "chaeyoung-b-done",
+      "candidate": "B",
+      "choice_id": "93e1e2bb84035f99edd39476b4b370196730817e6b4c8dbd5350397c1957ad6b",
+      "trial_id": "trial-68b0a9e08909140ae280ee17",
+      "text": "작업이 끝났어요. 확인해 주세요.",
+      "wav": "assets/evaluation/reusable-voices/chaeyoung/trial-68b0a9e08909140ae280ee17-done.wav",
+      "wav_sha256": "0f48496d7ae21e2a8f60e4022a161bfcaa2c44c9a1d8b1534af8933ac74a6a09",
+      "settings": {
+        "seed": 20260920,
+        "temperature": 0.9,
+        "top_p": 1,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "voice_id": "voice-26967610ed84dba375abdb14",
+      "video": "assets/samples/chaeyoung-b-done.mp4",
+      "video_sha256": "e4794ebe9b3ac3207325d1566c574a222d8aa9a319ac6890dd230c21a61b33f4",
+      "player_url": "https://github.com/user-attachments/assets/cfe86949-cd0f-408d-bf94-bc3b2f74a8c8"
+    },
+    {
+      "id": "chaeyoung-c-attention",
+      "candidate": "C",
+      "choice_id": "c31c7c447564a7330f0d0028171d3489d4c725748323ec5ef65cf2d9f8f2b04c",
+      "trial_id": "trial-26da080d2d2264c20d1ec987",
+      "text": "확인이 필요해요. 잠깐 봐 주세요.",
+      "wav": "assets/evaluation/reusable-voices/chaeyoung/trial-26da080d2d2264c20d1ec987-attention.wav",
+      "wav_sha256": "15c54a2bb48b789e031d83647b8e96fce3bae523c77766962386399d585418d2",
+      "settings": {
+        "seed": 20260921,
+        "temperature": 0.9,
+        "top_p": 1,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "voice_id": "voice-26967610ed84dba375abdb14",
+      "video": "assets/samples/chaeyoung-c-attention.mp4",
+      "video_sha256": "b7b3fb74adf25f7900f0db25735fb58a725233c84eca8f0bbbd3b6c2fcf3db8a",
+      "player_url": "https://github.com/user-attachments/assets/befe8618-aa1d-4bba-94c0-ee03ec601128"
+    },
+    {
+      "id": "chaeyoung-c-done",
+      "candidate": "C",
+      "choice_id": "c31c7c447564a7330f0d0028171d3489d4c725748323ec5ef65cf2d9f8f2b04c",
+      "trial_id": "trial-31ab28107e439424523047fb",
+      "text": "작업이 끝났어요. 확인해 주세요.",
+      "wav": "assets/evaluation/reusable-voices/chaeyoung/trial-31ab28107e439424523047fb-done.wav",
+      "wav_sha256": "ac2a03ae632ca6d06964ec691273710f29daefbccc611e64785e1ba2528fa334",
+      "settings": {
+        "seed": 20260921,
+        "temperature": 0.9,
+        "top_p": 1,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "voice_id": "voice-26967610ed84dba375abdb14",
+      "video": "assets/samples/chaeyoung-c-done.mp4",
+      "video_sha256": "5d43aa3b30d949f56bafdd989542c231110d031a525ab012749fdea8ca0b0ee4",
+      "player_url": "https://github.com/user-attachments/assets/5b9171be-65c5-48da-a14c-d4d2ff690163"
+    },
+    {
+      "id": "chaeyoung-new-sentence",
+      "candidate": null,
+      "job_id": "job-cc347cee3917cdd7c0c8ea7e",
+      "text": "잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+      "wav": "assets/evaluation/reusable-voices/heldout/chaeyoung-long.wav",
+      "wav_sha256": "b191598aa8aae4e7c7ec4d5eb4ee53c620a3bce766ee807936216f1dc55f2507",
+      "settings": {
+        "seed": 3763071485,
+        "temperature": 0.9,
+        "top_p": 1,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "voice_id": "voice-26967610ed84dba375abdb14",
+      "video": "assets/samples/chaeyoung-new-sentence.mp4",
+      "video_sha256": "b5c08a428206794251e8fbd61ac155241271753ab748307195188e2546bfcc16",
+      "player_url": "https://github.com/user-attachments/assets/d0673b28-8bd7-4646-bd40-326d43c90c6e"
+    }
+  ]
+}
