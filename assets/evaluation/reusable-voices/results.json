@@ -1,0 +1,1757 @@
+{
+  "date": "2026-09-20",
+  "device": "Apple M1, 16 GiB",
+  "purpose": "Reference curation and recipe reuse; automatic checks are not listening or speaker identity judgments.",
+  "studies": [
+    {
+      "person": "karina",
+      "job_id": "audition-c8107895839a527beafd9ea7",
+      "request": {
+        "action": "audition",
+        "voice_ids": [
+          "voice-a88ae71249a2bc109f5a6f7d",
+          "voice-d0dea8c55d75ed34c18a54d5"
+        ],
+        "messages": [
+          {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          }
+        ],
+        "seeds": [
+          20260920,
+          20260921
+        ],
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "language": "Korean",
+        "quality": {
+          "min_duration_seconds": 0.25,
+          "max_duration_seconds": 120.0,
+          "max_clipping_ratio": 0.02,
+          "min_rms_dbfs": -50.0,
+          "max_text_error_rate": 0.15
+        }
+      },
+      "status": "complete",
+      "references": [
+        {
+          "voice_id": "voice-a88ae71249a2bc109f5a6f7d",
+          "sha256": "22133aea2c959269cd804edfdd9bcb1b29945d80b9002782aecfcb15f25d898f",
+          "transcript": "오늘 재밌는 시간 함께 보내봅시다",
+          "provenance": {
+            "kind": "mimic",
+            "source": "https://www.youtube.com/watch?v=r96zEiIHVf4",
+            "source_id": null,
+            "start_seconds": 24.419104166666667,
+            "end_seconds": 27.471062500000002,
+            "description": "Exact measured native boundary selection used for the reviewed attention sample; source and PCM provenance are recorded in this preset's README."
+          },
+          "preparation": [
+            "original",
+            "mono",
+            "native_sample_rate",
+            "measured_boundary_selection"
+          ],
+          "recipe": {
+            "version": 1,
+            "language": "Korean",
+            "settings": {
+              "seed": 20260920,
+              "temperature": 0.9,
+              "top_p": 1.0,
+              "top_k": 50,
+              "repetition_penalty": 1.5
+            },
+            "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+            "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+          }
+        },
+        {
+          "voice_id": "voice-d0dea8c55d75ed34c18a54d5",
+          "sha256": "22f4699da0e970aa766758844964507062f045a1064dff8a1faf021d31b6f87f",
+          "transcript": "저에 대한 자팍 사전을 한번 기입을 해볼 예정인데요. 저에 대한 TMI 속속들이 알려드리겠습니다. 오늘 재밌는 시간 함께 보내봅시다.",
+          "provenance": {
+            "kind": "mimic",
+            "source": "https://www.youtube.com/watch?v=r96zEiIHVf4",
+            "source_id": "source-56cd152fa78a4a566320",
+            "start_seconds": 16.37,
+            "end_seconds": 27.716,
+            "description": null
+          },
+          "preparation": [
+            "original",
+            "mono",
+            "native_sample_rate"
+          ],
+          "recipe": null
+        }
+      ],
+      "trials": [
+        {
+          "id": "trial-b06a070f6a50f441a097b3e4",
+          "voice_id": "voice-a88ae71249a2bc109f5a6f7d",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 3.36,
+              "rms_dbfs": -28.989886627577306,
+              "peak": 0.44732666015625,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.64,
+              "terminal_drop_db": 36.67193163754314,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 확인이 필요해요 잠깐 봐주세요",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/karina/trial-b06a070f6a50f441a097b3e4-attention.wav",
+          "sha256": "462b63a39599394ac9b2b8d945eed34cba9602fe3378846b44b65c856cb9c6e0",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 3.5003514997661114,
+          "duration_seconds": 3.36
+        },
+        {
+          "id": "trial-b59dade8587bdff24ac2fafb",
+          "voice_id": "voice-a88ae71249a2bc109f5a6f7d",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.48,
+              "rms_dbfs": -22.01002542750803,
+              "peak": 0.64434814453125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.04,
+              "terminal_drop_db": 27.814023247549564,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 작업이 끝났어요. 확인해 주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/karina/trial-b59dade8587bdff24ac2fafb-done.wav",
+          "sha256": "d37f697b4fae0efeaf1dca289ee4f1c93608ad086dc8900c67fec76eefc69250",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 3.069116957951337,
+          "duration_seconds": 2.48
+        },
+        {
+          "id": "trial-3e7075da60601d82abfdc50b",
+          "voice_id": "voice-a88ae71249a2bc109f5a6f7d",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.8000416666666665,
+              "rms_dbfs": -29.942948279502865,
+              "peak": 0.26983642578125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.07,
+              "terminal_drop_db": 39.13028882682603,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 확인이 필요해요. 잠깐 봐주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/karina/trial-3e7075da60601d82abfdc50b-attention.wav",
+          "sha256": "3450a8c6e0b348f27dcb81f33df297a2125b17434d46351dda939ada0b0c14c0",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 3.594671207945794,
+          "duration_seconds": 2.8000416666666665
+        },
+        {
+          "id": "trial-416a2d972cdb517153fd0cae",
+          "voice_id": "voice-a88ae71249a2bc109f5a6f7d",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.72,
+              "rms_dbfs": -23.544904783224606,
+              "peak": 0.47442626953125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.07,
+              "terminal_drop_db": 25.51390413789963,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 작업이 끝났어요. 확인해 주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/karina/trial-416a2d972cdb517153fd0cae-done.wav",
+          "sha256": "633a256a96446e91515aad75d336bda62addfbaa64cd3eb4747cb83099aaec34",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 3.6837376672774553,
+          "duration_seconds": 2.72
+        },
+        {
+          "id": "trial-b6a2bb6b48222698ff2ef843",
+          "voice_id": "voice-d0dea8c55d75ed34c18a54d5",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.56,
+              "rms_dbfs": -26.823716119026365,
+              "peak": 0.251129150390625,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.01,
+              "terminal_drop_db": 26.87984648191979,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/karina/trial-b6a2bb6b48222698ff2ef843-attention.wav",
+          "sha256": "97c8b7a0b71750e612ed727cbd7bd25b069c88669db01d84f30b5103963d7b55",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 7.249662125017494,
+          "duration_seconds": 2.56
+        },
+        {
+          "id": "trial-e1f7b58c77194deb25f57e99",
+          "voice_id": "voice-d0dea8c55d75ed34c18a54d5",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.32,
+              "rms_dbfs": -30.40752697033078,
+              "peak": 0.19818115234375,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.14,
+              "terminal_drop_db": 35.89453745976486,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 작업이 끝났어요. 확인해주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/karina/trial-e1f7b58c77194deb25f57e99-done.wav",
+          "sha256": "9f869e02cd2d53bf6cb48e8725744ff156c722a9ad404fe415578a1d462ca4a1",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 6.152708292007446,
+          "duration_seconds": 2.32
+        },
+        {
+          "id": "trial-d02e519a978723718a5890b8",
+          "voice_id": "voice-d0dea8c55d75ed34c18a54d5",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.8,
+              "rms_dbfs": -25.737712568065618,
+              "peak": 0.3929443359375,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.0,
+              "terminal_drop_db": 30.69003767786785,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/karina/trial-d02e519a978723718a5890b8-attention.wav",
+          "sha256": "bc1fe33492085a9104a0bd41b0e5f240ab05eb49759aee314b826699c2743154",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 6.021803291980177,
+          "duration_seconds": 2.8
+        },
+        {
+          "id": "trial-75ed6a4ed4275dece2dfc00f",
+          "voice_id": "voice-d0dea8c55d75ed34c18a54d5",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.16,
+              "rms_dbfs": -30.463292777800703,
+              "peak": 0.263824462890625,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.09,
+              "terminal_drop_db": 37.2493333992485,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 작업이 끝났어요. 확인해주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/karina/trial-75ed6a4ed4275dece2dfc00f-done.wav",
+          "sha256": "62a7a7468ce8ae4d88df4b2be2c002311537292863a78a5974ba333becf45707",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 5.562589124776423,
+          "duration_seconds": 2.16
+        }
+      ],
+      "eligible_choices": 2,
+      "selection": {
+        "audition_id": "audition-c8107895839a527beafd9ea7",
+        "choice_id": "59e1ffb7493e3c89386f96b412ea6f0494b8c6234e461f6129ac0fb23b821145",
+        "reason": "기존에 사용자가 좋다고 평가한 attention 음성과 SHA256이 동일한 참조와 설정을 선택합니다. 새 done 결과는 자동 검사 통과만 확인했으며 별도 청취를 했다고 주장하지 않습니다."
+      },
+      "listening_review": "Prior user feedback on byte-identical public attention sample only; no new listening judgment."
+    },
+    {
+      "person": "chaeyoung",
+      "job_id": "audition-f3a34c21748d6074398eede0",
+      "request": {
+        "action": "audition",
+        "voice_ids": [
+          "voice-157bfbd3ea63bfc4079d47b4",
+          "voice-26967610ed84dba375abdb14"
+        ],
+        "messages": [
+          {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          }
+        ],
+        "seeds": [
+          20260920,
+          20260921
+        ],
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "language": "Korean",
+        "quality": {
+          "min_duration_seconds": 0.25,
+          "max_duration_seconds": 120.0,
+          "max_clipping_ratio": 0.02,
+          "min_rms_dbfs": -50.0,
+          "max_text_error_rate": 0.15
+        }
+      },
+      "status": "needs_selection",
+      "references": [
+        {
+          "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
+          "sha256": "3359fce1c1000029ae0fd1a90de8bb59f4ece16b833c5ddbf53bd76c5a67aa40",
+          "transcript": "저는 빙수를 좋아해서 매년 여름 아이스크림이나 빙수를 많이 먹는 것 같아요.",
+          "provenance": {
+            "kind": "mimic",
+            "source": "https://www.youtube.com/watch?v=opvsj3J5ccs",
+            "source_id": "source-ce9521c96e1d78c1448b",
+            "start_seconds": 94.0,
+            "end_seconds": 102.993,
+            "description": null
+          },
+          "preparation": [
+            "original",
+            "mono",
+            "native_sample_rate"
+          ],
+          "recipe": {
+            "version": 1,
+            "language": "Korean",
+            "settings": {
+              "seed": 20260920,
+              "temperature": 0.9,
+              "top_p": 1.0,
+              "top_k": 50,
+              "repetition_penalty": 1.5
+            },
+            "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+            "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+          }
+        },
+        {
+          "voice_id": "voice-26967610ed84dba375abdb14",
+          "sha256": "181697e68eced9d851ecb75d95ee76062ca576d3b8f1a67d71c645c9692d1053",
+          "transcript": "촉촉한 눈으로 저를 보면 아.. 간식 주면 안 되는데 간식도 막 나오고 아 장난감 지금 안 되는데 장난감도 나오고 제 통장을 거덜내는 그런 촉촉한 눈방울을 가지고 있습니다.",
+          "provenance": {
+            "kind": "mimic",
+            "source": "https://www.youtube.com/watch?v=opvsj3J5ccs",
+            "source_id": "source-a51ea644488c9a922b5f",
+            "start_seconds": 147.69,
+            "end_seconds": 161.60999999999999,
+            "description": null
+          },
+          "preparation": [
+            "original",
+            "mono",
+            "native_sample_rate"
+          ],
+          "recipe": {
+            "version": 1,
+            "language": "Korean",
+            "settings": {
+              "seed": 20260920,
+              "temperature": 0.9,
+              "top_p": 1.0,
+              "top_k": 50,
+              "repetition_penalty": 1.5
+            },
+            "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+            "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+          }
+        }
+      ],
+      "trials": [
+        {
+          "id": "trial-7e91a8b515c1aaa3cb910e57",
+          "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.64,
+              "rms_dbfs": -16.87197119564065,
+              "peak": 0.69256591796875,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.41,
+              "terminal_drop_db": 40.24066548693916,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 확인이 필요해요. 잠깐 봐주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/chaeyoung/trial-7e91a8b515c1aaa3cb910e57-attention.wav",
+          "sha256": "f6ced591d43520989521a5217146795d87be9be1b4a2a6ab49d54339dd42d508",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 6.790924499742687,
+          "duration_seconds": 2.64
+        },
+        {
+          "id": "trial-f2d805f9c572c544ace42759",
+          "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.0,
+              "rms_dbfs": -21.50084700943009,
+              "peak": 0.72979736328125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.03,
+              "terminal_drop_db": 72.58653893478129,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/chaeyoung/trial-f2d805f9c572c544ace42759-done.wav",
+          "sha256": "f1b9b1e82c39ec75701ddbd13775451039a03fee2e03660d4af9c8fe66a17535",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 4.759617167059332,
+          "duration_seconds": 2.0
+        },
+        {
+          "id": "trial-2dccd0e42fe196497aaf2c3e",
+          "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.64,
+              "rms_dbfs": -24.77732698555656,
+              "peak": 0.401611328125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.06,
+              "terminal_drop_db": 31.283596384592386,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 확인이 필요해요. 잠깐 봐주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/chaeyoung/trial-2dccd0e42fe196497aaf2c3e-attention.wav",
+          "sha256": "fbafde038ee2a394e6aa1e0b3286581f01f72a55a21375e52615626dd6e852e2",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 5.437700042035431,
+          "duration_seconds": 2.64
+        },
+        {
+          "id": "trial-2fd19d49ef09b44af875ca9a",
+          "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.4,
+              "rms_dbfs": -23.011262942307557,
+              "peak": 0.60888671875,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.07,
+              "terminal_drop_db": 25.986897041300985,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 작업이 끝났어요. 확인해주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/chaeyoung/trial-2fd19d49ef09b44af875ca9a-done.wav",
+          "sha256": "3823d54a8b6636aa17812e4ed04b02ae0e881fbdbf90f2c9af9137b7d481d22f",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 4.669268916826695,
+          "duration_seconds": 2.4
+        },
+        {
+          "id": "trial-4a3d04c3f19ef098a2cee5de",
+          "voice_id": "voice-26967610ed84dba375abdb14",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.069625,
+              "rms_dbfs": -22.899232371858083,
+              "peak": 0.671173095703125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.29,
+              "terminal_drop_db": null,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 확인이 필요해요. 잠깐 봐주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/chaeyoung/trial-4a3d04c3f19ef098a2cee5de-attention.wav",
+          "sha256": "846bfe802149ef9afaaabc796d61a5c186a152701f8ad9bcdb18f24d086e153d",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 5.619823457673192,
+          "duration_seconds": 2.069625
+        },
+        {
+          "id": "trial-68b0a9e08909140ae280ee17",
+          "voice_id": "voice-26967610ed84dba375abdb14",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.3085833333333334,
+              "rms_dbfs": -20.64403253463691,
+              "peak": 0.81610107421875,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.03,
+              "terminal_drop_db": null,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 작업이 끝났어요. 확인해주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/chaeyoung/trial-68b0a9e08909140ae280ee17-done.wav",
+          "sha256": "0f48496d7ae21e2a8f60e4022a161bfcaa2c44c9a1d8b1534af8933ac74a6a09",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 6.5349031668156385,
+          "duration_seconds": 2.3085833333333334
+        },
+        {
+          "id": "trial-26da080d2d2264c20d1ec987",
+          "voice_id": "voice-26967610ed84dba375abdb14",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 3.105375,
+              "rms_dbfs": -20.91602215340137,
+              "peak": 0.603363037109375,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.15,
+              "terminal_drop_db": null,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 확인이 필요해요. 잠깐 봐주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/chaeyoung/trial-26da080d2d2264c20d1ec987-attention.wav",
+          "sha256": "15c54a2bb48b789e031d83647b8e96fce3bae523c77766962386399d585418d2",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 7.563364416826516,
+          "duration_seconds": 3.105375
+        },
+        {
+          "id": "trial-31ab28107e439424523047fb",
+          "voice_id": "voice-26967610ed84dba375abdb14",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.706958333333333,
+              "rms_dbfs": -21.927116528441356,
+              "peak": 0.7916259765625,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.33,
+              "terminal_drop_db": null,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 작업이 끝났어요. 확인해주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/chaeyoung/trial-31ab28107e439424523047fb-done.wav",
+          "sha256": "ac2a03ae632ca6d06964ec691273710f29daefbccc611e64785e1ba2528fa334",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 6.272092167288065,
+          "duration_seconds": 2.706958333333333
+        }
+      ],
+      "eligible_choices": 3,
+      "selection": null,
+      "listening_review": "Pending; no listening judgment."
+    },
+    {
+      "person": "fleurs",
+      "job_id": "audition-441d39b55f2fbfb5df6d050c",
+      "request": {
+        "action": "audition",
+        "voice_ids": [
+          "voice-4dd36980dcdadb2fb4718d42",
+          "voice-70ca44ea2432a47134229efd"
+        ],
+        "messages": [
+          {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          }
+        ],
+        "seeds": [
+          20260920,
+          20260921
+        ],
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "language": "Korean",
+        "quality": {
+          "min_duration_seconds": 0.25,
+          "max_duration_seconds": 120.0,
+          "max_clipping_ratio": 0.02,
+          "min_rms_dbfs": -50.0,
+          "max_text_error_rate": 0.15
+        }
+      },
+      "status": "failed",
+      "references": [
+        {
+          "voice_id": "voice-4dd36980dcdadb2fb4718d42",
+          "sha256": "e1d79a51ed521774c4ecb55fe54dcb075e1f6f3923a7b90f2d353720e2af20f0",
+          "transcript": "합금은 기본적으로 금속 2개 이상의 혼합물이다. 주기율표상의 원소가 많이 있다는 것을 잊지 마라.",
+          "provenance": {
+            "kind": "mimic",
+            "source": "https://huggingface.co/datasets/google/fleurs",
+            "source_id": "ko_kr/test/10115200572671025618.wav",
+            "start_seconds": 0.0,
+            "end_seconds": 9.9,
+            "description": null
+          },
+          "preparation": [
+            "original",
+            "mono",
+            "native_sample_rate"
+          ],
+          "recipe": {
+            "version": 1,
+            "language": "Korean",
+            "settings": {
+              "seed": 20260920,
+              "temperature": 0.9,
+              "top_p": 1.0,
+              "top_k": 50,
+              "repetition_penalty": 1.5
+            },
+            "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+            "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+          }
+        },
+        {
+          "voice_id": "voice-70ca44ea2432a47134229efd",
+          "sha256": "2a0f0715ad2d6900f7b06cb2a398e88475dc4e6b2990eead25713f143cae2a3f",
+          "transcript": "합금은 기본적으로 금속 2개 이상의 혼합물이다.",
+          "provenance": {
+            "kind": "mimic",
+            "source": "https://huggingface.co/datasets/google/fleurs",
+            "source_id": "ko_kr/test/10115200572671025618.wav",
+            "start_seconds": 0.87,
+            "end_seconds": 4.23,
+            "description": null
+          },
+          "preparation": [
+            "original",
+            "mono",
+            "native_sample_rate",
+            "pause_bounded"
+          ],
+          "recipe": {
+            "version": 1,
+            "language": "Korean",
+            "settings": {
+              "seed": 20260920,
+              "temperature": 0.9,
+              "top_p": 1.0,
+              "top_k": 50,
+              "repetition_penalty": 1.5
+            },
+            "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+            "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+          }
+        }
+      ],
+      "trials": [
+        {
+          "id": "trial-62980f387356022eca7f57b9",
+          "voice_id": "voice-4dd36980dcdadb2fb4718d42",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.56,
+              "rms_dbfs": -32.6935790298839,
+              "peak": 0.163116455078125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.02,
+              "terminal_drop_db": 28.600681416224482,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/fleurs/trial-62980f387356022eca7f57b9-attention.wav",
+          "sha256": "bece46e62c3bd4cc91fd1f697d14b4904e85ee5a67eef47bcebea3b5ba177176",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 5.622119291685522,
+          "duration_seconds": 2.56
+        },
+        {
+          "id": "trial-905cf5bf1ffd3bde61da1c3b",
+          "voice_id": "voice-4dd36980dcdadb2fb4718d42",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.16,
+              "rms_dbfs": -32.3505914528288,
+              "peak": 0.15228271484375,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.0,
+              "terminal_drop_db": 21.797805798170977,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/fleurs/trial-905cf5bf1ffd3bde61da1c3b-done.wav",
+          "sha256": "947964c8024166a92ea4f3fedbc5f7fb61b2d3901ecfa5db87c13fe9b9208711",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 4.671176292002201,
+          "duration_seconds": 2.16
+        },
+        {
+          "id": "trial-804a3000684c2d0b91c6907c",
+          "voice_id": "voice-4dd36980dcdadb2fb4718d42",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.32,
+              "rms_dbfs": -33.81743285131199,
+              "peak": 0.144744873046875,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.01,
+              "terminal_drop_db": 81.76890262244844,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/fleurs/trial-804a3000684c2d0b91c6907c-attention.wav",
+          "sha256": "da7308f82629c21b9b7da4c8cd4d3ddc6370d0a03f807b4db39699d6379b1e67",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 4.788882083725184,
+          "duration_seconds": 2.32
+        },
+        {
+          "id": "trial-4a75cfc809e99a5895ec79bc",
+          "voice_id": "voice-4dd36980dcdadb2fb4718d42",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.56,
+              "rms_dbfs": -31.874127064787096,
+              "peak": 0.19189453125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.0,
+              "terminal_drop_db": 18.169599058172935,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/fleurs/trial-4a75cfc809e99a5895ec79bc-done.wav",
+          "sha256": "f1a7226fac792cf77cd4283c43ee26ed49a633dff6f945760ce1e931d4a46bd3",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 4.760057291947305,
+          "duration_seconds": 2.56
+        },
+        {
+          "id": "trial-a1139280f72e52722b9a96d4",
+          "voice_id": "voice-70ca44ea2432a47134229efd",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.56,
+              "rms_dbfs": -33.74284874356707,
+              "peak": 0.1153564453125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.02,
+              "terminal_drop_db": 71.46031673655628,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/fleurs/trial-a1139280f72e52722b9a96d4-attention.wav",
+          "sha256": "8d307ab452bf2c76463de241810e24dbe8fc8dbbd0e18210978ebf1e0f48edb7",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 3.038780582603067,
+          "duration_seconds": 2.56
+        },
+        {
+          "id": "trial-f7b01d33c6be0be554e7d281",
+          "voice_id": "voice-70ca44ea2432a47134229efd",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260920,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "passed",
+          "quality": {
+            "valid": true,
+            "decision": "pass",
+            "metrics": {
+              "duration_seconds": 2.64,
+              "rms_dbfs": -35.82972875516894,
+              "peak": 0.12371826171875,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": 0.0,
+              "terminal_decay_seconds": 0.15,
+              "terminal_drop_db": 19.68319327134821,
+              "ending_text_match": true
+            },
+            "warnings": [],
+            "transcript": " 작업이 끝났어요. 확인해주세요.",
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/fleurs/trial-f7b01d33c6be0be554e7d281-done.wav",
+          "sha256": "796062da26208ae2057137af2ce5d3e86b6556db37c7f2e86537ade37463572a",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 3.467432209290564,
+          "duration_seconds": 2.64
+        },
+        {
+          "id": "trial-0f9c65e92bbfa19a85f53649",
+          "voice_id": "voice-70ca44ea2432a47134229efd",
+          "message": {
+            "id": "attention",
+            "text": "확인이 필요해요. 잠깐 봐 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 3.2,
+              "rms_dbfs": -35.24944395128617,
+              "peak": 0.163330078125,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.02,
+              "terminal_drop_db": 32.52540476463413,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/fleurs/trial-0f9c65e92bbfa19a85f53649-attention.wav",
+          "sha256": "9c91d69065d698a4347cd3ff0997d76322dbb79637e507cca494f58433047c4a",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 3.415273082908243,
+          "duration_seconds": 3.2
+        },
+        {
+          "id": "trial-086e3ea8b52512849946500e",
+          "voice_id": "voice-70ca44ea2432a47134229efd",
+          "message": {
+            "id": "done",
+            "text": "작업이 끝났어요. 확인해 주세요."
+          },
+          "settings": {
+            "seed": 20260921,
+            "temperature": 0.9,
+            "top_p": 1.0,
+            "top_k": 50,
+            "repetition_penalty": 1.5
+          },
+          "attempts": 1,
+          "status": "failed",
+          "quality": {
+            "valid": true,
+            "decision": "retry",
+            "metrics": {
+              "duration_seconds": 2.32,
+              "rms_dbfs": -33.179762617616866,
+              "peak": 0.13671875,
+              "clipping_ratio": 0.0,
+              "speech_ratio": null,
+              "spectral_flatness": null,
+              "noise_floor_dbfs": null,
+              "text_error_rate": null,
+              "terminal_decay_seconds": 0.0,
+              "terminal_drop_db": 35.45797729746921,
+              "ending_text_match": null
+            },
+            "warnings": [
+              "The vowel ending may be cut short; regenerate the complete utterance."
+            ],
+            "transcript": null,
+            "policy_version": "speech-completeness-v2"
+          },
+          "errors": [],
+          "audio": "assets/evaluation/reusable-voices/fleurs/trial-086e3ea8b52512849946500e-done.wav",
+          "sha256": "ae5f70e69c9212f647950bd4df5e90983498d300a5e95bdcf68670b693232eb2",
+          "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+          "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c",
+          "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+          "elapsed_seconds": 2.7330177910625935,
+          "duration_seconds": 2.32
+        }
+      ],
+      "eligible_choices": 0,
+      "selection": null,
+      "listening_review": "Pending; no listening judgment."
+    }
+  ],
+  "heldout": [
+    {
+      "label": "karina",
+      "job_id": "job-cb8faba87eca939a34710d3f",
+      "voice_id": "voice-a50d302d566b985a74725caf",
+      "status": "complete",
+      "message": "잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+      "attempts": 2,
+      "recipe": {
+        "version": 1,
+        "language": "Korean",
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+        "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+      },
+      "reference_sha256": "22133aea2c959269cd804edfdd9bcb1b29945d80b9002782aecfcb15f25d898f",
+      "quality": {
+        "valid": true,
+        "decision": "pass",
+        "metrics": {
+          "duration_seconds": 2.96,
+          "rms_dbfs": -28.633624325089183,
+          "peak": 0.282562255859375,
+          "clipping_ratio": 0.0,
+          "speech_ratio": null,
+          "spectral_flatness": null,
+          "noise_floor_dbfs": null,
+          "text_error_rate": 0.0,
+          "terminal_decay_seconds": 0.07,
+          "terminal_drop_db": 20.795474918031005,
+          "ending_text_match": true
+        },
+        "warnings": [],
+        "transcript": " 잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+        "policy_version": "speech-completeness-v2"
+      },
+      "final_audio": "assets/evaluation/reusable-voices/heldout/karina.wav",
+      "sha256": "0e29749a2c2577247b8a6ce6dd739bbc7fabd7fc249b9a3ac49c12c08241e336",
+      "applied_settings": {
+        "seed": 3763071485,
+        "temperature": 0.9,
+        "top_p": 1.0,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+      "errors": []
+    },
+    {
+      "label": "karina-long",
+      "job_id": "job-b793a644125d0b628d917ba5",
+      "voice_id": "voice-d0dea8c55d75ed34c18a54d5",
+      "status": "complete",
+      "message": "잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+      "attempts": 1,
+      "recipe": {
+        "version": 1,
+        "language": "Korean",
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+        "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+      },
+      "reference_sha256": "22f4699da0e970aa766758844964507062f045a1064dff8a1faf021d31b6f87f",
+      "quality": {
+        "valid": true,
+        "decision": "pass",
+        "metrics": {
+          "duration_seconds": 2.96,
+          "rms_dbfs": -27.76029826889794,
+          "peak": 0.319488525390625,
+          "clipping_ratio": 0.0,
+          "speech_ratio": null,
+          "spectral_flatness": null,
+          "noise_floor_dbfs": null,
+          "text_error_rate": 0.0,
+          "terminal_decay_seconds": 0.12,
+          "terminal_drop_db": 35.970802230058815,
+          "ending_text_match": true
+        },
+        "warnings": [],
+        "transcript": " 잠시 쉬었다가 다음 작업을 시작해볼까요?",
+        "policy_version": "speech-completeness-v2"
+      },
+      "final_audio": "assets/evaluation/reusable-voices/heldout/karina-long.wav",
+      "sha256": "8a11a11255c2954c5ea8bb437803ec39a54757e8959554009c281804786bf3b2",
+      "applied_settings": {
+        "seed": 20260920,
+        "temperature": 0.9,
+        "top_p": 1.0,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+      "errors": []
+    },
+    {
+      "label": "chaeyoung",
+      "job_id": "job-a84c30b3663dae73c201de04",
+      "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
+      "status": "failed",
+      "message": "잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+      "attempts": 2,
+      "recipe": {
+        "version": 1,
+        "language": "Korean",
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+        "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+      },
+      "reference_sha256": "3359fce1c1000029ae0fd1a90de8bb59f4ece16b833c5ddbf53bd76c5a67aa40",
+      "quality": {
+        "valid": true,
+        "decision": "retry",
+        "metrics": {
+          "duration_seconds": 3.28,
+          "rms_dbfs": -23.702560934951272,
+          "peak": 0.46575927734375,
+          "clipping_ratio": 0.0,
+          "speech_ratio": null,
+          "spectral_flatness": null,
+          "noise_floor_dbfs": null,
+          "text_error_rate": null,
+          "terminal_decay_seconds": 0.02,
+          "terminal_drop_db": 27.5325556250102,
+          "ending_text_match": null
+        },
+        "warnings": [
+          "The vowel ending may be cut short; regenerate the complete utterance."
+        ],
+        "transcript": null,
+        "policy_version": "speech-completeness-v2"
+      },
+      "final_audio": "assets/evaluation/reusable-voices/heldout/chaeyoung.wav",
+      "sha256": "7258c11ae82ab1d9c9d36506aad87d616b870c00a34f81c4ced80b87ddcb4abf",
+      "applied_settings": {
+        "seed": 3763071485,
+        "temperature": 0.9,
+        "top_p": 1.0,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+      "errors": []
+    },
+    {
+      "label": "chaeyoung-long",
+      "job_id": "job-cc347cee3917cdd7c0c8ea7e",
+      "voice_id": "voice-26967610ed84dba375abdb14",
+      "status": "complete",
+      "message": "잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+      "attempts": 2,
+      "recipe": {
+        "version": 1,
+        "language": "Korean",
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+        "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+      },
+      "reference_sha256": "181697e68eced9d851ecb75d95ee76062ca576d3b8f1a67d71c645c9692d1053",
+      "quality": {
+        "valid": true,
+        "decision": "pass",
+        "metrics": {
+          "duration_seconds": 3.503875,
+          "rms_dbfs": -22.827520837888613,
+          "peak": 0.71820068359375,
+          "clipping_ratio": 0.0,
+          "speech_ratio": null,
+          "spectral_flatness": null,
+          "noise_floor_dbfs": null,
+          "text_error_rate": 0.0,
+          "terminal_decay_seconds": 0.01,
+          "terminal_drop_db": null,
+          "ending_text_match": true
+        },
+        "warnings": [],
+        "transcript": " 잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+        "policy_version": "speech-completeness-v2"
+      },
+      "final_audio": "assets/evaluation/reusable-voices/heldout/chaeyoung-long.wav",
+      "sha256": "b191598aa8aae4e7c7ec4d5eb4ee53c620a3bce766ee807936216f1dc55f2507",
+      "applied_settings": {
+        "seed": 3763071485,
+        "temperature": 0.9,
+        "top_p": 1.0,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+      "errors": []
+    },
+    {
+      "label": "fleurs",
+      "job_id": "job-50bdb8f5fd09a909826c1dfc",
+      "voice_id": "voice-70ca44ea2432a47134229efd",
+      "status": "complete",
+      "message": "잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+      "attempts": 2,
+      "recipe": {
+        "version": 1,
+        "language": "Korean",
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+        "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+      },
+      "reference_sha256": "2a0f0715ad2d6900f7b06cb2a398e88475dc4e6b2990eead25713f143cae2a3f",
+      "quality": {
+        "valid": true,
+        "decision": "pass",
+        "metrics": {
+          "duration_seconds": 3.76,
+          "rms_dbfs": -34.996154393389254,
+          "peak": 0.162506103515625,
+          "clipping_ratio": 0.0,
+          "speech_ratio": null,
+          "spectral_flatness": null,
+          "noise_floor_dbfs": null,
+          "text_error_rate": 0.0,
+          "terminal_decay_seconds": 0.04,
+          "terminal_drop_db": 26.521962253263908,
+          "ending_text_match": true
+        },
+        "warnings": [],
+        "transcript": " 잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+        "policy_version": "speech-completeness-v2"
+      },
+      "final_audio": "assets/evaluation/reusable-voices/heldout/fleurs.wav",
+      "sha256": "3dc7b1d67b203b8469ccbc49302c48f0ffadf538b57b5ca0b4fdca010c8e6e9b",
+      "applied_settings": {
+        "seed": 3763071485,
+        "temperature": 0.9,
+        "top_p": 1.0,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+      "errors": []
+    },
+    {
+      "label": "fleurs-full",
+      "job_id": "job-de6565eb04e8346cb6cd856a",
+      "voice_id": "voice-4dd36980dcdadb2fb4718d42",
+      "status": "failed",
+      "message": "잠시 쉬었다가 다음 작업을 시작해 볼까요?",
+      "attempts": 2,
+      "recipe": {
+        "version": 1,
+        "language": "Korean",
+        "settings": {
+          "seed": 20260920,
+          "temperature": 0.9,
+          "top_p": 1.0,
+          "top_k": 50,
+          "repetition_penalty": 1.5
+        },
+        "model_id": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-4bit",
+        "model_revision": "37e955a1deb861c088ae5f3a67043185f3d1a60c"
+      },
+      "reference_sha256": "e1d79a51ed521774c4ecb55fe54dcb075e1f6f3923a7b90f2d353720e2af20f0",
+      "quality": {
+        "valid": true,
+        "decision": "retry",
+        "metrics": {
+          "duration_seconds": 3.28,
+          "rms_dbfs": -31.43003704826333,
+          "peak": 0.186614990234375,
+          "clipping_ratio": 0.0,
+          "speech_ratio": null,
+          "spectral_flatness": null,
+          "noise_floor_dbfs": null,
+          "text_error_rate": null,
+          "terminal_decay_seconds": 0.01,
+          "terminal_drop_db": 63.09281287798131,
+          "ending_text_match": null
+        },
+        "warnings": [
+          "The vowel ending may be cut short; regenerate the complete utterance."
+        ],
+        "transcript": null,
+        "policy_version": "speech-completeness-v2"
+      },
+      "final_audio": "assets/evaluation/reusable-voices/heldout/fleurs-full.wav",
+      "sha256": "cd9b1b212060c68c58d9efb8c1924c305616dc09ca0a111d8e2f1375e1d9044e",
+      "applied_settings": {
+        "seed": 3763071485,
+        "temperature": 0.9,
+        "top_p": 1.0,
+        "top_k": 50,
+        "repetition_penalty": 1.5
+      },
+      "runtime": "mlx-audio==0.5.4; mlx==0.32.2; python=3.12.12; macOS-26.5-arm64-arm-64bit; arm64",
+      "errors": []
+    }
+  ],
+  "total_synthesis_calls": 35,
+  "heldout_note": "The longer reference was additionally tested for every source after the first held-out results. This extension was not preregistered. Earlier failed attempt audio is retained in local job records; these files are the six final outputs."
+}

@@ -63,6 +63,9 @@ ignore = ["COM812", "ISC001", "D203", "D213", "CPY001", "FBT001", "FBT002", "EM1
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel", "voice_of_karina.contracts.FrozenModel"]
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"

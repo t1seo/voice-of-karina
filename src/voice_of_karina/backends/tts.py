@@ -11,7 +11,7 @@ from voice_of_karina.errors import VoiceError
 
 from .client import run_task
 from .languages import asr_language, tts_language
-from .models import DESIGN_MODEL, DESIGN_SEEDS
+from .models import CLONE_MODEL, DESIGN_MODEL, DESIGN_SEEDS
 from .protocol import AudioResponse, CloneTask, DesignTask, TranscriptResponse
 from .stt import transcribe_audio
 
@@ -117,6 +117,44 @@ def design_reference(request: GenerateRequest, job_dir: Path) -> Reference:
     return reference
 
 
+def _validated_audio(task: CloneTask, response: AudioResponse) -> list[GeneratedAudio]:
+    """Accept only output files and evidence matching this exact worker request."""
+    if tuple(item.message_id for item in response.audio) != tuple(
+        message.id for message in task.messages
+    ):
+        raise VoiceError(
+            "invalid_model_response", "The model returned an incomplete message batch."
+        )
+    for message, item in zip(task.messages, response.audio, strict=True):
+        expected = task.output_dir / f"{item.message_id}.wav"
+        if (
+            Path(item.path).resolve() != expected
+            or not expected.is_file()
+            or item.sample_rate <= 0
+            or item.duration_seconds <= 0
+        ):
+            raise VoiceError(
+                "invalid_model_response", "The model returned a missing or invalid WAV."
+            )
+        if task.settings is not None:
+            evidence = item.synthesis
+            if (
+                evidence is None
+                or evidence.settings != task.settings
+                or evidence.text != message.text
+                or evidence.audio_sha256 != hashlib.sha256(expected.read_bytes()).hexdigest()
+                or item.reference != task.reference
+                or item.model_id != CLONE_MODEL.repository
+                or item.model_revision != CLONE_MODEL.revision
+                or item.language != task.language
+            ):
+                raise VoiceError(
+                    "invalid_model_response",
+                    "The synthesis evidence differs from the requested voice or settings.",
+                )
+    return list(response.audio)
+
+
 def synthesize(
     request: GenerateRequest, reference: Reference | None, output_dir: Path
 ) -> list[GeneratedAudio]:
@@ -134,34 +172,17 @@ def synthesize(
         selected = reference
     _ = validate_reference(selected)
     destination = output_dir.resolve()
-    response = run_task(
-        CloneTask(
-            messages=request.messages,
-            reference=selected,
-            output_dir=destination,
-            language=tts_language(request.language),
-        )
+    task = CloneTask(
+        messages=request.messages,
+        reference=selected,
+        output_dir=destination,
+        language=tts_language(request.language),
+        settings=request.settings,
     )
+    response = run_task(task)
     match response:
         case AudioResponse():
-            if tuple(item.message_id for item in response.audio) != tuple(
-                message.id for message in request.messages
-            ):
-                raise VoiceError(
-                    "invalid_model_response", "The model returned an incomplete message batch."
-                )
-            for item in response.audio:
-                expected = destination / f"{item.message_id}.wav"
-                if (
-                    Path(item.path).resolve() != expected
-                    or not expected.is_file()
-                    or item.sample_rate <= 0
-                    or item.duration_seconds <= 0
-                ):
-                    raise VoiceError(
-                        "invalid_model_response", "The model returned a missing or invalid WAV."
-                    )
-            return list(response.audio)
+            return _validated_audio(task, response)
         case TranscriptResponse():
             raise VoiceError(
                 "invalid_model_response", "The synthesis worker returned text instead of WAVs."

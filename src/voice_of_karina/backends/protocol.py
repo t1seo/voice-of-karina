@@ -6,6 +6,7 @@ from typing import Annotated, ClassVar, Literal
 from pydantic import ConfigDict, Field, TypeAdapter
 
 from voice_of_karina.contracts import FrozenModel, GeneratedAudio, Message, Reference
+from voice_of_karina.generation_settings import GenerationSettings
 
 
 class CloneTask(FrozenModel):
@@ -16,6 +17,7 @@ class CloneTask(FrozenModel):
     reference: Reference
     output_dir: Path
     language: str
+    settings: GenerationSettings | None = None
 
     @property
     def timeout_seconds(self) -> int:

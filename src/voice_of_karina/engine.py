@@ -8,18 +8,26 @@ from typing import Literal, assert_never
 from pydantic import ValidationError
 
 from voice_of_karina.audio import analyze_sources, prepare_reference
+from voice_of_karina.audition_models import AuditionResult
+from voice_of_karina.audition_workflow import AuditionWorkflow
 from voice_of_karina.backends import backend_cache_key, design_reference, synthesize
 from voice_of_karina.contracts import (
-    REQUEST_ADAPTER,
     AnalyzeRequest,
     FrozenModel,
     GenerateRequest,
     InstallRequest,
     RejectRequest,
-    Request,
     ResumeRequest,
     StatusRequest,
     VoicesRequest,
+)
+from voice_of_karina.curation_contracts import (
+    AuditionRequest,
+    PresetRequest,
+    ProfileResult,
+    RegisterCandidateRequest,
+    RegisterRequest,
+    SelectVoiceRequest,
 )
 from voice_of_karina.errors import VoiceError
 from voice_of_karina.notifications import (
@@ -27,7 +35,10 @@ from voice_of_karina.notifications import (
     NotificationInstallError,
     install_notifications,
 )
+from voice_of_karina.preset_catalog import register_preset
 from voice_of_karina.quality import validate_output
+from voice_of_karina.reference_registration import register_candidate, register_voice
+from voice_of_karina.requests import REQUEST_ADAPTER, Request
 from voice_of_karina.sources import validate_source
 from voice_of_karina.storage import Store
 from voice_of_karina.workflow import Workflow
@@ -42,7 +53,9 @@ class ErrorResult(FrozenModel):
     errors: tuple[ErrorDetail, ...]
 
 
-type Response = JobResult | VoicesResult | InstallResult | ErrorResult
+type Response = (
+    JobResult | VoicesResult | InstallResult | ErrorResult | ProfileResult | AuditionResult
+)
 
 
 def run(raw: str | bytes, root: Path | None = None) -> Response:
@@ -59,6 +72,11 @@ def run(raw: str | bytes, root: Path | None = None) -> Response:
                 | RejectRequest()
                 | VoicesRequest()
                 | InstallRequest()
+                | RegisterRequest()
+                | RegisterCandidateRequest()
+                | PresetRequest()
+                | AuditionRequest()
+                | SelectVoiceRequest()
             ):
                 pass
             case unreachable:
@@ -88,18 +106,63 @@ def _dispatch(request: Request, workflow: Workflow) -> Response:
         case GenerateRequest():
             response = workflow.generate(request)
         case StatusRequest():
-            response = workflow.status(request.job_id)
+            response = _read_status(request.job_id, workflow)
         case ResumeRequest():
-            response = workflow.resume(request)
+            response = _resume(request, workflow)
         case RejectRequest():
             response = workflow.reject(request)
         case VoicesRequest():
             response = workflow.voices()
         case InstallRequest():
             response = apply_notification(request, workflow)
+        case (
+            RegisterRequest()
+            | RegisterCandidateRequest()
+            | PresetRequest()
+            | AuditionRequest()
+            | SelectVoiceRequest()
+        ):
+            response = _curate(request, workflow)
         case unreachable:
             assert_never(unreachable)
     return response
+
+
+def _read_status(job_id: str, workflow: Workflow) -> JobResult | AuditionResult:
+    if job_id.startswith("audition-"):
+        return AuditionWorkflow(workflow.store, workflow.adapters).status(job_id)
+    return workflow.status(job_id)
+
+
+def _resume(request: ResumeRequest, workflow: Workflow) -> JobResult | AuditionResult:
+    if not request.job_id.startswith("audition-"):
+        return workflow.resume(request)
+    if request.candidate_id is not None:
+        raise VoiceError("conflicting_selection", "Use select_voice for an audition.")
+    return AuditionWorkflow(workflow.store, workflow.adapters).resume(request.job_id)
+
+
+def _curate(
+    request: RegisterRequest
+    | RegisterCandidateRequest
+    | PresetRequest
+    | AuditionRequest
+    | SelectVoiceRequest,
+    workflow: Workflow,
+) -> ProfileResult | AuditionResult:
+    match request:
+        case RegisterRequest():
+            return register_voice(request, workflow.store)
+        case RegisterCandidateRequest():
+            return register_candidate(request, workflow.store)
+        case PresetRequest():
+            return register_preset(request, workflow.store)
+        case AuditionRequest():
+            return AuditionWorkflow(workflow.store, workflow.adapters).audition(request)
+        case SelectVoiceRequest():
+            return AuditionWorkflow(workflow.store, workflow.adapters).select(request)
+        case unreachable:
+            assert_never(unreachable)
 
 
 def apply_notification(request: InstallRequest, workflow: Workflow) -> InstallResult:

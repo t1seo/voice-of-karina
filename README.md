@@ -10,10 +10,24 @@
 
 ## Just ask
 
+**Reuse the reviewed Karina sample voice**
+
+> Use the Karina voice from the README's reviewed “Attention needed” sample to say “다음 작업도 준비됐어요.” Save it so I can use the same voice again.
+
+The exact reference and generation recipe used for that sample are packaged with
+the project. You do not need to supply the video again.
+
 **Use a voice from a video**
 
 > Use Karina's voice from this video to say “작업이 끝났어요. 확인해 주세요.”
 > https://www.youtube.com/watch?v=r96zEiIHVf4
+
+**Prepare another person's voice**
+
+> Compare clear solo speech from the Lee Chaeyoung videos I attached, then make “확인이 필요해요. 잠깐 봐 주세요.” Let me choose a preview and save the voice as “Chaeyoung guide.”
+
+Attach one or more YouTube links for the person you want. The same preparation
+and review flow works with other speakers; their output quality still needs review.
 
 **Create a voice without a video**
 
@@ -23,7 +37,7 @@
 
 > Use Calm guide again to say “다음 작업도 준비됐어요.”
 
-You can start with “Help me make a voice.” The skill asks whether you want to reference a person or design a new voice, then asks only for missing details. For mimicry, provide one or more YouTube links. For design, describe the voice. If a video contains several speakers, listen to short candidates and select the right person once. Links, messages, and choices already given are not requested again.
+You can start with “Help me make a voice.” The skill asks whether you want to reference a person or design a new voice, then asks only for missing details. For a new mimic voice, provide one or more YouTube links. For design, describe the voice. If several people speak, confirm the right person, then choose between short generated previews before saving. You can also ask for a quick result from one reference. Links, messages, and choices already given are not requested again.
 
 ## Install once
 
@@ -53,23 +67,38 @@ flowchart LR
     A[Your request] --> B{Voice source}
     B -->|Video or audio| C[Analyze speech candidates]
     C --> D[Confirm speaker when unclear]
+    D --> P[Compare short previews]
+    P --> Q[Listen, select, and save]
+    Q --> I[Requested WAV files]
+    Q --> F[Reuse saved voice recipe]
     B -->|Description| E[Design an original voice]
-    B -->|Saved voice| F[Reuse stored reference]
-    D --> G[Generate requested messages]
+    B -->|Saved or reviewed sample voice| F
+    D -->|Quick result| G[Generate requested messages]
     E --> G
     F --> G
     G --> H[Check audio and spoken text]
-    H -->|Accepted| I[WAV files and saved voice]
+    H -->|Accepted| I
     H -->|Retry budget remains| G
     H -->|Input needed| J[Explain the issue]
-    I -->|If requested| K[Apply completion sound]
 ```
 
-The engine keeps resumable jobs and per-message results. Its quality loop allows **two total attempts per message** by default, with a maximum of three. Accepted messages are preserved when another needs a retry. Resume continues the saved job without resetting its attempt budget.
+New reusable voices normally start with two references and four paired previews.
+The comparison has a fixed budget, with at most 12 trials, and resumes unfinished
+work without repeating completed trials. A choice must pass every preview text
+before it is eligible for selection. You choose the sound you prefer; automated
+checks do not decide whether it sounds natural or resembles the right person.
+If a selected preview already says your requested message, it is returned directly.
+
+For regular message generation, the engine keeps resumable jobs and per-message results. Its quality loop allows **two total attempts per message** by default, with a maximum of three. Accepted messages are preserved when another needs a retry. Resume continues the saved job without resetting its attempt budget.
 
 You can give feedback after an automatic pass, such as “There is noise at the beginning; try again.” The skill records why that artifact was rejected and uses the same job's remaining attempts. Recovery cannot select the rejected file again, and other accepted messages stay intact.
 
-Saved voices keep their reference recording and transcript. Follow-up messages skip source acquisition and candidate selection. Reference files are reused; reusable neural speaker embeddings are not cached.
+Saved voices keep the exact reference recording, transcript, and generation recipe.
+Compared voices also retain the selected preview evidence and review reason.
+Follow-up messages restore those conditions and skip source acquisition and
+candidate comparison. A new message still receives its own output checks; saving
+a voice does not approve all future speech. Older reference-only profiles remain
+usable without being treated as reviewed recipes.
 
 Jobs and voices live in `.voice-of-karina/` inside the checkout by default, even when the skill is invoked from another folder. `VOICE_OF_KARINA_HOME` selects a different persistent store. Keep the same store when resuming or reusing voices.
 
@@ -85,13 +114,17 @@ When reliable transcription contains several utterances, analysis can propose sh
 
 Mimicry and saved voices now use **Qwen3-TTS 1.7B Base (4-bit)**, prioritizing quality with slower generation than the previous 0.6B model; see the [measured tradeoff](docs/model-comparison.md). Output checks combine audible signal quality, stricter text matching, the requested ending, and an acoustic check for abrupt Korean vowel endings. Suspect results are regenerated within the attempt budget. Generation that reaches its token limit is rejected. Missing or uncertain transcription remains unverified. These checks do not guarantee pronunciation, naturalness, or speaker similarity; listen before choosing a result. Saved-voice speed and emotion controls are not exposed.
 
-The [quality improvement notes (Korean)](docs/quality-improvement-notes.ko.md) explain the ending fix, reference selection changes, paired experiments, and the limits of automatic checks.
+The [quality improvement notes (Korean)](docs/quality-improvement-notes.ko.md) explain the ending fix and reference experiments. The [reusable voice research](docs/reusable-voice-research.md) covers reference curation, evaluation limits, and local alternatives; the [implementation validation record](docs/reusable-voice-validation.ko.md) records the actual reuse and comparison checks.
 
 ## Optional completion notifications
 
 > Use the finished message as my completion sound in Codex and Claude Code.
 
 The skill installs only when asked. It uses **Claude's `Stop` hook** and **Codex's `agent-turn-complete` notification**. Permission, authentication, and other event types are not wired in this version.
+
+Comparison previews can be played and downloaded. To apply one as a notification,
+the skill uses your selected voice to create and check a regular message first;
+comparison trial files are not installed directly.
 
 The installer backs up changed settings, retains unrelated Claude hooks, and forwards events to an unrelated existing Codex notification program. Known hooks from this project's old player are replaced on explicit installation to avoid duplicate playback. Reinstalling the same sound is idempotent. Each tool gets its own player and WAV under its configuration home, so playback does not load an AI model or require this project's environment. Restart the selected agent to load changed settings.
 

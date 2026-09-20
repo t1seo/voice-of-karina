@@ -16,6 +16,7 @@ from voice_of_karina.audio_reference_windows import (
 from voice_of_karina.backends.languages import asr_language
 from voice_of_karina.backends.stt import Transcript, transcribe_many
 from voice_of_karina.errors import VoiceError
+from voice_of_karina.sources import file_sha256
 
 if TYPE_CHECKING:
     from voice_of_karina.contracts import Candidate
@@ -39,6 +40,18 @@ def uncertain_transcript(transcript: Transcript) -> bool:
     )
 
 
+def _bind_digest(candidate: Candidate) -> Candidate:
+    try:
+        digest = file_sha256(Path(candidate.audio_path))
+    except OSError as error:
+        raise VoiceError(
+            "changed_candidate", "The candidate audio is no longer readable."
+        ) from error
+    if candidate.sha256 is not None and candidate.sha256 != digest:
+        raise VoiceError("changed_candidate", "The candidate audio changed during transcription.")
+    return candidate.model_copy(update={"sha256": digest})
+
+
 def _transcribe_native_candidates(
     candidates: tuple[Candidate, ...],
     job_dir: Path,
@@ -47,6 +60,7 @@ def _transcribe_native_candidates(
 ) -> tuple[Transcript, ...]:
     paths: list[Path] = []
     for candidate in candidates:
+        _ = _bind_digest(candidate)
         path = job_dir / "analysis" / f"{candidate.id}-16k.wav"
         paths.append(
             crop_audio(
@@ -57,7 +71,10 @@ def _transcribe_native_candidates(
                 sample_rate=ANALYSIS_RATE,
             )
         )
-    return transcribe_many(tuple(paths), language=asr_language(language))
+    transcripts = transcribe_many(tuple(paths), language=asr_language(language))
+    for candidate in candidates:
+        _ = _bind_digest(candidate)
+    return transcripts
 
 
 def transcribe_candidates(
@@ -68,11 +85,12 @@ def transcribe_candidates(
 ) -> tuple[tuple[Candidate, ...], str | None]:
     """Verify a bounded batch of pause crops while retaining original references."""
     try:
-        transcripts = _transcribe_native_candidates(candidates, job_dir, language=language)
+        bound = tuple(_bind_digest(candidate) for candidate in candidates)
+        transcripts = _transcribe_native_candidates(bound, job_dir, language=language)
     except VoiceError as error:
         return candidates, f"Reference transcription is unavailable: {error.message}"
     results: list[Candidate] = []
-    for candidate, transcript in zip(candidates, transcripts, strict=True):
+    for candidate, transcript in zip(bound, transcripts, strict=True):
         uncertain = uncertain_transcript(transcript)
         text = transcript.text.strip() if not uncertain else None
         warnings = candidate.warnings
@@ -101,12 +119,13 @@ def transcribe_candidates(
                 )
         if not proposals:
             return tuple(results), None
-        confirmations = _transcribe_native_candidates(tuple(proposals), job_dir, language=language)
+        bound_proposals = tuple(_bind_digest(candidate) for candidate in proposals)
+        confirmations = _transcribe_native_candidates(bound_proposals, job_dir, language=language)
     except VoiceError as error:
         return tuple(results), f"Shorter reference verification is unavailable: {error.message}"
     verified = [
         candidate.model_copy(update={"transcript": transcript.text.strip()})
-        for candidate, transcript in zip(proposals, confirmations, strict=True)
+        for candidate, transcript in zip(bound_proposals, confirmations, strict=True)
         if not uncertain_transcript(transcript)
         and valid_segment_order(transcript.segments, candidate.metrics.duration_seconds)
         and normalized_reference_text(transcript.text)

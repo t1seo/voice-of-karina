@@ -1,18 +1,20 @@
 """Generate exact requested text and atomically write standard PCM WAVs."""
 
+import hashlib
 import math
 import sys
 import wave
 from array import array
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
 from time import perf_counter
 
 from voice_of_karina.contracts import GeneratedAudio
 from voice_of_karina.errors import VoiceError
+from voice_of_karina.generation_settings import SynthesisEvidence
 
-from .interfaces import CloneModel, DesignModel, GenerationChunk
+from .interfaces import CloneModel, DesignModel, GenerationChunk, SamplingParameters
 from .models import CLONE_MODEL, DESIGN_MODEL, token_limit
 from .protocol import AudioResponse, CloneTask, DesignTask
 
@@ -59,12 +61,33 @@ def write_audio(
     return AudioStats(sample_rate=sample_rate, duration_seconds=len(samples) / sample_rate)
 
 
-def clone_batch(task: CloneTask, model: CloneModel) -> AudioResponse:
+def clone_batch(
+    task: CloneTask,
+    model: CloneModel,
+    *,
+    seed_rng: Callable[[int], None] | None = None,
+    runtime: str | None = None,
+) -> AudioResponse:
     """Reuse one loaded Base model and the same reference for the entire batch."""
     artifacts: list[GeneratedAudio] = []
+    settings = task.settings
+    sampling: SamplingParameters = {}
+    if settings is not None:
+        if seed_rng is None or runtime is None or not runtime.strip():
+            raise VoiceError(
+                "missing_sampling_context", "Explicit settings require a complete sampling context."
+            )
+        sampling = {
+            "temperature": settings.temperature,
+            "top_p": settings.top_p,
+            "top_k": settings.top_k,
+            "repetition_penalty": settings.repetition_penalty,
+        }
     for message in task.messages:
         started = perf_counter()
         path = task.output_dir / f"{message.id}.wav"
+        if settings is not None and seed_rng is not None:
+            seed_rng(settings.seed)
         chunks = model.generate(
             text=message.text,
             lang_code=task.language,
@@ -72,8 +95,19 @@ def clone_batch(task: CloneTask, model: CloneModel) -> AudioResponse:
             ref_text=task.reference.transcript,
             stream=False,
             max_tokens=token_limit(message.text),
+            **sampling,
         )
         stats = write_audio(chunks, path, max_tokens=token_limit(message.text))
+        synthesis = (
+            SynthesisEvidence(
+                settings=settings,
+                text=message.text,
+                audio_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                runtime=runtime,
+            )
+            if settings is not None and runtime is not None
+            else None
+        )
         artifact = GeneratedAudio(
             message_id=message.id,
             path=str(path),
@@ -84,6 +118,7 @@ def clone_batch(task: CloneTask, model: CloneModel) -> AudioResponse:
             elapsed_seconds=perf_counter() - started,
             language=task.language,
             reference=task.reference,
+            synthesis=synthesis,
         )
         manifest = path.with_suffix(".audio.json")
         pending = manifest.with_suffix(".json.pending")

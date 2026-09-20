@@ -23,6 +23,7 @@ from voice_of_karina.contracts import (
     Status,
     Text,
 )
+from voice_of_karina.generation_settings import VoiceRecipe
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -79,6 +80,7 @@ class JobResult(FrozenModel):
     messages: tuple[MessageResult, ...] = ()
     voice_id: Identifier | None = None
     selected_candidate_id: Identifier | None = None
+    recipe: VoiceRecipe | None = None
     events: tuple[Event, ...] = ()
     errors: tuple[ErrorDetail, ...] = ()
 
@@ -110,6 +112,14 @@ class JobResult(FrozenModel):
         return self
 
 
+class VoiceSelection(FrozenModel):
+    """An explicit review decision bound to immutable audition evidence."""
+
+    audition_id: Identifier
+    choice_id: Sha256
+    reason: Text
+
+
 class VoiceProfile(FrozenModel):
     """A reusable voice owns its copied reference and exact transcript."""
 
@@ -117,6 +127,8 @@ class VoiceProfile(FrozenModel):
     name: str
     reference: Reference
     created_at: str
+    recipe: VoiceRecipe | None = None
+    selection: VoiceSelection | None = None
 
 
 class VoicesResult(FrozenModel):

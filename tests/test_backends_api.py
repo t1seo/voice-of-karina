@@ -29,6 +29,7 @@ from voice_of_karina.contracts import (
     Reference,
 )
 from voice_of_karina.errors import VoiceError
+from voice_of_karina.generation_settings import SynthesisEvidence
 
 
 def write_fixture(path: Path) -> None:
@@ -63,7 +64,18 @@ class ModelBoundary:
                             model_id=CLONE_MODEL.repository,
                             model_revision=CLONE_MODEL.revision,
                             elapsed_seconds=0.1,
+                            language=task.language,
                             reference=task.reference,
+                            synthesis=(
+                                SynthesisEvidence(
+                                    settings=task.settings,
+                                    text=message.text,
+                                    audio_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                                    runtime="test runtime",
+                                )
+                                if task.settings is not None
+                                else None
+                            ),
                         )
                     )
                 return AudioResponse(audio=tuple(artifacts))
