@@ -26,7 +26,8 @@
       },
       "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
       "video": "assets/samples/chaeyoung-a-attention.mp4",
-      "video_sha256": "7dc92093c2839c70436efdf8fa0116821bb0e6247d154efacd6a9e92485abd5a"
+      "video_sha256": "7dc92093c2839c70436efdf8fa0116821bb0e6247d154efacd6a9e92485abd5a",
+      "player_url": "https://github.com/user-attachments/assets/0293a99b-a977-46bc-8922-cd1db9d1f4ad"
     },
     {
       "id": "chaeyoung-a-done",
@@ -45,7 +46,8 @@
       },
       "voice_id": "voice-157bfbd3ea63bfc4079d47b4",
       "video": "assets/samples/chaeyoung-a-done.mp4",
-      "video_sha256": "0e9bee8ff44cabe171a77b305367b168d32b11dc7129a15614476b0a5bae8c2a"
+      "video_sha256": "0e9bee8ff44cabe171a77b305367b168d32b11dc7129a15614476b0a5bae8c2a",
+      "player_url": "https://github.com/user-attachments/assets/137ca7ad-386f-4a63-82bd-12a00ec3001e"
     },
     {
       "id": "chaeyoung-b-attention",
@@ -64,7 +66,8 @@
       },
       "voice_id": "voice-26967610ed84dba375abdb14",
       "video": "assets/samples/chaeyoung-b-attention.mp4",
-      "video_sha256": "d91cf54e9677de2e2afc81ec9d5972bb5b14b27092ed742e77c1309904b42d88"
+      "video_sha256": "d91cf54e9677de2e2afc81ec9d5972bb5b14b27092ed742e77c1309904b42d88",
+      "player_url": "https://github.com/user-attachments/assets/0887285c-be4e-4a09-97bc-faf374f27c17"
     },
     {
       "id": "chaeyoung-b-done",
@@ -83,7 +86,8 @@
       },
       "voice_id": "voice-26967610ed84dba375abdb14",
       "video": "assets/samples/chaeyoung-b-done.mp4",
-      "video_sha256": "e4794ebe9b3ac3207325d1566c574a222d8aa9a319ac6890dd230c21a61b33f4"
+      "video_sha256": "e4794ebe9b3ac3207325d1566c574a222d8aa9a319ac6890dd230c21a61b33f4",
+      "player_url": "https://github.com/user-attachments/assets/cfe86949-cd0f-408d-bf94-bc3b2f74a8c8"
     },
     {
       "id": "chaeyoung-c-attention",
@@ -102,7 +106,8 @@
       },
       "voice_id": "voice-26967610ed84dba375abdb14",
       "video": "assets/samples/chaeyoung-c-attention.mp4",
-      "video_sha256": "b7b3fb74adf25f7900f0db25735fb58a725233c84eca8f0bbbd3b6c2fcf3db8a"
+      "video_sha256": "b7b3fb74adf25f7900f0db25735fb58a725233c84eca8f0bbbd3b6c2fcf3db8a",
+      "player_url": "https://github.com/user-attachments/assets/befe8618-aa1d-4bba-94c0-ee03ec601128"
     },
     {
       "id": "chaeyoung-c-done",
@@ -121,7 +126,8 @@
       },
       "voice_id": "voice-26967610ed84dba375abdb14",
       "video": "assets/samples/chaeyoung-c-done.mp4",
-      "video_sha256": "5d43aa3b30d949f56bafdd989542c231110d031a525ab012749fdea8ca0b0ee4"
+      "video_sha256": "5d43aa3b30d949f56bafdd989542c231110d031a525ab012749fdea8ca0b0ee4",
+      "player_url": "https://github.com/user-attachments/assets/5b9171be-65c5-48da-a14c-d4d2ff690163"
     },
     {
       "id": "chaeyoung-new-sentence",
@@ -139,7 +145,8 @@
       },
       "voice_id": "voice-26967610ed84dba375abdb14",
       "video": "assets/samples/chaeyoung-new-sentence.mp4",
-      "video_sha256": "b5c08a428206794251e8fbd61ac155241271753ab748307195188e2546bfcc16"
+      "video_sha256": "b5c08a428206794251e8fbd61ac155241271753ab748307195188e2546bfcc16",
+      "player_url": "https://github.com/user-attachments/assets/d0673b28-8bd7-4646-bd40-326d43c90c6e"
     }
   ]
 }
