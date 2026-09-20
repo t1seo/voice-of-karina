@@ -24,7 +24,7 @@ the project. You do not need to supply the video again.
 
 **Prepare another person's voice**
 
-> Compare clear solo speech from the Lee Chaeyoung videos I attached, then make “확인이 필요해요. 잠깐 봐 주세요.” Let me choose a preview and save the voice as “Chaeyoung guide.”
+> Compare clear solo speech from the videos I attached, then make “확인이 필요해요. 잠깐 봐 주세요.” Let me choose a preview and save the voice as “My guide.”
 
 Attach one or more YouTube links for the person you want. The same preparation
 and review flow works with other speakers; their output quality still needs review.
@@ -150,66 +150,7 @@ https://github.com/user-attachments/assets/d228e9b7-9f96-40b7-9f25-9fcb03751b47
 
 https://github.com/user-attachments/assets/db7d7fc2-3ee0-4682-a955-bea2725e0767
 
-Download the WAVs: [complete](assets/samples/karina-done.wav), [attention](assets/samples/karina-attention.wav), [ready](assets/samples/karina-ready.wav), [take a break](assets/samples/karina-break.wav). An [original designed voice](assets/samples/original-rest.wav) says “잠시 쉬어 가셔도 괜찮아요.” Open [the listening gallery](docs/samples.html) locally for these five recordings and the seven Lee Chaeyoung demos below. Generation inputs and quality results are recorded in [sample provenance](assets/samples/provenance.json).
-
-## Listen to Lee Chaeyoung samples
-
-**Seven playable demos:** two messages each for candidates A, B and C, plus one new sentence. These are synthetic voices generated from the [fromis_9 Lee Chaeyoung interview reference](https://www.youtube.com/watch?v=opvsj3J5ccs), not recordings of her saying these lines. All seven passed automatic checks; the final listening choice remains open. Expand a candidate to compare its two previews.
-
-<details open>
-<summary>Candidate A · two previews</summary>
-
-**Attention needed** · 확인이 필요해요. 잠깐 봐 주세요.
-
-https://github.com/user-attachments/assets/0293a99b-a977-46bc-8922-cd1db9d1f4ad
-
-**Task complete** · 작업이 끝났어요. 확인해 주세요.
-
-https://github.com/user-attachments/assets/137ca7ad-386f-4a63-82bd-12a00ec3001e
-
-WAV: [attention](assets/evaluation/reusable-voices/chaeyoung/trial-2dccd0e42fe196497aaf2c3e-attention.wav) · [complete](assets/evaluation/reusable-voices/chaeyoung/trial-2fd19d49ef09b44af875ca9a-done.wav)
-
-</details>
-
-<details>
-<summary>Candidate B · two previews</summary>
-
-**Attention needed** · 확인이 필요해요. 잠깐 봐 주세요.
-
-https://github.com/user-attachments/assets/0887285c-be4e-4a09-97bc-faf374f27c17
-
-**Task complete** · 작업이 끝났어요. 확인해 주세요.
-
-https://github.com/user-attachments/assets/cfe86949-cd0f-408d-bf94-bc3b2f74a8c8
-
-WAV: [attention](assets/evaluation/reusable-voices/chaeyoung/trial-4a3d04c3f19ef098a2cee5de-attention.wav) · [complete](assets/evaluation/reusable-voices/chaeyoung/trial-68b0a9e08909140ae280ee17-done.wav)
-
-</details>
-
-<details>
-<summary>Candidate C · two previews</summary>
-
-**Attention needed** · 확인이 필요해요. 잠깐 봐 주세요.
-
-https://github.com/user-attachments/assets/befe8618-aa1d-4bba-94c0-ee03ec601128
-
-**Task complete** · 작업이 끝났어요. 확인해 주세요.
-
-https://github.com/user-attachments/assets/5b9171be-65c5-48da-a14c-d4d2ff690163
-
-WAV: [attention](assets/evaluation/reusable-voices/chaeyoung/trial-26da080d2d2264c20d1ec987-attention.wav) · [complete](assets/evaluation/reusable-voices/chaeyoung/trial-31ab28107e439424523047fb-done.wav)
-
-</details>
-
-**New sentence** · 잠시 쉬었다가 다음 작업을 시작해 볼까요?
-
-This additional sentence passed on the second attempt using the longer reference. It was not used to choose between the previews.
-
-https://github.com/user-attachments/assets/d0673b28-8bd7-4646-bd40-326d43c90c6e
-
-[Download WAV](assets/evaluation/reusable-voices/heldout/chaeyoung-long.wav) · [Sample provenance](assets/samples/chaeyoung-provenance.json)
-
-The repository contains **10 Lee Chaeyoung evaluation WAVs**: eight comparison previews and two final new-sentence results. The seven players above contain the six paired previews and the passing new-sentence result. [The full evaluation gallery](docs/reusable-voice-evaluation.html), opened locally, also includes the other passing preview and both failed results; see the [validation record](docs/reusable-voice-validation.ko.md).
+Download the WAVs: [complete](assets/samples/karina-done.wav), [attention](assets/samples/karina-attention.wav), [ready](assets/samples/karina-ready.wav), [take a break](assets/samples/karina-break.wav). An [original designed voice](assets/samples/original-rest.wav) says “잠시 쉬어 가셔도 괜찮아요.” Open [the listening gallery](docs/samples.html) locally to play the WAV files. Generation inputs and quality results are recorded in [sample provenance](assets/samples/provenance.json).
 
 ## Development
 
